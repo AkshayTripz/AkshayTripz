@@ -5,10 +5,10 @@
 
   <h2 style="color:#FF5555;">🔴 Binary Archaeologist | Deobfuscation Expert | Malware Hunter</h2>
 
-  <!-- Reverse Engineering Cyberpunk Animation -->
+  <!-- Reverse Engineering Animation -->
   <div style="margin: 2rem 0; padding: 15px; border: 2px solid #FF3333; border-radius: 16px; background: #1A0000; box-shadow: 0 0 30px rgba(255, 51, 51, 0.4);">
-    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ2Z0Z3J3b2t5b3Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZg/Y2lkPTc5MGI3NjExZ2Z0Z3J3b2t5b3Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZg/giphy.gif" 
-         alt="Reverse Engineering Cyberpunk Animation" 
+    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ2Z0Z3J3b2t5b3Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZg/Y2lkPTc5MGI3NjExZ2Z0Z3J3b2t5b3Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZg/giphy.gif" 
+         alt="Reverse Engineering Animation" 
          width="720" 
          style="border-radius: 12px; box-shadow: 0 0 35px rgba(255, 51, 51, 0.6); transition: all 0.5s ease;"/>
     <p style="margin-top: 15px; font-style: italic; color:#FF8888;">
@@ -23,7 +23,7 @@
     <a href="https://github.com/yourusername"><img src="https://img.shields.io/badge/GitHub-000000?style=for-the-badge&logo=github&logoColor=FF3333" alt="GitHub"/></a>
   </p>
 
-  <!-- Enhanced Typing Animation (Red) -->
+  <!-- Typing Animation -->
   <div style="margin: 2.5rem 0;">
     <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=26&duration=3000&pause=800&color=FF3333&center=true&vCenter=true&width=740&lines=Reverse+Engineering+Native+Binaries;Deobfuscating+VMProtect+%26+Custom+Virtual+Machines;Advanced+Malware+Analysis+%26+Threat+Dissection;Building+Custom+Unpackers+%26+Instrumentation+Tools;Turning+Obfuscated+Chaos+into+Readable+Logic" alt="Typing SVG"/>
   </div>
@@ -33,30 +33,22 @@
   <!-- In-Depth About Reverse Engineering -->
   <h3 style="color:#FF5555;">🔴 What is Reverse Engineering?</h3>
   <p style="max-width: 820px; text-align:left; margin: 0 auto 2rem auto; color:#FFDDDD;">
-    Reverse Engineering (RE) is the art and science of analyzing software or hardware to understand its inner workings without access to the original source code. 
-    It involves dissecting binaries, recovering logic, bypassing protections, and uncovering hidden behaviors.
+    Reverse Engineering (RE) is the art and science of analyzing software without access to the original source code. 
+    It involves disassembling binaries, understanding internal logic, defeating protection schemes, recovering algorithms, 
+    and uncovering malicious behavior in malware.
   </p>
-
   <p style="max-width: 820px; text-align:left; margin: 0 auto 2rem auto; color:#FFDDDD;">
-    As a Reverse Engineer, Deobfuscator, and Malware Analyst, I specialize in:
+    My focus areas include static &amp; dynamic analysis, deobfuscation of commercial and custom protectors, 
+    malware dissection, and building custom tooling for Windows, macOS, and Linux binaries.
   </p>
-
-  <ul style="max-width: 800px; text-align:left; margin: 0 auto 2rem auto; color:#FFBBBB;">
-    <li>Static analysis using disassemblers and decompilers</li>
-    <li>Dynamic analysis with debuggers and instrumentation frameworks</li>
-    <li>Defeating commercial protectors (VMProtect, Themida, custom VMs)</li>
-    <li>Malware dissection — from ransomware to APT-grade implants</li>
-    <li>Developing custom tools for unpacking, hooking, and automation</li>
-    <li>Qt application internals, game engine reversing, and plugin analysis</li>
-  </ul>
 
   <h3 style="color:#FF5555;">🛠️ Core Reverse Engineering Arsenal</h3>
   <table style="margin: 1.5rem auto; border-collapse: collapse; width: 92%; max-width: 920px; background:#1A0000;">
     <tr><td style="padding: 16px 20px; border: 1px solid #660000; color:#FFAAAA;">Static Analysis</td><td style="padding: 16px 20px; border: 1px solid #660000; color:#FFDDDD;">Ghidra, IDA Pro, Binary Ninja, Radare2/Cutter</td></tr>
     <tr><td style="padding: 16px 20px; border: 1px solid #660000; color:#FFAAAA;">Dynamic Debugging</td><td style="padding: 16px 20px; border: 1px solid #660000; color:#FFDDDD;">x64dbg, WinDbg, Frida, OllyDbg</td></tr>
-    <tr><td style="padding: 16px 20px; border: 1px solid #660000; color:#FFAAAA;">Deobfuscation & Unpacking</td><td style="padding: 16px 20px; border: 1px solid #660000; color:#FFDDDD;">Custom scripts, symbolic execution (Angr), VM unpacking frameworks</td></tr>
-    <tr><td style="padding: 16px 20px; border: 1px solid #660000; color:#FFAAAA;">Malware & Forensics</td><td style="padding: 16px 20px; border: 1px solid #660000; color:#FFDDDD;">Volatility, YARA, x64dbg scripts, C2 analysis tools</td></tr>
-    <tr><td style="padding: 16px 20px; border: 1px solid #660000; color:#FFAAAA;">Languages & Frameworks</td><td style="padding: 16px 20px; border: 1px solid #660000; color:#FFDDDD;">C/C++, Rust, Python, x86/x64 Assembly, Capstone, Keystone</td></tr>
+    <tr><td style="padding: 16px 20px; border: 1px solid #660000; color:#FFAAAA;">Deobfuscation &amp; Unpacking</td><td style="padding: 16px 20px; border: 1px solid #660000; color:#FFDDDD;">VMProtect, Themida, custom virtual machines, Angr, symbolic execution</td></tr>
+    <tr><td style="padding: 16px 20px; border: 1px solid #660000; color:#FFAAAA;">Malware Analysis</td><td style="padding: 16px 20px; border: 1px solid #660000; color:#FFDDDD;">Volatility, YARA, memory forensics, C2 dissection, rootkit analysis</td></tr>
+    <tr><td style="padding: 16px 20px; border: 1px solid #660000; color:#FFAAAA;">Languages &amp; Frameworks</td><td style="padding: 16px 20px; border: 1px solid #660000; color:#FFDDDD;">C/C++, Rust, Python, x86/x64 Assembly, Capstone, Keystone</td></tr>
   </table>
 
   <h3 style="color:#FF5555;">🛡️ Tech Stack</h3>
@@ -72,11 +64,11 @@
   </div>
 
   <h3 style="color:#FF5555;">🔥 Currently Working On</h3>
-  <ul style="max-width: 780px; margin: 0 auto; color:#FFCCCC;">
-    <li>Advanced automated unpacking frameworks for VM-protected binaries</li>
-    <li>Custom instrumentation tools for Qt applications and VJ software</li>
-    <li>Malware campaign tracking and C2 infrastructure reverse engineering</li>
-    <li>High-performance hooks and runtime analysis pipelines in Rust/C++</li>
+  <ul style="max-width: 780px; margin: 0 auto; color:#FFCCCC; text-align:left;">
+    <li>Advanced automated unpacking frameworks for heavily VM-protected binaries</li>
+    <li>Custom instrumentation and hooking tools for Qt applications</li>
+    <li>Malware campaign tracking and C2 infrastructure analysis</li>
+    <li>High-performance runtime analysis pipelines in Rust &amp; C++</li>
   </ul>
 
   <!-- Stats -->
@@ -85,22 +77,9 @@
   <img src="https://github-readme-streak-stats.herokuapp.com/?user=yourusername&theme=radical&hide_border=true" alt="Streak" style="margin: 10px; border-radius: 12px; box-shadow: 0 0 20px rgba(255,51,51,0.3);"/>
 
   <div style="margin: 3.5rem 0; padding: 2.2rem; border: 2px solid #FF3333; border-radius: 16px; background: #1A0000; box-shadow: 0 0 40px rgba(255, 51, 51, 0.25);">
-    <p style="font-size: 1.2em; color:#FF8888; animation: pulse 2.2s infinite;">
+    <p style="font-size: 1.2em; color:#FF8888;">
       ⚡ Obsessed with understanding systems at the deepest level ⚡
     </p>
   </div>
 
 </div>
-
-<!-- Inline Animations -->
-<style>
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.75; transform: scale(1.04); }
-  }
-  img:hover {
-    transform: scale(1.04) rotate(1deg);
-    filter: brightness(1.2) contrast(1.15);
-    box-shadow: 0 0 40px rgba(255, 51, 51, 0.7);
-  }
-</style>
