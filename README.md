@@ -5,20 +5,24 @@
 
   <h2 style="color:#FF5555;">🔴 Binary Archaeologist | Deobfuscation Expert | Malware Hunter</h2>
 
-  <!-- Ghidra Dragon Animation / Logo Section (Top of RE) -->
-  <div style="margin: 2rem 0; padding: 20px; border: 2px solid #FF3333; border-radius: 16px; background: #1A0000; box-shadow: 0 0 35px rgba(255, 51, 51, 0.5);">
+  <!-- Ghidra Dragon Section with Reliable Image -->
+  <div style="margin: 2rem 0; padding: 25px; border: 2px solid #FF3333; border-radius: 16px; background: #1A0000; box-shadow: 0 0 40px rgba(255, 51, 51, 0.5);">
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Ghidra_logo.svg/512px-Ghidra_logo.svg.png" 
          alt="Ghidra Dragon" 
-         width="280" 
-         style="filter: drop-shadow(0 0 25px #FF3333); transition: all 0.6s ease;"/>
-    <p style="margin-top: 12px; font-style: italic; color:#FF8888; font-size: 1.1em;">
-      Powered by Ghidra — The Dragon of Reverse Engineering
+         width="320" 
+         style="filter: drop-shadow(0 0 30px #FF3333) brightness(1.15); transition: all 0.6s ease;"/>
+    
+    <h3 style="margin: 20px 0 8px 0; color:#FF4444; font-size: 2.1em; letter-spacing: 6px;">
+      GHIDRA
+    </h3>
+    <p style="margin: 0; font-style: italic; color:#FF8888; font-size: 1.1em;">
+      Here Be Dragons — The Ultimate Reverse Engineering Framework
     </p>
   </div>
 
-  <!-- Existing Reverse Engineering Animation -->
+  <!-- Reverse Engineering Animation -->
   <div style="margin: 2rem 0; padding: 15px; border: 2px solid #FF3333; border-radius: 16px; background: #1A0000; box-shadow: 0 0 30px rgba(255, 51, 51, 0.4);">
-    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ2Z0Z3J3b2t5b3Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZg/Y2lkPTc5MGI3NjExZ2Z0Z3J3b2t5b3Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZg/giphy.gif" 
+    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ2Z0Z3J3b2t5b3Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZg/Y2lkPTc5MGI3NjExZ2Z0Z3J3b2t5b3Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZg/giphy.gif" 
          alt="Reverse Engineering Animation" 
          width="720" 
          style="border-radius: 12px; box-shadow: 0 0 35px rgba(255, 51, 51, 0.6); transition: all 0.5s ease;"/>
@@ -44,22 +48,22 @@
   <!-- In-Depth About Reverse Engineering -->
   <h3 style="color:#FF5555;">🔴 What is Reverse Engineering?</h3>
   <p style="max-width: 820px; text-align:left; margin: 0 auto 2rem auto; color:#FFDDDD;">
-    Reverse Engineering (RE) is the art and science of analyzing software without access to the original source code. 
-    It involves disassembling binaries, understanding internal logic, defeating protection schemes, recovering algorithms, 
-    and uncovering malicious behavior in malware.
+    Reverse Engineering (RE) is the art and science of analyzing compiled software without access to the original source code. 
+    It involves disassembling binaries, reconstructing logic, defeating protection schemes, recovering algorithms, 
+    and uncovering hidden or malicious behaviors.
   </p>
   <p style="max-width: 820px; text-align:left; margin: 0 auto 2rem auto; color:#FFDDDD;">
-    My focus areas include static &amp; dynamic analysis, deobfuscation of commercial and custom protectors, 
-    malware dissection, and building custom tooling for Windows, macOS, and Linux binaries.
+    As a dedicated Reverse Engineer, Deobfuscator and Malware Analyst, I specialize in static &amp; dynamic analysis using tools like Ghidra, 
+    breaking complex commercial and custom obfuscators, and developing custom instrumentation solutions.
   </p>
 
   <h3 style="color:#FF5555;">🛠️ Core Reverse Engineering Arsenal</h3>
   <table style="margin: 1.5rem auto; border-collapse: collapse; width: 92%; max-width: 920px; background:#1A0000;">
     <tr><td style="padding: 16px 20px; border: 1px solid #660000; color:#FFAAAA;">Static Analysis</td><td style="padding: 16px 20px; border: 1px solid #660000; color:#FFDDDD;">Ghidra, IDA Pro, Binary Ninja, Radare2/Cutter</td></tr>
-    <tr><td style="padding: 16px 20px; border: 1px solid #660000; color:#FFAAAA;">Dynamic Debugging</td><td style="padding: 16px 20px; border: 1px solid #660000; color:#FFDDDD;">x64dbg, WinDbg, Frida, OllyDbg</td></tr>
-    <tr><td style="padding: 16px 20px; border: 1px solid #660000; color:#FFAAAA;">Deobfuscation &amp; Unpacking</td><td style="padding: 16px 20px; border: 1px solid #660000; color:#FFDDDD;">VMProtect, Themida, custom virtual machines, Angr, symbolic execution</td></tr>
-    <tr><td style="padding: 16px 20px; border: 1px solid #660000; color:#FFAAAA;">Malware Analysis</td><td style="padding: 16px 20px; border: 1px solid #660000; color:#FFDDDD;">Volatility, YARA, memory forensics, C2 dissection, rootkit analysis</td></tr>
-    <tr><td style="padding: 16px 20px; border: 1px solid #660000; color:#FFAAAA;">Languages &amp; Frameworks</td><td style="padding: 16px 20px; border: 1px solid #660000; color:#FFDDDD;">C/C++, Rust, Python, x86/x64 Assembly, Capstone, Keystone</td></tr>
+    <tr><td style="padding: 16px 20px; border: 1px solid #660000; color:#FFAAAA;">Dynamic Debugging</td><td style="padding: 16px 20px; border: 1px solid #660000; color:#FFDDDD;">x64dbg, WinDbg, Frida</td></tr>
+    <tr><td style="padding: 16px 20px; border: 1px solid #660000; color:#FFAAAA;">Deobfuscation &amp; Unpacking</td><td style="padding: 16px 20px; border: 1px solid #660000; color:#FFDDDD;">VMProtect, Themida, custom VMs, symbolic execution</td></tr>
+    <tr><td style="padding: 16px 20px; border: 1px solid #660000; color:#FFAAAA;">Malware Analysis</td><td style="padding: 16px 20px; border: 1px solid #660000; color:#FFDDDD;">Volatility, YARA, Memory Forensics, C2 Analysis</td></tr>
+    <tr><td style="padding: 16px 20px; border: 1px solid #660000; color:#FFAAAA;">Languages</td><td style="padding: 16px 20px; border: 1px solid #660000; color:#FFDDDD;">C/C++, Rust, Python, x86/x64 Assembly</td></tr>
   </table>
 
   <h3 style="color:#FF5555;">🛡️ Tech Stack</h3>
@@ -67,29 +71,26 @@
     <img src="https://img.shields.io/badge/C%2B%2B-FF0000?style=for-the-badge&logo=c%2B%2B&logoColor=white" alt="C++" style="transition: all 0.4s ease;"/>
     <img src="https://img.shields.io/badge/Rust-FF3333?style=for-the-badge&logo=rust&logoColor=white" alt="Rust" style="transition: all 0.4s ease;"/>
     <img src="https://img.shields.io/badge/Python-FF5555?style=for-the-badge&logo=python&logoColor=black" alt="Python" style="transition: all 0.4s ease;"/>
-    <img src="https://img.shields.io/badge/Assembly-8B0000?style=for-the-badge&logo=assemblyscript&logoColor=white" alt="Assembly" style="transition: all 0.4s ease;"/>
     <img src="https://img.shields.io/badge/Ghidra-FF2222?style=for-the-badge&logo=ghidra&logoColor=white" alt="Ghidra" style="transition: all 0.4s ease;"/>
     <img src="https://img.shields.io/badge/Binary_Ninja-FF0000?style=for-the-badge&logo=bin&logoColor=white" alt="Binary Ninja" style="transition: all 0.4s ease;"/>
     <img src="https://img.shields.io/badge/x64dbg-FF4444?style=for-the-badge&logo=debugger&logoColor=white" alt="x64dbg" style="transition: all 0.4s ease;"/>
-    <img src="https://img.shields.io/badge/Frida-FF6666?style=for-the-badge&logo=frida&logoColor=black" alt="Frida" style="transition: all 0.4s ease;"/>
   </div>
 
   <h3 style="color:#FF5555;">🔥 Currently Working On</h3>
   <ul style="max-width: 780px; margin: 0 auto; color:#FFCCCC; text-align:left;">
-    <li>Advanced automated unpacking frameworks for heavily VM-protected binaries</li>
-    <li>Custom instrumentation and hooking tools for Qt applications</li>
+    <li>Automated unpacking frameworks for VM-protected binaries</li>
+    <li>Custom Qt application instrumentation and theming tools</li>
     <li>Malware campaign tracking and C2 infrastructure analysis</li>
-    <li>High-performance runtime analysis pipelines in Rust &amp; C++</li>
+    <li>High-performance hooks in Rust &amp; C++</li>
   </ul>
 
   <!-- Stats -->
   <h3 style="color:#FF5555;">📊 Activity</h3>
   <img src="https://github-readme-stats.vercel.app/api?username=yourusername&show_icons=true&theme=radical&hide_border=true&include_all_commits=true" alt="Stats" style="margin: 10px; border-radius: 12px; box-shadow: 0 0 20px rgba(255,51,51,0.3);"/>
-  <img src="https://github-readme-streak-stats.herokuapp.com/?user=yourusername&theme=radical&hide_border=true" alt="Streak" style="margin: 10px; border-radius: 12px; box-shadow: 0 0 20px rgba(255,51,51,0.3);"/>
 
   <div style="margin: 3.5rem 0; padding: 2.2rem; border: 2px solid #FF3333; border-radius: 16px; background: #1A0000; box-shadow: 0 0 40px rgba(255, 51, 51, 0.25);">
     <p style="font-size: 1.2em; color:#FF8888;">
-      ⚡ Obsessed with understanding systems at the deepest level ⚡
+      ⚡ Taming the Dragon — One Binary at a Time ⚡
     </p>
   </div>
 
