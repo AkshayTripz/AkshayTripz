@@ -5,9 +5,20 @@
 
   <h2 style="color:#FF5555;">🔴 Binary Archaeologist | Deobfuscation Expert | Malware Hunter</h2>
 
-  <!-- Reverse Engineering Animation -->
+  <!-- Ghidra Dragon Animation / Logo Section (Top of RE) -->
+  <div style="margin: 2rem 0; padding: 20px; border: 2px solid #FF3333; border-radius: 16px; background: #1A0000; box-shadow: 0 0 35px rgba(255, 51, 51, 0.5);">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Ghidra_logo.svg/512px-Ghidra_logo.svg.png" 
+         alt="Ghidra Dragon" 
+         width="280" 
+         style="filter: drop-shadow(0 0 25px #FF3333); transition: all 0.6s ease;"/>
+    <p style="margin-top: 12px; font-style: italic; color:#FF8888; font-size: 1.1em;">
+      Powered by Ghidra — The Dragon of Reverse Engineering
+    </p>
+  </div>
+
+  <!-- Existing Reverse Engineering Animation -->
   <div style="margin: 2rem 0; padding: 15px; border: 2px solid #FF3333; border-radius: 16px; background: #1A0000; box-shadow: 0 0 30px rgba(255, 51, 51, 0.4);">
-    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ2Z0Z3J3b2t5b3Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZg/Y2lkPTc5MGI3NjExZ2Z0Z3J3b2t5b3Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZg/giphy.gif" 
+    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ2Z0Z3J3b2t5b3Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZg/Y2lkPTc5MGI3NjExZ2Z0Z3J3b2t5b3Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZ2Z6eG1iZg/giphy.gif" 
          alt="Reverse Engineering Animation" 
          width="720" 
          style="border-radius: 12px; box-shadow: 0 0 35px rgba(255, 51, 51, 0.6); transition: all 0.5s ease;"/>
