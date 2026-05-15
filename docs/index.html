@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akshay Tripz - Reverse Engineer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            background: #000;
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            overflow-x: hidden;
+        }
+
+        /* ANIMATIONS */
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+
+        @keyframes neon-glow {
+            0%, 100% { 
+                text-shadow: 
+                    0 0 5px #FF0080,
+                    0 0 10px #FF0080,
+                    0 0 20px #FF0080,
+                    0 0 40px #FF0080;
+            }
+            50% { 
+                text-shadow: 
+                    0 0 10px #00ffff,
+                    0 0 20px #00ffff,
+                    0 0 40px #00ffff,
+                    0 0 80px #00ffff;
+            }
+        }
+
+        @keyframes color-shift {
+            0% { color: #FF0080; }
+            25% { color: #00ffff; }
+            50% { color: #FF00FF; }
+            75% { color: #00ff00; }
+            100% { color: #FF0080; }
+        }
+
+        @keyframes slide-down {
+            from { transform: translateY(-100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes slide-up {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes pulse-scale {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+
+        @keyframes border-glow {
+            0% { border-color: #FF0080; box-shadow: 0 0 10px #FF0080; }
+            50% { border-color: #00ffff; box-shadow: 0 0 20px #00ffff; }
+            100% { border-color: #FF0080; box-shadow: 0 0 10px #FF0080; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes matrix-rain {
+            0% { transform: translateY(-100%); opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* BACKGROUND MATRIX EFFECT */
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .matrix-char {
+            position: absolute;
+            color: #00ff00;
+            opacity: 0.05;
+            font-size: 20px;
+            font-weight: bold;
+            animation: matrix-rain linear infinite;
+        }
+
+        /* SCANLINE OVERLAY */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(255, 0, 128, 0.03),
+                rgba(255, 0, 128, 0.03) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 998;
+        }
+
+        /* CONTAINER */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* HEADER SECTION */
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: slide-down 1s ease-out;
+        }
+
+        .title {
+            font-size: 4rem;
+            font-weight: 900;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            margin: 20px 0;
+            animation: neon-glow 2s ease-in-out infinite, glitch 0.3s infinite;
+            line-height: 1.2;
+        }
+
+        .title span {
+            animation: color-shift 4s linear infinite;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #00ffff;
+            text-shadow: 0 0 10px #00ffff, 0 0 20px #FF0080;
+            margin: 15px 0;
+            letter-spacing: 3px;
+            animation: slide-down 1.2s ease-out;
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            color: #FF0080;
+            animation: pulse-scale 3s ease-in-out infinite;
+            margin-top: 10px;
+        }
+
+        /* DIVIDER */
+        .divider {
+            width: 80%;
+            height: 3px;
+            background: linear-gradient(90deg, #FF0080, #00ffff, #FF00FF, #00ff00, #FF0080);
+            margin: 40px auto;
+            box-shadow: 0 0 20px rgba(255, 0, 128, 0.7);
+            animation: border-glow 3s ease-in-out infinite;
+        }
+
+        /* STATS */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin: 50px 0;
+            animation: slide-up 1.5s ease-out;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 25px;
+            border: 2px solid #FF0080;
+            border-radius: 10px;
+            background: rgba(255, 0, 128, 0.05);
+            transition: all 0.3s ease;
+            animation: border-glow 3s ease-in-out infinite;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 0, 128, 0.15);
+            box-shadow: 0 0 30px #FF0080, 0 0 15px #00ffff;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            color: #FF0080;
+            font-weight: bold;
+            text-shadow: 0 0 15px #FF0080;
+            animation: neon-glow 2s ease-in-out infinite;
+        }
+
+        .stat-label {
+            color: #00ffff;
+            margin-top: 10px;
+            text-shadow: 0 0 8px #00ffff;
+        }
+
+        /* SECTIONS */
+        .section {
+            margin: 60px 0;
+            animation: slide-up 1.5s ease-out;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: #00ffff;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #FF0080;
+            padding-bottom: 15px;
+            text-shadow: 0 0 10px #00ffff;
+            animation: slide-down 1s ease-out 0.2s both;
+        }
+
+        /* BOXES */
+        .box {
+            background: rgba(255, 0, 128, 0.08);
+            border: 2px solid #FF0080;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+            animation: border-glow 3s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.2), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        .box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 25px #FF0080, 0 0 15px #00ffff;
+            background: rgba(255, 0, 128, 0.12);
+        }
+
+        .box-title {
+            color: #00ffff;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            text-shadow: 0 0 8px #00ffff;
+            font-weight: bold;
+        }
+
+        .box-content {
+            color: #ccc;
+            line-height: 1.8;
+            font-size: 0.95rem;
+        }
+
+        /* BADGES */
+        .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #FF0080, #FF00FF);
+            color: white;
+            padding: 10px 20px;
+            margin: 8px 5px;
+            border-radius: 25px;
+            font-weight: bold;
+            box-shadow: 0 0 15px rgba(255, 0, 128, 0.6);
+            transition: all 0.3s ease;
+            animation: pulse-scale 2s ease-in-out infinite;
+        }
+
+        .badge:hover {
+            transform: scale(1.15) translateY(-5px);
+            box-shadow: 0 0 25px #FF0080, 0 0 15px #00ffff;
+            background: linear-gradient(135deg, #00ffff, #00ff00);
+        }
+
+        /* GRID */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .grid-item {
+            background: rgba(0, 255, 255, 0.05);
+            border: 2px solid #00ffff;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .grid-item:hover {
+            transform: translateY(-10px) scale(1.05);
+            border-color: #FF0080;
+            box-shadow: 0 0 20px #FF0080, 0 0 10px #00ffff;
+            background: rgba(255, 0, 128, 0.1);
+        }
+
+        .grid-name {
+            color: #00ffff;
+            font-weight: bold;
+            text-shadow: 0 0 5px #00ffff;
+        }
+
+        .grid-desc {
+            color: #aaa;
+            font-size: 0.8rem;
+            margin-top: 8px;
+        }
+
+        /* FOOTER */
+        .footer {
+            text-align: center;
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 2px solid #FF0080;
+            animation: slide-up 2s ease-out;
+        }
+
+        .footer-text {
+            color: #00ffff;
+            margin: 15px 0;
+            text-shadow: 0 0 8px #FF0080;
+        }
+
+        .social-links {
+            margin: 30px 0;
+        }
+
+        .social-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #FF0080, #00ffff);
+            color: white;
+            padding: 12px 25px;
+            margin: 10px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(255, 0, 128, 0.5);
+        }
+
+        .social-btn:hover {
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 0 30px #FF0080, 0 0 20px #00ffff;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.5rem;
+            }
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- MATRIX BACKGROUND -->
+    <div class="matrix-bg" id="matrixBg"></div>
+    <div class="scanlines"></div>
+
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <h1 class="title"><span>AKSHAY</span> TRIPZ</h1>
+            <p class="subtitle">[ REVERSE ENGINEER ]</p>
+            <p class="tagline">Binary Archaeologist • Security Researcher • Malware Hunter</p>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- STATS -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number">100+</div>
+                <div class="stat-label">Tools Mastered</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">15+</div>
+                <div class="stat-label">Languages</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">5</div>
+                <div class="stat-label">Architectures</div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- ABOUT -->
+        <div class="section">
+            <h2 class="section-title">⚡ WHO I AM</h2>
+            <div class="box">
+                <div class="box-content">
+                    Dedicated Reverse Engineer specializing in <span style="color: #FF0080; font-weight: bold;">binary analysis</span>, 
+                    <span style="color: #FF0080; font-weight: bold;">malware research</span>, and 
+                    <span style="color: #FF0080; font-weight: bold;">vulnerability discovery</span>. 
+                    I dissect binaries, break obfuscation, and uncover hidden vulnerabilities through advanced static and dynamic analysis techniques.
+                </div>
+            </div>
+        </div>
+
+        <!-- LANGUAGES -->
+        <div class="section">
+            <h2 class="section-title">💻 PROGRAMMING LANGUAGES</h2>
+            
+            <div class="box">
+                <div class="box-title">Primary Languages</div>
+                <div class="box-content">
+                    <div style="margin: 15px 0;">
+                        <span class="badge">x86/x86-64 Assembly</span>
+                        <span class="badge">Python</span>
+                        <span class="badge">C/C++</span>
+                        <span class="badge">Java</span>
+                        <span class="badge">C#</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="box">
+                <div class="box-title">Secondary Languages</div>
+                <div class="box-content">
+                    <div style="margin: 15px 0;">
+                        <span class="badge">ARM Assembly</span>
+                        <span class="badge">MIPS Assembly</span>
+                        <span class="badge">PowerPC Assembly</span>
+                        <span class="badge">JavaScript</span>
+                        <span class="badge">Go</span>
+                        <span class="badge">Rust</span>
+                        <span class="badge">Bash/Shell</span>
+                        <span class="badge">PowerShell</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="box">
+                <div class="box-title">Binary Formats & Architectures</div>
+                <div class="box-content">
+                    <div style="margin: 15px 0;">
+                        <span class="badge">PE (Windows)</span>
+                        <span class="badge">ELF (Linux)</span>
+                        <span class="badge">Mach-O (macOS)</span>
+                        <span class="badge">DEX (Android)</span>
+                        <span class="badge">WebAssembly</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TOOLS -->
+        <div class="section">
+            <h2 class="section-title">🛠️ REVERSE ENGINEERING TOOLS</h2>
+
+            <div class="box">
+                <div class="box-title">Static Analysis & Disassembly</div>
+                <div class="grid">
+                    <div class="grid-item">
+                        <div class="grid-name">IDA Pro</div>
+                        <div class="grid-desc">Advanced disassembly</div>
+                    </div>
+                    <div class="grid-item">
+                        <div class="grid-name">Ghidra</div>
+                        <div class="grid-desc">NSA framework</div>
+                    </div>
+                    <div class="grid-item">
+                        <div class="grid-name">Radare2</div>
+                        <div class="grid-desc">Portable analysis</div>
+                    </div>
+                    <div class="grid-item">
+                        <div class="grid-name">Binary Ninja</div>
+                        <div class="grid-desc">Professional tool</div>
+                    </div>
+                    <div class="grid-item">
+                        <div class="grid-name">Hopper</div>
+                        <div class="grid-desc">Disassembler</div>
+                    </div>
+                    <div class="grid-item">
+                        <div class="grid-name">Cutter</div>
+                        <div class="grid-desc">Radare2 GUI</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="box">
+                <div class="box-title">Dynamic Analysis & Debugging</div>
+                <div class="grid">
+                    <div class="grid-item">
+                        <div class="grid-name">x64dbg</div>
+                        <div class="grid-desc">x64 debugger</div>
+                    </div>
+                    <div class="grid-item">
+                        <div class="grid-name">WinDbg</div>
+                        <div class="grid-desc">Kernel debug</div>
+                    </div>
+                    <div class="grid-item">
+                        <div class="grid-name">GDB</div>
+                        <div class="grid-desc">GNU debugger</div>
+                    </div>
+                    <div class="grid-item">
+                        <div class="grid-name">Frida</div>
+                        <div class="grid-desc">Instrumentation</div>
+                    </div>
+                    <div class="grid-item">
+                        <div class="grid-name">LLDB</div>
+                        <div class="grid-desc">LLVM debugger</div>
+                    </div>
+                    <div class="grid-item">
+                        <div class="grid-name">DynamoRIO</div>
+                        <div class="grid-desc">Binary instr.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="box">
+                <div class="box-title">Malware & Security Analysis</div>
+                <div class="grid">
+                    <div class="grid-item">
+                        <div class="grid-name">Wireshark</div>
+                        <div class="grid-desc">Network</div>
+                    </div>
+                    <div class="grid-item">
+                        <div class="grid-name">Volatility</div>
+                        <div class="grid-desc">Memory forensics</div>
+                    </div>
+                    <div class="grid-item">
+                        <div class="grid-name">Yara</div>
+                        <div class="grid-desc">Detection</div>
+                    </div>
+                    <div class="grid-item">
+                        <div class="grid-name">VirusTotal</div>
+                        <div class="grid-desc">Multi-scanner</div>
+                    </div>
+                    <div class="grid-item">
+                        <div class="grid-name">Any.run</div>
+                        <div class="grid-desc">Sandbox</div>
+                    </div>
+                    <div class="grid-item">
+                        <div class="grid-name">ClamAV</div>
+                        <div class="grid-desc">Antivirus</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EXPERTISE -->
+        <div class="section">
+            <h2 class="section-title">🔬 AREAS OF EXPERTISE</h2>
+
+            <div class="box">
+                <div class="box-title">✓ Binary Analysis & Disassembly</div>
+                <div class="box-content">
+                    Static disassembly • Control Flow Analysis • Function Identification • Data Flow Mapping • String Analysis
+                </div>
+            </div>
+
+            <div class="box">
+                <div class="box-title">✓ Dynamic Analysis & Debugging</div>
+                <div class="box-content">
+                    Runtime Monitoring • Breakpoint Debugging • Memory Inspection • Register Analysis • API Tracing
+                </div>
+            </div>
+
+            <div class="box">
+                <div class="box-title">✓ Vulnerability Research</div>
+                <div class="box-content">
+                    Buffer Overflow • Use-After-Free • Integer Overflow • Logic Errors • CVE Research
+                </div>
+            </div>
+
+            <div class="box">
+                <div class="box-title">✓ Malware Analysis</div>
+                <div class="box-content">
+                    Behavioral Analysis • Signature Detection • Packing/Unpacking • Memory Forensics • IOC Extraction
+                </div>
+            </div>
+
+            <div class="box">
+                <div class="box-title">✓ Protection Bypass</div>
+                <div class="box-content">
+                    Code Virtualization • Anti-Debugging • Control Flow Flattening • String Decryption • Anti-VM Evasion
+                </div>
+            </div>
+
+            <div class="box">
+                <div class="box-title">✓ Architecture Knowledge</div>
+                <div class="box-content">
+                    x86/x86-64 • ARM (v7/v8) • MIPS/MIPS64 • PowerPC • SPARC • AVR • RISC-V • WebAssembly
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <p class="footer-text">⚡ Security Through Deep Understanding ⚡</p>
+            
+            <div class="social-links">
+                <a href="https://github.com/AkshayTripz" class="social-btn">🔗 GitHub</a>
+                <a href="https://linkedin.com" class="social-btn">💼 LinkedIn</a>
+                <a href="https://twitter.com" class="social-btn">🐦 Twitter</a>
+            </div>
+
+            <p class="footer-text">Reverse Engineering • Binary Analysis • Security Research</p>
+            <p style="color: #666; font-size: 0.9rem; margin-top: 20px;">
+                Last Updated: May 15, 2026 | Active & Learning
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Matrix rain effect
+        const matrixBg = document.getElementById('matrixBg');
+        const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+        
+        for (let i = 0; i < 40; i++) {
+            const span = document.createElement('div');
+            span.classList.add('matrix-char');
+            span.textContent = chars[Math.floor(Math.random() * chars.length)];
+            span.style.left = Math.random() * 100 + '%';
+            span.style.top = Math.random() * 100 + '%';
+            span.style.animationDuration = (5 + Math.random() * 10) + 's';
+            span.style.animationDelay = (Math.random() * 5) + 's';
+            matrixBg.appendChild(span);
+        }
+    </script>
+</body>
+</html>
