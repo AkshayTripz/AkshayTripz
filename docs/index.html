@@ -93,23 +93,6 @@
             100% { transform: rotate(360deg); }
         }
 
-        @keyframes data-flow {
-            0% { 
-                background-position: 0% 50%;
-            }
-            50% { 
-                background-position: 100% 50%;
-            }
-            100% { 
-                background-position: 0% 50%;
-            }
-        }
-
-        @keyframes hex-rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
         /* ===== BACKGROUND & EFFECTS ===== */
         body::before {
             content: '';
@@ -836,8 +819,8 @@
                     <div class="tool-badge">VirusTotal</div>
                     <div class="tool-badge">Any.run</div>
                     <div class="tool-badge">Cuckoo</div>
-                    <div class="tool-badge">AnyDesk</div>
-                    <div class="tool-badge">WireShark</div>
+                    <div class="tool-badge">Procmon</div>
+                    <div class="tool-badge">Tcpdump</div>
                 </div>
             </div>
         </div>
@@ -912,9 +895,11 @@
 
         // ===== TOUCH EVENTS =====
         document.addEventListener('touchmove', (e) => {
-            const touch = e.touches[0];
-            mouseTracker.style.left = (touch.clientX - 10) + 'px';
-            mouseTracker.style.top = (touch.clientY - 10) + 'px';
+            if (e.touches[0]) {
+                const touch = e.touches[0];
+                mouseTracker.style.left = (touch.clientX - 10) + 'px';
+                mouseTracker.style.top = (touch.clientY - 10) + 'px';
+            }
         });
 
         // ===== ENHANCED 3D HOVER =====
@@ -938,6 +923,30 @@
             });
 
             card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0) scale(1)';
+            });
+
+            card.addEventListener('touchmove', (e) => {
+                if (e.touches[0]) {
+                    const touch = e.touches[0];
+                    const rect = card.getBoundingClientRect();
+                    const x = touch.clientX - rect.left;
+                    const y = touch.clientY - rect.top;
+                    
+                    const rotateX = ((y / rect.height) - 0.5) * 15;
+                    const rotateY = ((x / rect.width) - 0.5) * 15;
+                    
+                    card.style.transform = `
+                        perspective(1000px)
+                        rotateX(${rotateX}deg)
+                        rotateY(${rotateY}deg)
+                        translateZ(15px)
+                        scale(1.03)
+                    `;
+                }
+            });
+
+            card.addEventListener('touchend', () => {
                 card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0) scale(1)';
             });
         });
