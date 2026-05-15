@@ -76,9 +76,9 @@
             100% { border-color: #FF0080; box-shadow: 0 0 10px #FF0080; }
         }
 
-        @keyframes float {
+        @keyframes float-anim {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+            50% { transform: translateY(-15px); }
         }
 
         @keyframes matrix-rain {
@@ -109,7 +109,6 @@
             opacity: 0.05;
             font-size: 20px;
             font-weight: bold;
-            animation: matrix-rain linear infinite;
         }
 
         /* SCANLINE OVERLAY */
@@ -128,6 +127,12 @@
             );
             pointer-events: none;
             z-index: 998;
+            animation: scanline-move 8s linear infinite;
+        }
+
+        @keyframes scanline-move {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(10px); }
         }
 
         /* CONTAINER */
@@ -152,12 +157,9 @@
             letter-spacing: 8px;
             text-transform: uppercase;
             margin: 20px 0;
-            animation: neon-glow 2s ease-in-out infinite, glitch 0.3s infinite;
+            animation: neon-glow 2s ease-in-out infinite, glitch 0.3s infinite, color-shift 4s linear infinite;
             line-height: 1.2;
-        }
-
-        .title span {
-            animation: color-shift 4s linear infinite;
+            color: #FF0080;
         }
 
         .subtitle {
@@ -263,6 +265,7 @@
             height: 100%;
             background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.2), transparent);
             animation: shimmer 3s infinite;
+            pointer-events: none;
         }
 
         .box:hover {
@@ -277,12 +280,16 @@
             margin-bottom: 15px;
             text-shadow: 0 0 8px #00ffff;
             font-weight: bold;
+            position: relative;
+            z-index: 1;
         }
 
         .box-content {
             color: #ccc;
             line-height: 1.8;
             font-size: 0.95rem;
+            position: relative;
+            z-index: 1;
         }
 
         /* BADGES */
@@ -320,7 +327,7 @@
             padding: 15px;
             text-align: center;
             transition: all 0.3s ease;
-            animation: float 3s ease-in-out infinite;
+            animation: float-anim 3s ease-in-out infinite;
         }
 
         .grid-item:hover {
@@ -383,6 +390,7 @@
         @media (max-width: 768px) {
             .title {
                 font-size: 2.5rem;
+                letter-spacing: 4px;
             }
             .subtitle {
                 font-size: 1.2rem;
@@ -401,7 +409,7 @@
     <div class="container">
         <!-- HEADER -->
         <div class="header">
-            <h1 class="title"><span>AKSHAY</span> TRIPZ</h1>
+            <h1 class="title">AKSHAY TRIPZ</h1>
             <p class="subtitle">[ REVERSE ENGINEER ]</p>
             <p class="tagline">Binary Archaeologist • Security Researcher • Malware Hunter</p>
         </div>
@@ -657,7 +665,10 @@
             span.style.left = Math.random() * 100 + '%';
             span.style.top = Math.random() * 100 + '%';
             span.style.animationDuration = (5 + Math.random() * 10) + 's';
+            span.style.animationName = 'matrix-rain';
             span.style.animationDelay = (Math.random() * 5) + 's';
+            span.style.animationTimingFunction = 'linear';
+            span.style.animationIterationCount = 'infinite';
             matrixBg.appendChild(span);
         }
     </script>
