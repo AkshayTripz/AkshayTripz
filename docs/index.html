@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Akshay Tripz - Reverse Engineer</title>
+    <title>Akshay Tripz - Advanced Reverse Engineering Specialist</title>
     <style>
         * {
             margin: 0;
@@ -14,76 +14,68 @@
         html, body {
             width: 100%;
             height: 100%;
-            background: #000;
+            background: #0a0e27;
             color: #fff;
-            font-family: 'Courier New', monospace;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
             overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
-        /* ANIMATIONS */
-        @keyframes glitch {
+        /* ===== KEYFRAME ANIMATIONS ===== */
+        @keyframes cyber-pulse {
+            0%, 100% { 
+                text-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88, 0 0 40px #00ff88;
+                color: #00ff88;
+            }
+            50% { 
+                text-shadow: 0 0 20px #ff00ff, 0 0 40px #ff00ff, 0 0 80px #ff00ff;
+                color: #ff00ff;
+            }
+        }
+
+        @keyframes glitch-effect {
             0% { transform: translate(0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(-2px, -2px); }
-            60% { transform: translate(2px, 2px); }
-            80% { transform: translate(2px, -2px); }
+            20% { transform: translate(-3px, 3px); }
+            40% { transform: translate(-3px, -3px); }
+            60% { transform: translate(3px, 3px); }
+            80% { transform: translate(3px, -3px); }
             100% { transform: translate(0); }
         }
 
-        @keyframes neon-glow {
+        @keyframes float-3d {
             0%, 100% { 
-                text-shadow: 
-                    0 0 5px #FF0080,
-                    0 0 10px #FF0080,
-                    0 0 20px #FF0080,
-                    0 0 40px #FF0080;
+                transform: translateY(0px) rotateX(0deg) rotateZ(0deg);
             }
             50% { 
-                text-shadow: 
-                    0 0 10px #00ffff,
-                    0 0 20px #00ffff,
-                    0 0 40px #00ffff,
-                    0 0 80px #00ffff;
+                transform: translateY(-20px) rotateX(5deg) rotateZ(2deg);
             }
         }
 
-        @keyframes color-shift {
-            0% { color: #FF0080; }
-            25% { color: #00ffff; }
-            50% { color: #FF00FF; }
-            75% { color: #00ff00; }
-            100% { color: #FF0080; }
+        @keyframes matrix-fall {
+            0% { 
+                transform: translateY(-100%);
+                opacity: 1;
+            }
+            100% { 
+                transform: translateY(100vh);
+                opacity: 0;
+            }
         }
 
-        @keyframes slide-down {
-            from { transform: translateY(-100px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        @keyframes slide-up {
-            from { transform: translateY(100px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        @keyframes pulse-scale {
-            0%, 100% { transform: scale(1); opacity: 0.7; }
-            50% { transform: scale(1.1); opacity: 1; }
+        @keyframes scan-line {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(10px); }
         }
 
         @keyframes border-glow {
-            0% { border-color: #FF0080; box-shadow: 0 0 10px #FF0080; }
-            50% { border-color: #00ffff; box-shadow: 0 0 20px #00ffff; }
-            100% { border-color: #FF0080; box-shadow: 0 0 10px #FF0080; }
-        }
-
-        @keyframes float-anim {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-
-        @keyframes matrix-rain {
-            0% { transform: translateY(-100%); opacity: 1; }
-            100% { transform: translateY(100vh); opacity: 0; }
+            0%, 100% { 
+                border-color: #00ff88;
+                box-shadow: 0 0 15px #00ff88, 0 0 30px #00ff8844;
+            }
+            50% { 
+                border-color: #ff00ff;
+                box-shadow: 0 0 20px #ff00ff, 0 0 40px #ff00ff44;
+            }
         }
 
         @keyframes shimmer {
@@ -91,28 +83,70 @@
             100% { left: 100%; }
         }
 
-        /* BACKGROUND MATRIX EFFECT */
+        @keyframes code-blink {
+            0%, 49%, 100% { opacity: 1; }
+            50%, 99% { opacity: 0; }
+        }
+
+        @keyframes radar-scan {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes data-flow {
+            0% { 
+                background-position: 0% 50%;
+            }
+            50% { 
+                background-position: 100% 50%;
+            }
+            100% { 
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes hex-rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ===== BACKGROUND & EFFECTS ===== */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(0deg, rgba(0, 255, 136, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 136, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 1;
+            animation: scan-line 8s linear infinite;
+        }
+
         .matrix-bg {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: #000;
-            z-index: -1;
+            background: #0a0e27;
+            z-index: 0;
             overflow: hidden;
         }
 
         .matrix-char {
             position: absolute;
-            color: #00ff00;
-            opacity: 0.05;
-            font-size: 20px;
+            color: #00ff88;
             font-weight: bold;
+            opacity: 0.03;
+            font-size: 16px;
         }
 
-        /* SCANLINE OVERLAY */
-        .scanlines {
+        .scanline-overlay {
             position: fixed;
             top: 0;
             left: 0;
@@ -120,557 +154,839 @@
             height: 100%;
             background: repeating-linear-gradient(
                 0deg,
-                rgba(255, 0, 128, 0.03),
-                rgba(255, 0, 128, 0.03) 1px,
+                rgba(0, 255, 136, 0.02),
+                rgba(0, 255, 136, 0.02) 1px,
                 transparent 1px,
                 transparent 2px
             );
             pointer-events: none;
             z-index: 998;
-            animation: scanline-move 8s linear infinite;
         }
 
-        @keyframes scanline-move {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(10px); }
-        }
-
-        /* CONTAINER */
+        /* ===== CONTAINER & LAYOUT ===== */
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 60px 30px;
             position: relative;
-            z-index: 1;
+            z-index: 2;
         }
 
-        /* HEADER SECTION */
+        /* ===== HEADER SECTION ===== */
         .header {
             text-align: center;
-            margin-bottom: 60px;
-            animation: slide-down 1s ease-out;
+            margin-bottom: 100px;
+            perspective: 1000px;
         }
 
-        .title {
-            font-size: 4rem;
+        .header-title {
+            font-size: 5rem;
             font-weight: 900;
-            letter-spacing: 8px;
+            letter-spacing: 12px;
             text-transform: uppercase;
+            margin: 30px 0;
+            animation: cyber-pulse 3s ease-in-out infinite, glitch-effect 0.4s infinite;
+            line-height: 1.1;
+            perspective: 1000px;
+            transform-style: preserve-3d;
+        }
+
+        .header-subtitle {
+            font-size: 1.8rem;
+            color: #00ff88;
             margin: 20px 0;
-            animation: neon-glow 2s ease-in-out infinite, glitch 0.3s infinite, color-shift 4s linear infinite;
-            line-height: 1.2;
-            color: #FF0080;
+            letter-spacing: 4px;
+            text-shadow: 0 0 20px #00ff8844;
+            font-weight: 300;
         }
 
-        .subtitle {
-            font-size: 1.5rem;
-            color: #00ffff;
-            text-shadow: 0 0 10px #00ffff, 0 0 20px #FF0080;
-            margin: 15px 0;
-            letter-spacing: 3px;
-            animation: slide-down 1.2s ease-out;
-        }
-
-        .tagline {
-            font-size: 1.1rem;
-            color: #FF0080;
-            animation: pulse-scale 3s ease-in-out infinite;
-            margin-top: 10px;
-        }
-
-        /* DIVIDER */
-        .divider {
-            width: 80%;
+        .header-divider {
+            width: 200px;
             height: 3px;
-            background: linear-gradient(90deg, #FF0080, #00ffff, #FF00FF, #00ff00, #FF0080);
+            background: linear-gradient(90deg, transparent, #00ff88, #ff00ff, transparent);
             margin: 40px auto;
-            box-shadow: 0 0 20px rgba(255, 0, 128, 0.7);
+            box-shadow: 0 0 20px #00ff88, 0 0 10px #ff00ff;
             animation: border-glow 3s ease-in-out infinite;
         }
 
-        /* STATS */
-        .stats {
+        /* ===== TECH STACK SECTION ===== */
+        .tech-section {
+            margin: 80px 0;
+        }
+
+        .section-header {
+            font-size: 2.2rem;
+            color: #00ff88;
+            margin-bottom: 50px;
+            position: relative;
+            padding-left: 40px;
+            text-shadow: 0 0 15px #00ff8844;
+        }
+
+        .section-header::before {
+            content: '▶';
+            position: absolute;
+            left: 0;
+            animation: code-blink 1.5s infinite;
+        }
+
+        .section-header::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, #00ff88, transparent);
+            box-shadow: 0 0 10px #00ff88;
+        }
+
+        /* ===== TECH CARD GRID ===== */
+        .tech-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 30px;
-            margin: 50px 0;
-            animation: slide-up 1.5s ease-out;
+            margin-bottom: 60px;
         }
 
-        .stat-card {
-            text-align: center;
-            padding: 25px;
-            border: 2px solid #FF0080;
-            border-radius: 10px;
-            background: rgba(255, 0, 128, 0.05);
-            transition: all 0.3s ease;
-            animation: border-glow 3s ease-in-out infinite;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-10px);
-            background: rgba(255, 0, 128, 0.15);
-            box-shadow: 0 0 30px #FF0080, 0 0 15px #00ffff;
-        }
-
-        .stat-number {
-            font-size: 3rem;
-            color: #FF0080;
-            font-weight: bold;
-            text-shadow: 0 0 15px #FF0080;
-            animation: neon-glow 2s ease-in-out infinite;
-        }
-
-        .stat-label {
-            color: #00ffff;
-            margin-top: 10px;
-            text-shadow: 0 0 8px #00ffff;
-        }
-
-        /* SECTIONS */
-        .section {
-            margin: 60px 0;
-            animation: slide-up 1.5s ease-out;
-        }
-
-        .section-title {
-            font-size: 2rem;
-            color: #00ffff;
-            margin-bottom: 30px;
-            border-bottom: 3px solid #FF0080;
-            padding-bottom: 15px;
-            text-shadow: 0 0 10px #00ffff;
-            animation: slide-down 1s ease-out 0.2s both;
-        }
-
-        /* BOXES */
-        .box {
-            background: rgba(255, 0, 128, 0.08);
-            border: 2px solid #FF0080;
-            border-radius: 10px;
-            padding: 25px;
-            margin: 20px 0;
-            transition: all 0.3s ease;
-            animation: border-glow 3s ease-in-out infinite;
+        .tech-card {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.08), rgba(255, 0, 255, 0.08));
+            border: 2px solid #00ff88;
+            border-radius: 8px;
+            padding: 30px;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+            perspective: 1000px;
         }
 
-        .box::before {
+        .tech-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.2), transparent);
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.3), transparent);
             animation: shimmer 3s infinite;
-            pointer-events: none;
+            z-index: 1;
         }
 
-        .box:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 0 25px #FF0080, 0 0 15px #00ffff;
-            background: rgba(255, 0, 128, 0.12);
+        .tech-card:hover {
+            border-color: #ff00ff;
+            box-shadow: 0 0 30px #00ff88, 0 0 60px #ff00ff, 0 15px 40px rgba(0, 255, 136, 0.2);
+            transform: translateY(-15px) rotateX(8deg) rotateZ(2deg);
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.15), rgba(255, 0, 255, 0.15));
         }
 
-        .box-title {
-            color: #00ffff;
-            font-size: 1.3rem;
+        .tech-card:active {
+            transform: translateY(-5px) rotateX(4deg);
+            box-shadow: 0 0 50px #ff00ff, 0 0 100px #00ff88;
+        }
+
+        .tech-card-icon {
+            font-size: 3rem;
             margin-bottom: 15px;
-            text-shadow: 0 0 8px #00ffff;
-            font-weight: bold;
-            position: relative;
-            z-index: 1;
+            animation: float-3d 4s ease-in-out infinite;
         }
 
-        .box-content {
-            color: #ccc;
-            line-height: 1.8;
+        .tech-card-title {
+            font-size: 1.3rem;
+            color: #00ff88;
+            margin-bottom: 12px;
+            font-weight: bold;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 0 10px #00ff8844;
+        }
+
+        .tech-card-desc {
+            color: #b0b0b0;
             font-size: 0.95rem;
+            line-height: 1.6;
             position: relative;
+            z-index: 2;
+        }
+
+        .tech-card-meta {
+            position: relative;
+            z-index: 2;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #00ff8844;
+            font-size: 0.8rem;
+            color: #00ff88;
+            opacity: 0.7;
+        }
+
+        /* ===== STAT BOXES ===== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin: 60px 0;
+        }
+
+        .stat-box {
+            background: rgba(0, 255, 136, 0.05);
+            border: 2px solid #00ff88;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .stat-box::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.2), transparent);
+            animation: shimmer 2.5s infinite;
+        }
+
+        .stat-box:hover {
+            border-color: #ff00ff;
+            box-shadow: 0 0 30px #ff00ff, 0 10px 30px rgba(255, 0, 255, 0.2);
+            transform: translateY(-10px) scale(1.05);
+        }
+
+        .stat-number {
+            font-size: 2.8rem;
+            color: #ff00ff;
+            font-weight: bold;
+            animation: cyber-pulse 2s ease-in-out infinite;
+            text-shadow: 0 0 20px #ff00ff;
+        }
+
+        .stat-label {
+            color: #00ff88;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            text-shadow: 0 0 8px #00ff8844;
+            letter-spacing: 2px;
+        }
+
+        /* ===== EXPERTISE BOXES ===== */
+        .expertise-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 60px 0;
+        }
+
+        .expertise-box {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.06), rgba(255, 0, 255, 0.06));
+            border: 2px solid #00ff88;
+            border-radius: 8px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .expertise-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(0, 255, 136, 0.1), transparent);
+            border-radius: 50%;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .expertise-box:hover {
+            border-color: #ff00ff;
+            box-shadow: 0 0 40px #00ff88, 0 0 80px #ff00ff;
+            transform: translateY(-12px) rotateY(5deg);
+        }
+
+        .expertise-box:hover::before {
+            opacity: 1;
+            width: 300px;
+            height: 300px;
+        }
+
+        .expertise-title {
+            font-size: 1.2rem;
+            color: #ff00ff;
+            margin-bottom: 15px;
+            font-weight: bold;
+            position: relative;
+            z-index: 2;
+        }
+
+        .expertise-desc {
+            color: #c0c0c0;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            position: relative;
+            z-index: 2;
+        }
+
+        .expertise-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2rem;
+            opacity: 0.3;
             z-index: 1;
         }
 
-        /* BADGES */
-        .badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #FF0080, #FF00FF);
-            color: white;
-            padding: 10px 20px;
-            margin: 8px 5px;
-            border-radius: 25px;
-            font-weight: bold;
-            box-shadow: 0 0 15px rgba(255, 0, 128, 0.6);
-            transition: all 0.3s ease;
-            animation: pulse-scale 2s ease-in-out infinite;
+        /* ===== TOOLS SHOWCASE ===== */
+        .tools-showcase {
+            margin: 80px 0;
         }
 
-        .badge:hover {
-            transform: scale(1.15) translateY(-5px);
-            box-shadow: 0 0 25px #FF0080, 0 0 15px #00ffff;
-            background: linear-gradient(135deg, #00ffff, #00ff00);
-        }
-
-        /* GRID */
-        .grid {
+        .tools-3d {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
         }
 
-        .grid-item {
-            background: rgba(0, 255, 255, 0.05);
-            border: 2px solid #00ffff;
-            border-radius: 8px;
+        .tool-badge {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(255, 0, 255, 0.1));
+            border: 2px solid #00ff88;
+            border-radius: 12px;
             padding: 15px;
             text-align: center;
+            font-size: 0.85rem;
+            color: #00ff88;
+            cursor: pointer;
             transition: all 0.3s ease;
-            animation: float-anim 3s ease-in-out infinite;
-        }
-
-        .grid-item:hover {
-            transform: translateY(-10px) scale(1.05);
-            border-color: #FF0080;
-            box-shadow: 0 0 20px #FF0080, 0 0 10px #00ffff;
-            background: rgba(255, 0, 128, 0.1);
-        }
-
-        .grid-name {
-            color: #00ffff;
+            position: relative;
+            overflow: hidden;
             font-weight: bold;
-            text-shadow: 0 0 5px #00ffff;
+            text-shadow: 0 0 8px #00ff8844;
         }
 
-        .grid-desc {
-            color: #aaa;
-            font-size: 0.8rem;
-            margin-top: 8px;
+        .tool-badge::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.4), transparent);
+            animation: shimmer 2s infinite;
         }
 
-        /* FOOTER */
+        .tool-badge:hover {
+            border-color: #ff00ff;
+            box-shadow: 0 0 20px #ff00ff, 0 8px 25px rgba(255, 0, 255, 0.3);
+            transform: translateY(-8px) scale(1.08) rotateX(15deg);
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(255, 0, 255, 0.2));
+            color: #ff00ff;
+        }
+
+        .tool-badge:active {
+            transform: translateY(-3px) scale(1.05);
+        }
+
+        /* ===== CODE BLOCK ===== */
+        .code-block {
+            background: rgba(0, 20, 40, 0.8);
+            border: 2px solid #00ff88;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 40px 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            position: relative;
+            box-shadow: 0 0 20px #00ff8844, inset 0 0 20px rgba(0, 255, 136, 0.05);
+        }
+
+        .code-block::before {
+            content: '$ ';
+            color: #ff00ff;
+            font-weight: bold;
+        }
+
+        .code-line {
+            color: #00ff88;
+            line-height: 1.8;
+            text-shadow: 0 0 5px #00ff8844;
+            animation: code-blink 2s infinite;
+        }
+
+        .code-line:nth-child(2) { animation-delay: 0.3s; }
+        .code-line:nth-child(3) { animation-delay: 0.6s; }
+        .code-line:nth-child(4) { animation-delay: 0.9s; }
+
+        /* ===== FOOTER ===== */
         .footer {
+            margin-top: 120px;
+            padding-top: 60px;
+            border-top: 2px solid #00ff88;
             text-align: center;
-            margin-top: 80px;
-            padding-top: 40px;
-            border-top: 2px solid #FF0080;
-            animation: slide-up 2s ease-out;
+            position: relative;
+            z-index: 2;
         }
 
         .footer-text {
-            color: #00ffff;
+            color: #00ff88;
             margin: 15px 0;
-            text-shadow: 0 0 8px #FF0080;
+            font-size: 0.95rem;
+            text-shadow: 0 0 10px #00ff8844;
+            letter-spacing: 2px;
         }
 
         .social-links {
-            margin: 30px 0;
+            margin: 40px 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
         }
 
         .social-btn {
-            display: inline-block;
-            background: linear-gradient(135deg, #FF0080, #00ffff);
-            color: white;
-            padding: 12px 25px;
-            margin: 10px;
-            border-radius: 30px;
+            padding: 12px 30px;
+            border: 2px solid #00ff88;
+            background: rgba(0, 255, 136, 0.08);
+            color: #00ff88;
             text-decoration: none;
+            border-radius: 8px;
             font-weight: bold;
+            cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 0 15px rgba(255, 0, 128, 0.5);
+            position: relative;
+            overflow: hidden;
+            font-size: 0.9rem;
+            text-shadow: 0 0 8px #00ff8844;
+        }
+
+        .social-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.3), transparent);
+            animation: shimmer 2s infinite;
         }
 
         .social-btn:hover {
-            transform: scale(1.1) translateY(-5px);
-            box-shadow: 0 0 30px #FF0080, 0 0 20px #00ffff;
+            border-color: #ff00ff;
+            box-shadow: 0 0 30px #ff00ff, 0 0 60px #00ff88;
+            transform: translateY(-5px) scale(1.05);
+            background: rgba(255, 0, 255, 0.15);
+            color: #ff00ff;
         }
 
-        /* RESPONSIVE */
+        .social-btn:active {
+            transform: translateY(-2px) scale(1.03);
+        }
+
+        /* ===== RADAR ELEMENT ===== */
+        .radar {
+            width: 250px;
+            height: 250px;
+            border: 2px solid #00ff88;
+            border-radius: 50%;
+            margin: 40px auto;
+            position: relative;
+            box-shadow: 0 0 30px #00ff8844, inset 0 0 30px rgba(0, 255, 136, 0.1);
+        }
+
+        .radar::before {
+            content: '';
+            position: absolute;
+            inset: 20%;
+            border: 1px dashed #00ff8844;
+            border-radius: 50%;
+        }
+
+        .radar::after {
+            content: '';
+            position: absolute;
+            inset: 40%;
+            border: 1px dashed #00ff8844;
+            border-radius: 50%;
+        }
+
+        .radar-scan {
+            position: absolute;
+            inset: 0;
+            border: 2px solid #ff00ff;
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: radar-scan 4s linear infinite;
+        }
+
+        .radar-center {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #00ff88;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 15px #00ff88;
+        }
+
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
-            .title {
+            .header-title {
                 font-size: 2.5rem;
-                letter-spacing: 4px;
+                letter-spacing: 6px;
             }
-            .subtitle {
+
+            .header-subtitle {
                 font-size: 1.2rem;
             }
-            .grid {
-                grid-template-columns: repeat(2, 1fr);
+
+            .section-header {
+                font-size: 1.6rem;
             }
+
+            .tech-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 30px 15px;
+            }
+        }
+
+        /* ===== MOUSE TRACKING ===== */
+        .mouse-tracker {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #00ff88;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            display: none;
+            box-shadow: 0 0 10px #00ff88, inset 0 0 10px #00ff8844;
+        }
+
+        body:hover .mouse-tracker {
+            display: block;
+        }
+
+        /* ===== 3D PERSPECTIVE ===== */
+        .perspective-section {
+            perspective: 1200px;
         }
     </style>
 </head>
 <body>
-    <!-- MATRIX BACKGROUND -->
     <div class="matrix-bg" id="matrixBg"></div>
-    <div class="scanlines"></div>
+    <div class="scanline-overlay"></div>
+    <div class="mouse-tracker" id="mouseTracker"></div>
 
     <div class="container">
         <!-- HEADER -->
         <div class="header">
-            <h1 class="title">AKSHAY TRIPZ</h1>
-            <p class="subtitle">[ REVERSE ENGINEER ]</p>
-            <p class="tagline">Binary Archaeologist • Security Researcher • Malware Hunter</p>
+            <h1 class="header-title">AKSHAY TRIPZ</h1>
+            <p class="header-subtitle">[ REVERSE ENGINEERING SPECIALIST ]</p>
+            <div class="header-divider"></div>
+            <p style="color: #00ff88; font-size: 1rem; letter-spacing: 3px; text-shadow: 0 0 10px #00ff8844;">
+                Binary Archaeologist • Vulnerability Researcher • Malware Analyst
+            </p>
         </div>
-
-        <div class="divider"></div>
 
         <!-- STATS -->
-        <div class="stats">
-            <div class="stat-card">
+        <div class="stats-grid">
+            <div class="stat-box">
                 <div class="stat-number">100+</div>
-                <div class="stat-label">Tools Mastered</div>
+                <div class="stat-label">TOOLS MASTERED</div>
             </div>
-            <div class="stat-card">
+            <div class="stat-box">
                 <div class="stat-number">15+</div>
-                <div class="stat-label">Languages</div>
+                <div class="stat-label">PROGRAMMING LANGUAGES</div>
             </div>
-            <div class="stat-card">
-                <div class="stat-number">5</div>
-                <div class="stat-label">Architectures</div>
+            <div class="stat-box">
+                <div class="stat-number">8</div>
+                <div class="stat-label">CPU ARCHITECTURES</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">∞</div>
+                <div class="stat-label">LEARNING POTENTIAL</div>
             </div>
         </div>
 
-        <div class="divider"></div>
+        <!-- EXPERTISE SECTION -->
+        <div class="tech-section">
+            <h2 class="section-header">⚡ CORE EXPERTISE</h2>
+            <div class="expertise-grid">
+                <div class="expertise-box">
+                    <div class="expertise-icon">🔍</div>
+                    <div class="expertise-title">Binary Analysis</div>
+                    <div class="expertise-desc">
+                        Static & dynamic analysis of executables across multiple architectures. Control flow analysis, data flow tracking, and semantic understanding of compiled code.
+                    </div>
+                </div>
 
-        <!-- ABOUT -->
-        <div class="section">
-            <h2 class="section-title">⚡ WHO I AM</h2>
-            <div class="box">
-                <div class="box-content">
-                    Dedicated Reverse Engineer specializing in <span style="color: #FF0080; font-weight: bold;">binary analysis</span>, 
-                    <span style="color: #FF0080; font-weight: bold;">malware research</span>, and 
-                    <span style="color: #FF0080; font-weight: bold;">vulnerability discovery</span>. 
-                    I dissect binaries, break obfuscation, and uncover hidden vulnerabilities through advanced static and dynamic analysis techniques.
+                <div class="expertise-box">
+                    <div class="expertise-icon">🛡️</div>
+                    <div class="expertise-title">Vulnerability Research</div>
+                    <div class="expertise-desc">
+                        Discovery and exploitation of memory corruption, logic flaws, and design vulnerabilities. CVE research and zero-day analysis techniques.
+                    </div>
+                </div>
+
+                <div class="expertise-box">
+                    <div class="expertise-icon">🦠</div>
+                    <div class="expertise-title">Malware Analysis</div>
+                    <div class="expertise-desc">
+                        Advanced behavioral analysis, unpacking obfuscated samples, memory forensics, and indicator of compromise extraction.
+                    </div>
+                </div>
+
+                <div class="expertise-box">
+                    <div class="expertise-icon">🔓</div>
+                    <div class="expertise-title">Protection Bypass</div>
+                    <div class="expertise-desc">
+                        Circumvention of anti-debugging, anti-vm, code virtualization, control flow flattening, and encryption mechanisms.
+                    </div>
+                </div>
+
+                <div class="expertise-box">
+                    <div class="expertise-icon">⚙️</div>
+                    <div class="expertise-title">Low-Level Programming</div>
+                    <div class="expertise-desc">
+                        Assembly language mastery, syscall exploitation, kernel interaction, and hardware-level reverse engineering.
+                    </div>
+                </div>
+
+                <div class="expertise-box">
+                    <div class="expertise-icon">🎯</div>
+                    <div class="expertise-title">Exploit Development</div>
+                    <div class="expertise-desc">
+                        Crafting reliable exploits for buffer overflows, use-after-free, integer overflows, and ROP chain construction.
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- LANGUAGES -->
-        <div class="section">
-            <h2 class="section-title">💻 PROGRAMMING LANGUAGES</h2>
+        <!-- PROGRAMMING LANGUAGES -->
+        <div class="tech-section">
+            <h2 class="section-header">💻 PROGRAMMING LANGUAGES</h2>
+            <div class="tools-3d">
+                <div class="tool-badge">x86/x86-64 ASM</div>
+                <div class="tool-badge">ARM v7/v8</div>
+                <div class="tool-badge">MIPS</div>
+                <div class="tool-badge">PowerPC</div>
+                <div class="tool-badge">Python</div>
+                <div class="tool-badge">C/C++</div>
+                <div class="tool-badge">Java</div>
+                <div class="tool-badge">C#</div>
+                <div class="tool-badge">JavaScript</div>
+                <div class="tool-badge">Go</div>
+                <div class="tool-badge">Rust</div>
+                <div class="tool-badge">Bash/Shell</div>
+            </div>
+        </div>
+
+        <!-- TOOLS & FRAMEWORKS -->
+        <div class="tech-section">
+            <h2 class="section-header">🛠️ TOOLKIT & FRAMEWORKS</h2>
             
-            <div class="box">
-                <div class="box-title">Primary Languages</div>
-                <div class="box-content">
-                    <div style="margin: 15px 0;">
-                        <span class="badge">x86/x86-64 Assembly</span>
-                        <span class="badge">Python</span>
-                        <span class="badge">C/C++</span>
-                        <span class="badge">Java</span>
-                        <span class="badge">C#</span>
-                    </div>
+            <div style="margin: 30px 0;">
+                <h3 style="color: #ff00ff; margin: 30px 0 20px 0; font-size: 1.2rem; text-shadow: 0 0 10px #ff00ff44;">Static Analysis & Disassembly</h3>
+                <div class="tools-3d">
+                    <div class="tool-badge">IDA Pro</div>
+                    <div class="tool-badge">Ghidra</div>
+                    <div class="tool-badge">Radare2</div>
+                    <div class="tool-badge">Binary Ninja</div>
+                    <div class="tool-badge">Hopper</div>
+                    <div class="tool-badge">Cutter</div>
+                    <div class="tool-badge">Rizin</div>
+                    <div class="tool-badge">Capstone</div>
                 </div>
             </div>
 
-            <div class="box">
-                <div class="box-title">Secondary Languages</div>
-                <div class="box-content">
-                    <div style="margin: 15px 0;">
-                        <span class="badge">ARM Assembly</span>
-                        <span class="badge">MIPS Assembly</span>
-                        <span class="badge">PowerPC Assembly</span>
-                        <span class="badge">JavaScript</span>
-                        <span class="badge">Go</span>
-                        <span class="badge">Rust</span>
-                        <span class="badge">Bash/Shell</span>
-                        <span class="badge">PowerShell</span>
-                    </div>
+            <div style="margin: 30px 0;">
+                <h3 style="color: #ff00ff; margin: 30px 0 20px 0; font-size: 1.2rem; text-shadow: 0 0 10px #ff00ff44;">Dynamic Analysis & Debugging</h3>
+                <div class="tools-3d">
+                    <div class="tool-badge">x64dbg</div>
+                    <div class="tool-badge">WinDbg</div>
+                    <div class="tool-badge">GDB</div>
+                    <div class="tool-badge">LLDB</div>
+                    <div class="tool-badge">Frida</div>
+                    <div class="tool-badge">Pin</div>
+                    <div class="tool-badge">DynamoRIO</div>
+                    <div class="tool-badge">Valgrind</div>
                 </div>
             </div>
 
-            <div class="box">
-                <div class="box-title">Binary Formats & Architectures</div>
-                <div class="box-content">
-                    <div style="margin: 15px 0;">
-                        <span class="badge">PE (Windows)</span>
-                        <span class="badge">ELF (Linux)</span>
-                        <span class="badge">Mach-O (macOS)</span>
-                        <span class="badge">DEX (Android)</span>
-                        <span class="badge">WebAssembly</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- TOOLS -->
-        <div class="section">
-            <h2 class="section-title">🛠️ REVERSE ENGINEERING TOOLS</h2>
-
-            <div class="box">
-                <div class="box-title">Static Analysis & Disassembly</div>
-                <div class="grid">
-                    <div class="grid-item">
-                        <div class="grid-name">IDA Pro</div>
-                        <div class="grid-desc">Advanced disassembly</div>
-                    </div>
-                    <div class="grid-item">
-                        <div class="grid-name">Ghidra</div>
-                        <div class="grid-desc">NSA framework</div>
-                    </div>
-                    <div class="grid-item">
-                        <div class="grid-name">Radare2</div>
-                        <div class="grid-desc">Portable analysis</div>
-                    </div>
-                    <div class="grid-item">
-                        <div class="grid-name">Binary Ninja</div>
-                        <div class="grid-desc">Professional tool</div>
-                    </div>
-                    <div class="grid-item">
-                        <div class="grid-name">Hopper</div>
-                        <div class="grid-desc">Disassembler</div>
-                    </div>
-                    <div class="grid-item">
-                        <div class="grid-name">Cutter</div>
-                        <div class="grid-desc">Radare2 GUI</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="box">
-                <div class="box-title">Dynamic Analysis & Debugging</div>
-                <div class="grid">
-                    <div class="grid-item">
-                        <div class="grid-name">x64dbg</div>
-                        <div class="grid-desc">x64 debugger</div>
-                    </div>
-                    <div class="grid-item">
-                        <div class="grid-name">WinDbg</div>
-                        <div class="grid-desc">Kernel debug</div>
-                    </div>
-                    <div class="grid-item">
-                        <div class="grid-name">GDB</div>
-                        <div class="grid-desc">GNU debugger</div>
-                    </div>
-                    <div class="grid-item">
-                        <div class="grid-name">Frida</div>
-                        <div class="grid-desc">Instrumentation</div>
-                    </div>
-                    <div class="grid-item">
-                        <div class="grid-name">LLDB</div>
-                        <div class="grid-desc">LLVM debugger</div>
-                    </div>
-                    <div class="grid-item">
-                        <div class="grid-name">DynamoRIO</div>
-                        <div class="grid-desc">Binary instr.</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="box">
-                <div class="box-title">Malware & Security Analysis</div>
-                <div class="grid">
-                    <div class="grid-item">
-                        <div class="grid-name">Wireshark</div>
-                        <div class="grid-desc">Network</div>
-                    </div>
-                    <div class="grid-item">
-                        <div class="grid-name">Volatility</div>
-                        <div class="grid-desc">Memory forensics</div>
-                    </div>
-                    <div class="grid-item">
-                        <div class="grid-name">Yara</div>
-                        <div class="grid-desc">Detection</div>
-                    </div>
-                    <div class="grid-item">
-                        <div class="grid-name">VirusTotal</div>
-                        <div class="grid-desc">Multi-scanner</div>
-                    </div>
-                    <div class="grid-item">
-                        <div class="grid-name">Any.run</div>
-                        <div class="grid-desc">Sandbox</div>
-                    </div>
-                    <div class="grid-item">
-                        <div class="grid-name">ClamAV</div>
-                        <div class="grid-desc">Antivirus</div>
-                    </div>
+            <div style="margin: 30px 0;">
+                <h3 style="color: #ff00ff; margin: 30px 0 20px 0; font-size: 1.2rem; text-shadow: 0 0 10px #ff00ff44;">Malware & Security</h3>
+                <div class="tools-3d">
+                    <div class="tool-badge">Wireshark</div>
+                    <div class="tool-badge">Volatility</div>
+                    <div class="tool-badge">Yara</div>
+                    <div class="tool-badge">VirusTotal</div>
+                    <div class="tool-badge">Any.run</div>
+                    <div class="tool-badge">Cuckoo</div>
+                    <div class="tool-badge">AnyDesk</div>
+                    <div class="tool-badge">WireShark</div>
                 </div>
             </div>
         </div>
 
-        <!-- EXPERTISE -->
-        <div class="section">
-            <h2 class="section-title">🔬 AREAS OF EXPERTISE</h2>
-
-            <div class="box">
-                <div class="box-title">✓ Binary Analysis & Disassembly</div>
-                <div class="box-content">
-                    Static disassembly • Control Flow Analysis • Function Identification • Data Flow Mapping • String Analysis
-                </div>
+        <!-- RADAR DISPLAY -->
+        <div class="tech-section perspective-section">
+            <h2 class="section-header">📡 ACTIVE SYSTEMS</h2>
+            <div class="radar">
+                <div class="radar-scan"></div>
+                <div class="radar-center"></div>
             </div>
-
-            <div class="box">
-                <div class="box-title">✓ Dynamic Analysis & Debugging</div>
-                <div class="box-content">
-                    Runtime Monitoring • Breakpoint Debugging • Memory Inspection • Register Analysis • API Tracing
-                </div>
+            <div style="text-align: center; color: #00ff88; margin-top: 20px; text-shadow: 0 0 10px #00ff8844;">
+                [SCANNING] Analysis Engine Running • [READY] Exploit Framework Active
             </div>
+        </div>
 
-            <div class="box">
-                <div class="box-title">✓ Vulnerability Research</div>
-                <div class="box-content">
-                    Buffer Overflow • Use-After-Free • Integer Overflow • Logic Errors • CVE Research
-                </div>
-            </div>
-
-            <div class="box">
-                <div class="box-title">✓ Malware Analysis</div>
-                <div class="box-content">
-                    Behavioral Analysis • Signature Detection • Packing/Unpacking • Memory Forensics • IOC Extraction
-                </div>
-            </div>
-
-            <div class="box">
-                <div class="box-title">✓ Protection Bypass</div>
-                <div class="box-content">
-                    Code Virtualization • Anti-Debugging • Control Flow Flattening • String Decryption • Anti-VM Evasion
-                </div>
-            </div>
-
-            <div class="box">
-                <div class="box-title">✓ Architecture Knowledge</div>
-                <div class="box-content">
-                    x86/x86-64 • ARM (v7/v8) • MIPS/MIPS64 • PowerPC • SPARC • AVR • RISC-V • WebAssembly
-                </div>
+        <!-- CODE DISPLAY -->
+        <div class="tech-section">
+            <h2 class="section-header">⚡ REVERSE ENGINEERING WORKFLOW</h2>
+            <div class="code-block">
+                <div class="code-line">>> RE Analysis Framework Initialized</div>
+                <div class="code-line">>> Loading Binary | Mapping Sections | Analyzing Code</div>
+                <div class="code-line">>> Vulnerability Patterns Detected: [+] Control Flow Anomaly</div>
+                <div class="code-line">>> Status: Ready for Exploitation &lt;EOF&gt;</div>
             </div>
         </div>
 
         <!-- FOOTER -->
         <div class="footer">
-            <p class="footer-text">⚡ Security Through Deep Understanding ⚡</p>
+            <p class="footer-text">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</p>
+            <p class="footer-text">Security Through Deep Understanding • Breaking Binaries • Reading Assembly Like Poetry</p>
             
             <div class="social-links">
                 <a href="https://github.com/AkshayTripz" class="social-btn">🔗 GitHub</a>
                 <a href="https://linkedin.com" class="social-btn">💼 LinkedIn</a>
                 <a href="https://twitter.com" class="social-btn">🐦 Twitter</a>
+                <a href="mailto:your@email.com" class="social-btn">📧 Email</a>
             </div>
 
-            <p class="footer-text">Reverse Engineering • Binary Analysis • Security Research</p>
-            <p style="color: #666; font-size: 0.9rem; margin-top: 20px;">
-                Last Updated: May 15, 2026 | Active & Learning
+            <p class="footer-text">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</p>
+            <p style="color: #666; font-size: 0.8rem; margin-top: 30px; letter-spacing: 2px;">
+                Last Updated: May 15, 2026 | ADVANCED REVERSE ENGINEERING SPECIALIST
             </p>
         </div>
     </div>
 
     <script>
-        // Matrix rain effect
+        // ===== MATRIX BACKGROUND =====
         const matrixBg = document.getElementById('matrixBg');
         const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
         
-        for (let i = 0; i < 40; i++) {
+        for (let i = 0; i < 30; i++) {
             const span = document.createElement('div');
             span.classList.add('matrix-char');
             span.textContent = chars[Math.floor(Math.random() * chars.length)];
             span.style.left = Math.random() * 100 + '%';
             span.style.top = Math.random() * 100 + '%';
-            span.style.animationDuration = (5 + Math.random() * 10) + 's';
-            span.style.animationName = 'matrix-rain';
+            span.style.animationDuration = (8 + Math.random() * 12) + 's';
+            span.style.animationName = 'matrix-fall';
             span.style.animationDelay = (Math.random() * 5) + 's';
             span.style.animationTimingFunction = 'linear';
             span.style.animationIterationCount = 'infinite';
             matrixBg.appendChild(span);
         }
+
+        // ===== MOUSE TRACKING =====
+        const mouseTracker = document.getElementById('mouseTracker');
+        document.addEventListener('mousemove', (e) => {
+            mouseTracker.style.left = (e.clientX - 10) + 'px';
+            mouseTracker.style.top = (e.clientY - 10) + 'px';
+        });
+
+        // ===== TOUCH EVENTS =====
+        document.addEventListener('touchmove', (e) => {
+            const touch = e.touches[0];
+            mouseTracker.style.left = (touch.clientX - 10) + 'px';
+            mouseTracker.style.top = (touch.clientY - 10) + 'px';
+        });
+
+        // ===== ENHANCED 3D HOVER =====
+        const cards = document.querySelectorAll('.tech-card, .expertise-box, .stat-box, .tool-badge');
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const rotateX = ((y / rect.height) - 0.5) * 20;
+                const rotateY = ((x / rect.width) - 0.5) * 20;
+                
+                card.style.transform = `
+                    perspective(1000px)
+                    rotateX(${rotateX}deg)
+                    rotateY(${rotateY}deg)
+                    translateZ(20px)
+                    scale(1.05)
+                `;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0) scale(1)';
+            });
+        });
+
+        // ===== CLICK WAVE EFFECT =====
+        document.addEventListener('click', (e) => {
+            const wave = document.createElement('div');
+            wave.style.position = 'fixed';
+            wave.style.left = e.clientX + 'px';
+            wave.style.top = e.clientY + 'px';
+            wave.style.width = '20px';
+            wave.style.height = '20px';
+            wave.style.border = '2px solid #00ff88';
+            wave.style.borderRadius = '50%';
+            wave.style.pointerEvents = 'none';
+            wave.style.zIndex = '9998';
+            wave.style.boxShadow = '0 0 20px #00ff88';
+            document.body.appendChild(wave);
+
+            let size = 20;
+            let opacity = 1;
+            const interval = setInterval(() => {
+                size += 8;
+                opacity -= 0.08;
+                wave.style.width = size + 'px';
+                wave.style.height = size + 'px';
+                wave.style.left = (e.clientX - size / 2) + 'px';
+                wave.style.top = (e.clientY - size / 2) + 'px';
+                wave.style.opacity = opacity;
+
+                if (opacity <= 0) {
+                    clearInterval(interval);
+                    wave.remove();
+                }
+            }, 30);
+        });
+
+        // ===== SCROLL REVEAL =====
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'float-3d 4s ease-in-out infinite';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.tech-card, .expertise-box').forEach(el => {
+            observer.observe(el);
+        });
     </script>
 </body>
 </html>
