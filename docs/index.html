@@ -14,22 +14,31 @@
         html, body {
             width: 100%;
             height: 100%;
-            background: #0a0e27;
+            background: #0a0a0f;
             color: #fff;
             font-family: 'JetBrains Mono', 'Courier New', monospace;
             overflow-x: hidden;
             scroll-behavior: smooth;
         }
 
+        /* ===== CYBER RED THEME ===== */
+        :root {
+            --cyber-red: #ff0040;
+            --cyber-red-light: #ff3366;
+            --cyber-red-dark: #cc0033;
+            --dark-bg: #0a0a0f;
+            --grid-color: #ff00401a;
+        }
+
         /* ===== KEYFRAME ANIMATIONS ===== */
         @keyframes cyber-pulse {
             0%, 100% { 
-                text-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88, 0 0 40px #00ff88;
-                color: #00ff88;
+                text-shadow: 0 0 10px #ff0040, 0 0 20px #ff0040, 0 0 40px #ff0040;
+                color: #ff0040;
             }
             50% { 
-                text-shadow: 0 0 20px #ff00ff, 0 0 40px #ff00ff, 0 0 80px #ff00ff;
-                color: #ff00ff;
+                text-shadow: 0 0 20px #ff3366, 0 0 40px #ff3366, 0 0 80px #ff3366;
+                color: #ff3366;
             }
         }
 
@@ -40,6 +49,72 @@
             60% { transform: translate(3px, 3px); }
             80% { transform: translate(3px, -3px); }
             100% { transform: translate(0); }
+        }
+
+        @keyframes typing-text {
+            0% { 
+                content: '';
+            }
+            10% { 
+                content: 'A';
+            }
+            15% {
+                content: 'AK';
+            }
+            25% {
+                content: 'AKS';
+            }
+            30% {
+                content: 'AKSH';
+            }
+            35% {
+                content: 'AKSHA';
+            }
+            40% {
+                content: 'AKSHAY';
+            }
+            45% {
+                content: 'AKSHAY ';
+            }
+            50% {
+                content: 'AKSHAY T';
+            }
+            60% {
+                content: 'AKSHAY TR';
+            }
+            70% {
+                content: 'AKSHAY TRI';
+            }
+            80% {
+                content: 'AKSHAY TRIP';
+            }
+            90% {
+                content: 'AKSHAY TRIPZ';
+            }
+        }
+
+        @keyframes typing-wrong-to-correct {
+            0% {
+                content: 'AKSHAY TRIPX';
+            }
+            25% {
+                content: 'AKSHAY TRIXX';
+            }
+            40% {
+                content: 'AKSHAY TRIP';
+            }
+            50% {
+                content: 'AKSHAY TRIP';
+                color: #ff6666;
+            }
+            65% {
+                content: 'AKSHAY TRIPZ';
+                color: #ff0040;
+            }
+            100% {
+                content: 'AKSHAY TRIPZ';
+                color: #ff0040;
+            }
         }
 
         @keyframes float-3d {
@@ -69,12 +144,12 @@
 
         @keyframes border-glow {
             0%, 100% { 
-                border-color: #00ff88;
-                box-shadow: 0 0 15px #00ff88, 0 0 30px #00ff8844;
+                border-color: #ff0040;
+                box-shadow: 0 0 15px #ff0040, 0 0 30px #ff004044;
             }
             50% { 
-                border-color: #ff00ff;
-                box-shadow: 0 0 20px #ff00ff, 0 0 40px #ff00ff44;
+                border-color: #ff3366;
+                box-shadow: 0 0 20px #ff3366, 0 0 40px #ff336644;
             }
         }
 
@@ -93,7 +168,34 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* ===== BACKGROUND & EFFECTS ===== */
+        @keyframes bug-float {
+            0% {
+                transform: translateY(0) translateX(0) rotateZ(0deg);
+            }
+            25% {
+                transform: translateY(-30px) translateX(20px) rotateZ(5deg);
+            }
+            50% {
+                transform: translateY(-60px) translateX(-10px) rotateZ(-3deg);
+            }
+            75% {
+                transform: translateY(-90px) translateX(30px) rotateZ(8deg);
+            }
+            100% {
+                transform: translateY(-120px) translateX(0) rotateZ(0deg);
+            }
+        }
+
+        @keyframes cyber-world-shift {
+            0% {
+                background-position: 0% 0%;
+            }
+            100% {
+                background-position: 100% 100%;
+            }
+        }
+
+        /* ===== CYBER WORLD BACKGROUND ===== */
         body::before {
             content: '';
             position: fixed;
@@ -102,12 +204,14 @@
             width: 100%;
             height: 100%;
             background: 
-                linear-gradient(0deg, rgba(0, 255, 136, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 136, 0.05) 1px, transparent 1px);
-            background-size: 50px 50px;
+                linear-gradient(0deg, rgba(255, 0, 64, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 0, 64, 0.08) 1px, transparent 1px),
+                radial-gradient(circle at 20% 50%, rgba(255, 0, 64, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 51, 102, 0.1) 0%, transparent 50%);
+            background-size: 80px 80px, 80px 80px, 100% 100%, 100% 100%;
             pointer-events: none;
             z-index: 1;
-            animation: scan-line 8s linear infinite;
+            animation: cyber-world-shift 20s linear infinite;
         }
 
         .matrix-bg {
@@ -116,14 +220,14 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: #0a0e27;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a0a15 50%, #0a0a0f 100%);
             z-index: 0;
             overflow: hidden;
         }
 
         .matrix-char {
             position: absolute;
-            color: #00ff88;
+            color: #ff0040;
             font-weight: bold;
             opacity: 0.03;
             font-size: 16px;
@@ -137,13 +241,37 @@
             height: 100%;
             background: repeating-linear-gradient(
                 0deg,
-                rgba(0, 255, 136, 0.02),
-                rgba(0, 255, 136, 0.02) 1px,
+                rgba(255, 0, 64, 0.02),
+                rgba(255, 0, 64, 0.02) 1px,
                 transparent 1px,
                 transparent 2px
             );
             pointer-events: none;
             z-index: 998;
+        }
+
+        /* ===== 3D BUG ELEMENT ===== */
+        .bug-container {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            pointer-events: none;
+            z-index: 50;
+            left: 5%;
+            top: -50px;
+        }
+
+        .bug {
+            width: 100%;
+            height: 100%;
+            font-size: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            filter: drop-shadow(0 0 15px #ff0040);
+            animation: bug-float 8s ease-in-out infinite;
+            transform-style: preserve-3d;
+            perspective: 1000px;
         }
 
         /* ===== CONTAINER & LAYOUT ===== */
@@ -168,27 +296,29 @@
             letter-spacing: 12px;
             text-transform: uppercase;
             margin: 30px 0;
-            animation: cyber-pulse 3s ease-in-out infinite, glitch-effect 0.4s infinite;
+            animation: typing-wrong-to-correct 5s ease-in-out 1, glitch-effect 0.4s infinite;
             line-height: 1.1;
             perspective: 1000px;
             transform-style: preserve-3d;
+            color: #ff0040;
+            text-shadow: 0 0 30px #ff0040, 0 0 60px #ff3366;
         }
 
         .header-subtitle {
             font-size: 1.8rem;
-            color: #00ff88;
+            color: #ff0040;
             margin: 20px 0;
             letter-spacing: 4px;
-            text-shadow: 0 0 20px #00ff8844;
+            text-shadow: 0 0 20px #ff004044;
             font-weight: 300;
         }
 
         .header-divider {
             width: 200px;
             height: 3px;
-            background: linear-gradient(90deg, transparent, #00ff88, #ff00ff, transparent);
+            background: linear-gradient(90deg, transparent, #ff0040, #ff3366, transparent);
             margin: 40px auto;
-            box-shadow: 0 0 20px #00ff88, 0 0 10px #ff00ff;
+            box-shadow: 0 0 20px #ff0040, 0 0 10px #ff3366;
             animation: border-glow 3s ease-in-out infinite;
         }
 
@@ -199,11 +329,11 @@
 
         .section-header {
             font-size: 2.2rem;
-            color: #00ff88;
+            color: #ff0040;
             margin-bottom: 50px;
             position: relative;
             padding-left: 40px;
-            text-shadow: 0 0 15px #00ff8844;
+            text-shadow: 0 0 15px #ff004044;
         }
 
         .section-header::before {
@@ -211,6 +341,7 @@
             position: absolute;
             left: 0;
             animation: code-blink 1.5s infinite;
+            color: #ff0040;
         }
 
         .section-header::after {
@@ -220,8 +351,8 @@
             left: 0;
             width: 100px;
             height: 2px;
-            background: linear-gradient(90deg, #00ff88, transparent);
-            box-shadow: 0 0 10px #00ff88;
+            background: linear-gradient(90deg, #ff0040, transparent);
+            box-shadow: 0 0 10px #ff0040;
         }
 
         /* ===== TECH CARD GRID ===== */
@@ -233,8 +364,8 @@
         }
 
         .tech-card {
-            background: linear-gradient(135deg, rgba(0, 255, 136, 0.08), rgba(255, 0, 255, 0.08));
-            border: 2px solid #00ff88;
+            background: linear-gradient(135deg, rgba(255, 0, 64, 0.08), rgba(255, 51, 102, 0.08));
+            border: 2px solid #ff0040;
             border-radius: 8px;
             padding: 30px;
             position: relative;
@@ -252,21 +383,21 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.3), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 64, 0.3), transparent);
             animation: shimmer 3s infinite;
             z-index: 1;
         }
 
         .tech-card:hover {
-            border-color: #ff00ff;
-            box-shadow: 0 0 30px #00ff88, 0 0 60px #ff00ff, 0 15px 40px rgba(0, 255, 136, 0.2);
+            border-color: #ff3366;
+            box-shadow: 0 0 30px #ff0040, 0 0 60px #ff3366, 0 15px 40px rgba(255, 0, 64, 0.2);
             transform: translateY(-15px) rotateX(8deg) rotateZ(2deg);
-            background: linear-gradient(135deg, rgba(0, 255, 136, 0.15), rgba(255, 0, 255, 0.15));
+            background: linear-gradient(135deg, rgba(255, 0, 64, 0.15), rgba(255, 51, 102, 0.15));
         }
 
         .tech-card:active {
             transform: translateY(-5px) rotateX(4deg);
-            box-shadow: 0 0 50px #ff00ff, 0 0 100px #00ff88;
+            box-shadow: 0 0 50px #ff3366, 0 0 100px #ff0040;
         }
 
         .tech-card-icon {
@@ -277,12 +408,12 @@
 
         .tech-card-title {
             font-size: 1.3rem;
-            color: #00ff88;
+            color: #ff0040;
             margin-bottom: 12px;
             font-weight: bold;
             position: relative;
             z-index: 2;
-            text-shadow: 0 0 10px #00ff8844;
+            text-shadow: 0 0 10px #ff004444;
         }
 
         .tech-card-desc {
@@ -298,9 +429,9 @@
             z-index: 2;
             margin-top: 15px;
             padding-top: 15px;
-            border-top: 1px solid #00ff8844;
+            border-top: 1px solid #ff004444;
             font-size: 0.8rem;
-            color: #00ff88;
+            color: #ff0040;
             opacity: 0.7;
         }
 
@@ -313,8 +444,8 @@
         }
 
         .stat-box {
-            background: rgba(0, 255, 136, 0.05);
-            border: 2px solid #00ff88;
+            background: rgba(255, 0, 64, 0.05);
+            border: 2px solid #ff0040;
             border-radius: 8px;
             padding: 30px;
             text-align: center;
@@ -331,29 +462,29 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.2), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 64, 0.2), transparent);
             animation: shimmer 2.5s infinite;
         }
 
         .stat-box:hover {
-            border-color: #ff00ff;
-            box-shadow: 0 0 30px #ff00ff, 0 10px 30px rgba(255, 0, 255, 0.2);
+            border-color: #ff3366;
+            box-shadow: 0 0 30px #ff3366, 0 10px 30px rgba(255, 51, 102, 0.2);
             transform: translateY(-10px) scale(1.05);
         }
 
         .stat-number {
             font-size: 2.8rem;
-            color: #ff00ff;
+            color: #ff3366;
             font-weight: bold;
             animation: cyber-pulse 2s ease-in-out infinite;
-            text-shadow: 0 0 20px #ff00ff;
+            text-shadow: 0 0 20px #ff3366;
         }
 
         .stat-label {
-            color: #00ff88;
+            color: #ff0040;
             font-size: 0.9rem;
             margin-top: 10px;
-            text-shadow: 0 0 8px #00ff8844;
+            text-shadow: 0 0 8px #ff004444;
             letter-spacing: 2px;
         }
 
@@ -366,8 +497,8 @@
         }
 
         .expertise-box {
-            background: linear-gradient(135deg, rgba(0, 255, 136, 0.06), rgba(255, 0, 255, 0.06));
-            border: 2px solid #00ff88;
+            background: linear-gradient(135deg, rgba(255, 0, 64, 0.06), rgba(255, 51, 102, 0.06));
+            border: 2px solid #ff0040;
             border-radius: 8px;
             padding: 30px;
             position: relative;
@@ -383,15 +514,15 @@
             right: 0;
             width: 200px;
             height: 200px;
-            background: radial-gradient(circle, rgba(0, 255, 136, 0.1), transparent);
+            background: radial-gradient(circle, rgba(255, 0, 64, 0.1), transparent);
             border-radius: 50%;
             opacity: 0;
             transition: all 0.3s ease;
         }
 
         .expertise-box:hover {
-            border-color: #ff00ff;
-            box-shadow: 0 0 40px #00ff88, 0 0 80px #ff00ff;
+            border-color: #ff3366;
+            box-shadow: 0 0 40px #ff0040, 0 0 80px #ff3366;
             transform: translateY(-12px) rotateY(5deg);
         }
 
@@ -403,7 +534,7 @@
 
         .expertise-title {
             font-size: 1.2rem;
-            color: #ff00ff;
+            color: #ff3366;
             margin-bottom: 15px;
             font-weight: bold;
             position: relative;
@@ -440,19 +571,19 @@
         }
 
         .tool-badge {
-            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(255, 0, 255, 0.1));
-            border: 2px solid #00ff88;
+            background: linear-gradient(135deg, rgba(255, 0, 64, 0.1), rgba(255, 51, 102, 0.1));
+            border: 2px solid #ff0040;
             border-radius: 12px;
             padding: 15px;
             text-align: center;
             font-size: 0.85rem;
-            color: #00ff88;
+            color: #ff0040;
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
             font-weight: bold;
-            text-shadow: 0 0 8px #00ff8844;
+            text-shadow: 0 0 8px #ff004444;
         }
 
         .tool-badge::after {
@@ -462,16 +593,16 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.4), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 64, 0.4), transparent);
             animation: shimmer 2s infinite;
         }
 
         .tool-badge:hover {
-            border-color: #ff00ff;
-            box-shadow: 0 0 20px #ff00ff, 0 8px 25px rgba(255, 0, 255, 0.3);
+            border-color: #ff3366;
+            box-shadow: 0 0 20px #ff3366, 0 8px 25px rgba(255, 51, 102, 0.3);
             transform: translateY(-8px) scale(1.08) rotateX(15deg);
-            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(255, 0, 255, 0.2));
-            color: #ff00ff;
+            background: linear-gradient(135deg, rgba(255, 0, 64, 0.2), rgba(255, 51, 102, 0.2));
+            color: #ff3366;
         }
 
         .tool-badge:active {
@@ -481,7 +612,7 @@
         /* ===== CODE BLOCK ===== */
         .code-block {
             background: rgba(0, 20, 40, 0.8);
-            border: 2px solid #00ff88;
+            border: 2px solid #ff0040;
             border-radius: 8px;
             padding: 25px;
             margin: 40px 0;
@@ -489,19 +620,19 @@
             font-size: 0.9rem;
             overflow-x: auto;
             position: relative;
-            box-shadow: 0 0 20px #00ff8844, inset 0 0 20px rgba(0, 255, 136, 0.05);
+            box-shadow: 0 0 20px #ff004444, inset 0 0 20px rgba(255, 0, 64, 0.05);
         }
 
         .code-block::before {
             content: '$ ';
-            color: #ff00ff;
+            color: #ff3366;
             font-weight: bold;
         }
 
         .code-line {
-            color: #00ff88;
+            color: #ff0040;
             line-height: 1.8;
-            text-shadow: 0 0 5px #00ff8844;
+            text-shadow: 0 0 5px #ff004444;
             animation: code-blink 2s infinite;
         }
 
@@ -513,17 +644,17 @@
         .footer {
             margin-top: 120px;
             padding-top: 60px;
-            border-top: 2px solid #00ff88;
+            border-top: 2px solid #ff0040;
             text-align: center;
             position: relative;
             z-index: 2;
         }
 
         .footer-text {
-            color: #00ff88;
+            color: #ff0040;
             margin: 15px 0;
             font-size: 0.95rem;
-            text-shadow: 0 0 10px #00ff8844;
+            text-shadow: 0 0 10px #ff004444;
             letter-spacing: 2px;
         }
 
@@ -537,9 +668,9 @@
 
         .social-btn {
             padding: 12px 30px;
-            border: 2px solid #00ff88;
-            background: rgba(0, 255, 136, 0.08);
-            color: #00ff88;
+            border: 2px solid #ff0040;
+            background: rgba(255, 0, 64, 0.08);
+            color: #ff0040;
             text-decoration: none;
             border-radius: 8px;
             font-weight: bold;
@@ -548,7 +679,7 @@
             position: relative;
             overflow: hidden;
             font-size: 0.9rem;
-            text-shadow: 0 0 8px #00ff8844;
+            text-shadow: 0 0 8px #ff004444;
         }
 
         .social-btn::before {
@@ -558,16 +689,16 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.3), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 64, 0.3), transparent);
             animation: shimmer 2s infinite;
         }
 
         .social-btn:hover {
-            border-color: #ff00ff;
-            box-shadow: 0 0 30px #ff00ff, 0 0 60px #00ff88;
+            border-color: #ff3366;
+            box-shadow: 0 0 30px #ff3366, 0 0 60px #ff0040;
             transform: translateY(-5px) scale(1.05);
-            background: rgba(255, 0, 255, 0.15);
-            color: #ff00ff;
+            background: rgba(255, 51, 102, 0.15);
+            color: #ff3366;
         }
 
         .social-btn:active {
@@ -578,18 +709,18 @@
         .radar {
             width: 250px;
             height: 250px;
-            border: 2px solid #00ff88;
+            border: 2px solid #ff0040;
             border-radius: 50%;
             margin: 40px auto;
             position: relative;
-            box-shadow: 0 0 30px #00ff8844, inset 0 0 30px rgba(0, 255, 136, 0.1);
+            box-shadow: 0 0 30px #ff004444, inset 0 0 30px rgba(255, 0, 64, 0.1);
         }
 
         .radar::before {
             content: '';
             position: absolute;
             inset: 20%;
-            border: 1px dashed #00ff8844;
+            border: 1px dashed #ff004444;
             border-radius: 50%;
         }
 
@@ -597,14 +728,14 @@
             content: '';
             position: absolute;
             inset: 40%;
-            border: 1px dashed #00ff8844;
+            border: 1px dashed #ff004444;
             border-radius: 50%;
         }
 
         .radar-scan {
             position: absolute;
             inset: 0;
-            border: 2px solid #ff00ff;
+            border: 2px solid #ff3366;
             border-radius: 50%;
             opacity: 0.5;
             animation: radar-scan 4s linear infinite;
@@ -614,12 +745,12 @@
             position: absolute;
             width: 12px;
             height: 12px;
-            background: #00ff88;
+            background: #ff0040;
             border-radius: 50%;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            box-shadow: 0 0 15px #00ff88;
+            box-shadow: 0 0 15px #ff0040;
         }
 
         /* ===== RESPONSIVE ===== */
@@ -651,12 +782,12 @@
             position: fixed;
             width: 20px;
             height: 20px;
-            border: 2px solid #00ff88;
+            border: 2px solid #ff0040;
             border-radius: 50%;
             pointer-events: none;
             z-index: 9999;
             display: none;
-            box-shadow: 0 0 10px #00ff88, inset 0 0 10px #00ff8844;
+            box-shadow: 0 0 10px #ff0040, inset 0 0 10px #ff004444;
         }
 
         body:hover .mouse-tracker {
@@ -673,6 +804,9 @@
     <div class="matrix-bg" id="matrixBg"></div>
     <div class="scanline-overlay"></div>
     <div class="mouse-tracker" id="mouseTracker"></div>
+    <div class="bug-container" id="bugContainer">
+        <div class="bug">🐛</div>
+    </div>
 
     <div class="container">
         <!-- HEADER -->
@@ -680,7 +814,7 @@
             <h1 class="header-title">AKSHAY TRIPZ</h1>
             <p class="header-subtitle">[ REVERSE ENGINEERING SPECIALIST ]</p>
             <div class="header-divider"></div>
-            <p style="color: #00ff88; font-size: 1rem; letter-spacing: 3px; text-shadow: 0 0 10px #00ff8844;">
+            <p style="color: #ff0040; font-size: 1rem; letter-spacing: 3px; text-shadow: 0 0 10px #ff004444;">
                 Binary Archaeologist • Vulnerability Researcher • Malware Analyst
             </p>
         </div>
@@ -783,7 +917,7 @@
             <h2 class="section-header">🛠️ TOOLKIT & FRAMEWORKS</h2>
             
             <div style="margin: 30px 0;">
-                <h3 style="color: #ff00ff; margin: 30px 0 20px 0; font-size: 1.2rem; text-shadow: 0 0 10px #ff00ff44;">Static Analysis & Disassembly</h3>
+                <h3 style="color: #ff3366; margin: 30px 0 20px 0; font-size: 1.2rem; text-shadow: 0 0 10px #ff334444;">Static Analysis & Disassembly</h3>
                 <div class="tools-3d">
                     <div class="tool-badge">IDA Pro</div>
                     <div class="tool-badge">Ghidra</div>
@@ -797,7 +931,7 @@
             </div>
 
             <div style="margin: 30px 0;">
-                <h3 style="color: #ff00ff; margin: 30px 0 20px 0; font-size: 1.2rem; text-shadow: 0 0 10px #ff00ff44;">Dynamic Analysis & Debugging</h3>
+                <h3 style="color: #ff3366; margin: 30px 0 20px 0; font-size: 1.2rem; text-shadow: 0 0 10px #ff334444;">Dynamic Analysis & Debugging</h3>
                 <div class="tools-3d">
                     <div class="tool-badge">x64dbg</div>
                     <div class="tool-badge">WinDbg</div>
@@ -811,7 +945,7 @@
             </div>
 
             <div style="margin: 30px 0;">
-                <h3 style="color: #ff00ff; margin: 30px 0 20px 0; font-size: 1.2rem; text-shadow: 0 0 10px #ff00ff44;">Malware & Security</h3>
+                <h3 style="color: #ff3366; margin: 30px 0 20px 0; font-size: 1.2rem; text-shadow: 0 0 10px #ff334444;">Malware & Security</h3>
                 <div class="tools-3d">
                     <div class="tool-badge">Wireshark</div>
                     <div class="tool-badge">Volatility</div>
@@ -832,7 +966,7 @@
                 <div class="radar-scan"></div>
                 <div class="radar-center"></div>
             </div>
-            <div style="text-align: center; color: #00ff88; margin-top: 20px; text-shadow: 0 0 10px #00ff8844;">
+            <div style="text-align: center; color: #ff0040; margin-top: 20px; text-shadow: 0 0 10px #ff004444;">
                 [SCANNING] Analysis Engine Running • [READY] Exploit Framework Active
             </div>
         </div>
@@ -885,6 +1019,23 @@
             span.style.animationIterationCount = 'infinite';
             matrixBg.appendChild(span);
         }
+
+        // ===== SCROLL-RESPONSIVE 3D BUG =====
+        const bugContainer = document.getElementById('bugContainer');
+        let scrollProgress = 0;
+
+        window.addEventListener('scroll', () => {
+            const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+            scrollProgress = (window.scrollY / scrollHeight) * 100;
+            
+            // Bug moves down with scroll
+            const bugTopPosition = Math.min(scrollProgress * 10, 100);
+            bugContainer.style.top = bugTopPosition + 'vh';
+            
+            // Bug rotates based on scroll
+            const bugRotation = (scrollProgress * 3.6) % 360;
+            bugContainer.style.transform = `rotateZ(${bugRotation}deg)`;
+        });
 
         // ===== MOUSE TRACKING =====
         const mouseTracker = document.getElementById('mouseTracker');
@@ -959,11 +1110,11 @@
             wave.style.top = e.clientY + 'px';
             wave.style.width = '20px';
             wave.style.height = '20px';
-            wave.style.border = '2px solid #00ff88';
+            wave.style.border = '2px solid #ff0040';
             wave.style.borderRadius = '50%';
             wave.style.pointerEvents = 'none';
             wave.style.zIndex = '9998';
-            wave.style.boxShadow = '0 0 20px #00ff88';
+            wave.style.boxShadow = '0 0 20px #ff0040';
             document.body.appendChild(wave);
 
             let size = 20;
