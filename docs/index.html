@@ -52,70 +52,32 @@
             100% { transform: translate(0); }
         }
 
-        @keyframes typing-text {
-            0% { 
-                content: '';
-            }
-            10% { 
-                content: 'A';
-            }
-            15% {
-                content: 'AK';
-            }
-            25% {
-                content: 'AKS';
-            }
-            30% {
-                content: 'AKSH';
-            }
-            35% {
-                content: 'AKSHA';
-            }
-            40% {
-                content: 'AKSHAY';
-            }
-            45% {
-                content: 'AKSHAY ';
-            }
-            50% {
-                content: 'AKSHAY T';
-            }
-            60% {
-                content: 'AKSHAY TR';
-            }
-            70% {
-                content: 'AKSHAY TRI';
-            }
-            80% {
-                content: 'AKSHAY TRIP';
-            }
-            90% {
-                content: 'AKSHAY TRIPZ';
-            }
+        @keyframes type-title {
+            0% { content: ''; }
+            3% { content: 'A'; }
+            6% { content: 'AK'; }
+            9% { content: 'AKS'; }
+            12% { content: 'AKSH'; }
+            15% { content: 'AKSHA'; }
+            18% { content: 'AKSHAY'; }
+            21% { content: 'AKSHAY '; }
+            24% { content: 'AKSHAY T'; }
+            27% { content: 'AKSHAY TR'; }
+            30% { content: 'AKSHAY TRI'; }
+            33% { content: 'AKSHAY TRIP'; }
+            36% { content: 'AKSHAY TRIPX'; }
+            42% { content: 'AKSHAY TRIPXX'; }
+            48% { content: 'AKSHAY TRIP'; }
+            54% { content: 'AKSHAY TRIP'; }
+            60% { content: 'AKSHAY TRIPZ'; }
+            100% { content: 'AKSHAY TRIPZ'; }
         }
 
-        @keyframes typing-wrong-to-correct {
-            0% {
-                content: 'AKSHAY TRIPX';
-            }
-            25% {
-                content: 'AKSHAY TRIXX';
-            }
-            40% {
-                content: 'AKSHAY TRIP';
-            }
-            50% {
-                content: 'AKSHAY TRIP';
-                color: #ff6666;
-            }
-            65% {
-                content: 'AKSHAY TRIPZ';
-                color: var(--primary);
-            }
-            100% {
-                content: 'AKSHAY TRIPZ';
-                color: var(--primary);
-            }
+        @keyframes type-color-error {
+            36% { color: #ff6666; text-shadow: 0 0 10px #ff6666, 0 0 20px #ff6666; }
+            54% { color: #ff6666; }
+            60% { color: var(--primary); text-shadow: 0 0 30px var(--primary), 0 0 60px var(--secondary); }
+            100% { color: var(--primary); text-shadow: 0 0 30px var(--primary), 0 0 60px var(--secondary); }
         }
 
         @keyframes float-3d {
@@ -125,22 +87,6 @@
             50% { 
                 transform: translateY(-20px) rotateX(5deg) rotateZ(2deg);
             }
-        }
-
-        @keyframes matrix-fall {
-            0% { 
-                transform: translateY(-100%);
-                opacity: 1;
-            }
-            100% { 
-                transform: translateY(100vh);
-                opacity: 0;
-            }
-        }
-
-        @keyframes scan-line {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(10px); }
         }
 
         @keyframes border-glow {
@@ -169,24 +115,6 @@
             100% { transform: rotate(360deg); }
         }
 
-        @keyframes bug-float {
-            0% {
-                transform: translateY(0) translateX(0) rotateZ(0deg);
-            }
-            25% {
-                transform: translateY(-30px) translateX(20px) rotateZ(5deg);
-            }
-            50% {
-                transform: translateY(-60px) translateX(-10px) rotateZ(-3deg);
-            }
-            75% {
-                transform: translateY(-90px) translateX(30px) rotateZ(8deg);
-            }
-            100% {
-                transform: translateY(-120px) translateX(0) rotateZ(0deg);
-            }
-        }
-
         @keyframes cyber-world-shift {
             0% {
                 background-position: 0% 0%;
@@ -194,6 +122,11 @@
             100% {
                 background-position: 100% 100%;
             }
+        }
+
+        @keyframes bug-walk {
+            0%, 100% { transform: scaleX(1); }
+            50% { transform: scaleX(-1); }
         }
 
         /* ===== CYBER WORLD BACKGROUND ===== */
@@ -254,23 +187,24 @@
         /* ===== 3D BUG ELEMENT ===== */
         .bug-container {
             position: fixed;
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             pointer-events: none;
             z-index: 50;
-            left: 5%;
-            top: -50px;
+            left: 2%;
+            top: 10vh;
+            transition: top 0.1s ease-out;
         }
 
         .bug {
             width: 100%;
             height: 100%;
-            font-size: 40px;
+            font-size: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
             filter: drop-shadow(0 0 15px var(--primary));
-            animation: bug-float 8s ease-in-out infinite;
+            animation: bug-walk 0.3s steps(2) infinite;
             transform-style: preserve-3d;
             perspective: 1000px;
         }
@@ -297,12 +231,13 @@
             letter-spacing: 12px;
             text-transform: uppercase;
             margin: 30px 0;
-            animation: typing-wrong-to-correct 5s ease-in-out 1, glitch-effect 0.4s infinite;
             line-height: 1.1;
             perspective: 1000px;
             transform-style: preserve-3d;
             color: var(--primary);
             text-shadow: 0 0 30px var(--primary), 0 0 60px var(--secondary);
+            animation: glitch-effect 0.3s infinite, type-title 12s steps(50) 1 forwards, type-color-error 12s ease-in-out 1 forwards;
+            min-height: 80px;
         }
 
         .header-subtitle {
@@ -1218,9 +1153,28 @@
 
             <p class="footer-text">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</p>
             <p style="color: #666; font-size: 0.8rem; margin-top: 30px; letter-spacing: 2px;">
-                Last Updated: May 15, 2026 | ADVANCED REVERSE ENGINEERING SPECIALIST
+                Last Updated: May 16, 2026 | ADVANCED REVERSE ENGINEERING SPECIALIST
             </p>
         </div>
     </div>
+
+    <script>
+        // Bug scroll tracking - moves bug down as user scrolls
+        const bugContainer = document.getElementById('bugContainer');
+        
+        window.addEventListener('scroll', () => {
+            const scrollPercentage = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            const bugPosition = (scrollPercentage / 100) * (document.documentElement.scrollHeight - 100);
+            bugContainer.style.top = (window.scrollY + 100) + 'px';
+        });
+
+        // Mouse tracking cursor
+        const mouseTracker = document.getElementById('mouseTracker');
+        
+        document.addEventListener('mousemove', (e) => {
+            mouseTracker.style.left = (e.clientX - 10) + 'px';
+            mouseTracker.style.top = (e.clientY - 10) + 'px';
+        });
+    </script>
 </body>
 </html>
