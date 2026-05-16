@@ -32,13 +32,13 @@
         }
 
         /* ===== ADVANCED KEYFRAME ANIMATIONS ===== */
-        @keyframes glitch-effect {
-            0% { transform: translate(0); }
-            20% { transform: translate(-3px, 3px); }
-            40% { transform: translate(-3px, -3px); }
-            60% { transform: translate(3px, 3px); }
-            80% { transform: translate(3px, -3px); }
-            100% { transform: translate(0); }
+        @keyframes smooth-shine {
+            0% {
+                background-position: -1000px 0;
+            }
+            100% {
+                background-position: 1000px 0;
+            }
         }
 
         @keyframes cyber-pulse {
@@ -96,11 +96,6 @@
             }
         }
 
-        @keyframes wave-animation {
-            0%, 100% { transform: translateX(0) skewX(0deg); }
-            50% { transform: translateX(20px) skewX(2deg); }
-        }
-
         @keyframes particle-float {
             0% { 
                 transform: translateY(0) translateX(0);
@@ -134,21 +129,37 @@
             }
         }
 
-        @keyframes rotate-glow {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
         @keyframes pulse-scale {
             0%, 100% {
                 transform: scale(1);
             }
             50% {
                 transform: scale(1.05);
+            }
+        }
+
+        @keyframes sparkle-burst {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(0.3);
+            }
+        }
+
+        @keyframes light-sweep {
+            0% {
+                left: -100%;
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                left: 100%;
+                opacity: 0;
             }
         }
 
@@ -220,6 +231,17 @@
             animation: particle-float 3s ease-out infinite;
         }
 
+        .sparkle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, #00d4ff 0%, #00d4ff 40%, transparent 70%);
+            border-radius: 50%;
+            box-shadow: 0 0 8px #00d4ff, 0 0 16px #a855f7;
+            pointer-events: none;
+            z-index: 999;
+        }
+
         /* ===== CONTAINER & LAYOUT ===== */
         .container {
             max-width: 1400px;
@@ -248,9 +270,39 @@
             transform-style: preserve-3d;
             color: var(--primary);
             text-shadow: 0 0 30px var(--primary), 0 0 60px var(--secondary);
-            animation: glitch-effect 0.3s infinite;
             min-height: 80px;
             position: relative;
+            background: linear-gradient(90deg, 
+                transparent 0%,
+                rgba(0, 212, 255, 0.3) 20%,
+                rgba(168, 85, 247, 0.2) 50%,
+                rgba(0, 212, 255, 0.3) 80%,
+                transparent 100%);
+            background-size: 200% 100%;
+            background-position: -200% 0;
+            animation: smooth-shine 3s ease-in-out infinite;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .header-title::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.1) 25%,
+                rgba(255, 255, 255, 0.2) 50%,
+                rgba(255, 255, 255, 0.1) 75%,
+                transparent 100%);
+            background-size: 200% 100%;
+            background-position: -200% 0;
+            animation: light-sweep 2.5s ease-in-out infinite;
+            border-radius: 4px;
+            pointer-events: none;
         }
 
         .header-subtitle {
@@ -1249,10 +1301,102 @@
             });
         }
 
+        // Sparkle effect on title interaction (mouse & touch)
+        function createSparkles(x, y) {
+            const particleCount = 8;
+            const container = document.querySelector('.container');
+            
+            for (let i = 0; i < particleCount; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = x + 'px';
+                sparkle.style.top = y + 'px';
+                
+                const angle = (360 / particleCount) * i;
+                const velocity = 3 + Math.random() * 3;
+                const tx = Math.cos(angle * Math.PI / 180) * velocity * 30;
+                const ty = Math.sin(angle * Math.PI / 180) * velocity * 30;
+                
+                sparkle.style.setProperty('--tx', tx + 'px');
+                sparkle.style.setProperty('--ty', ty + 'px');
+                
+                document.body.appendChild(sparkle);
+                
+                sparkle.animate([
+                    {
+                        opacity: 1,
+                        transform: 'translate(0, 0) scale(1)'
+                    },
+                    {
+                        opacity: 0,
+                        transform: `translate(${tx}px, ${ty}px) scale(0.3)`
+                    }
+                ], {
+                    duration: 800,
+                    easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                });
+                
+                setTimeout(() => sparkle.remove(), 800);
+            }
+        }
+
+        // Create sparkle line effect
+        function createSparkleLineEffect(event) {
+            const title = document.getElementById('typeTitle');
+            const rect = title.getBoundingClientRect();
+            
+            // Get position relative to viewport
+            let x, y;
+            if (event.type.includes('touch')) {
+                x = event.touches[0].clientX;
+                y = event.touches[0].clientY;
+            } else {
+                x = event.clientX;
+                y = event.clientY;
+            }
+            
+            // Only trigger if hovering over title or touching it
+            if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
+                createSparkles(x, y);
+            }
+        }
+
         // Initialize all animations
         createParticles();
         initMouseTracker();
         initScrollAnimations();
+
+        // Add event listeners for sparkle effects
+        const title = document.getElementById('typeTitle');
+        
+        // Mouse move event for desktop
+        document.addEventListener('mousemove', (e) => {
+            createSparkleLineEffect(e);
+        }, { passive: true });
+
+        // Touch move event for mobile
+        document.addEventListener('touchmove', (e) => {
+            createSparkleLineEffect(e);
+        }, { passive: true });
+
+        // Click event for extra sparkle burst
+        title.addEventListener('click', (e) => {
+            for (let i = 0; i < 3; i++) {
+                setTimeout(() => {
+                    createSparkles(e.clientX, e.clientY);
+                }, i * 150);
+            }
+        });
+
+        // Touch event for mobile click
+        title.addEventListener('touchend', (e) => {
+            const touch = e.changedTouches[0];
+            for (let i = 0; i < 3; i++) {
+                setTimeout(() => {
+                    createSparkles(touch.clientX, touch.clientY);
+                }, i * 150);
+            }
+        });
     </script>
 </body>
 </html>
