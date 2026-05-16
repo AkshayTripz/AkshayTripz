@@ -31,7 +31,7 @@
             --grid-color: #00d4ff1a;
         }
 
-        /* ===== KEYFRAME ANIMATIONS ===== */
+        /* ===== ADVANCED KEYFRAME ANIMATIONS ===== */
         @keyframes glitch-effect {
             0% { transform: translate(0); }
             20% { transform: translate(-3px, 3px); }
@@ -96,6 +96,62 @@
             }
         }
 
+        @keyframes wave-animation {
+            0%, 100% { transform: translateX(0) skewX(0deg); }
+            50% { transform: translateX(20px) skewX(2deg); }
+        }
+
+        @keyframes particle-float {
+            0% { 
+                transform: translateY(0) translateX(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-50px) translateX(20px);
+                opacity: 0;
+            }
+        }
+
+        @keyframes slide-in-down {
+            from {
+                transform: translateY(-30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fade-in-up {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes rotate-glow {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes pulse-scale {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
         /* ===== CYBER WORLD BACKGROUND ===== */
         body::before {
             content: '';
@@ -143,6 +199,27 @@
             z-index: 998;
         }
 
+        /* ===== PARTICLE EFFECTS ===== */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: particle-float 3s ease-out infinite;
+        }
+
         /* ===== CONTAINER & LAYOUT ===== */
         .container {
             max-width: 1400px;
@@ -157,6 +234,7 @@
             text-align: center;
             margin-bottom: 100px;
             perspective: 1000px;
+            animation: slide-in-down 0.8s ease-out;
         }
 
         .header-title {
@@ -182,6 +260,7 @@
             letter-spacing: 4px;
             text-shadow: 0 0 20px var(--secondary)44;
             font-weight: 300;
+            animation: fade-in-up 0.8s ease-out 0.2s both;
         }
 
         .header-divider {
@@ -191,6 +270,14 @@
             margin: 40px auto;
             box-shadow: 0 0 20px var(--primary), 0 0 10px var(--secondary);
             animation: border-glow 3s ease-in-out infinite;
+        }
+
+        .tagline-text {
+            color: var(--primary);
+            font-size: 1rem;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px var(--primary)44;
+            animation: fade-in-up 0.8s ease-out 0.4s both;
         }
 
         /* ===== TECH STACK SECTION ===== */
@@ -205,6 +292,7 @@
             position: relative;
             padding-left: 40px;
             text-shadow: 0 0 15px var(--primary)44;
+            animation: slide-in-down 0.6s ease-out;
         }
 
         .section-header::before {
@@ -245,7 +333,15 @@
             transition: all 0.3s ease;
             transform-style: preserve-3d;
             perspective: 1000px;
+            animation: fade-in-up 0.6s ease-out both;
         }
+
+        .tech-card:nth-child(1) { animation-delay: 0.1s; }
+        .tech-card:nth-child(2) { animation-delay: 0.2s; }
+        .tech-card:nth-child(3) { animation-delay: 0.3s; }
+        .tech-card:nth-child(4) { animation-delay: 0.4s; }
+        .tech-card:nth-child(5) { animation-delay: 0.5s; }
+        .tech-card:nth-child(6) { animation-delay: 0.6s; }
 
         .tech-card::before {
             content: '';
@@ -324,7 +420,13 @@
             overflow: hidden;
             cursor: pointer;
             transition: all 0.3s ease;
+            animation: fade-in-up 0.6s ease-out both;
         }
+
+        .stat-box:nth-child(1) { animation-delay: 0s; }
+        .stat-box:nth-child(2) { animation-delay: 0.1s; }
+        .stat-box:nth-child(3) { animation-delay: 0.2s; }
+        .stat-box:nth-child(4) { animation-delay: 0.3s; }
 
         .stat-box:nth-child(2) {
             border-color: var(--secondary);
@@ -429,7 +531,15 @@
             overflow: hidden;
             transition: all 0.3s ease;
             cursor: pointer;
+            animation: fade-in-up 0.6s ease-out both;
         }
+
+        .expertise-box:nth-child(1) { animation-delay: 0.1s; }
+        .expertise-box:nth-child(2) { animation-delay: 0.2s; }
+        .expertise-box:nth-child(3) { animation-delay: 0.3s; }
+        .expertise-box:nth-child(4) { animation-delay: 0.4s; }
+        .expertise-box:nth-child(5) { animation-delay: 0.5s; }
+        .expertise-box:nth-child(6) { animation-delay: 0.6s; }
 
         .expertise-box:nth-child(2) {
             border-color: var(--secondary);
@@ -572,6 +682,7 @@
             overflow: hidden;
             font-weight: bold;
             text-shadow: 0 0 8px var(--primary)44;
+            animation: fade-in-up 0.5s ease-out both;
         }
 
         .tool-badge:nth-child(4n+2) {
@@ -663,6 +774,7 @@
             overflow-x: auto;
             position: relative;
             box-shadow: 0 0 20px var(--primary)44, inset 0 0 20px rgba(0, 212, 255, 0.05);
+            animation: fade-in-up 0.8s ease-out;
         }
 
         .code-block::before {
@@ -682,6 +794,56 @@
         .code-line:nth-child(3) { animation-delay: 0.6s; }
         .code-line:nth-child(4) { animation-delay: 0.9s; }
 
+        /* ===== RADAR ELEMENT ===== */
+        .radar {
+            width: 250px;
+            height: 250px;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            margin: 40px auto;
+            position: relative;
+            box-shadow: 0 0 30px var(--primary)44, inset 0 0 30px rgba(0, 212, 255, 0.1);
+            animation: fade-in-up 0.8s ease-out;
+        }
+
+        .radar::before {
+            content: '';
+            position: absolute;
+            inset: 20%;
+            border: 1px dashed var(--primary)44;
+            border-radius: 50%;
+        }
+
+        .radar::after {
+            content: '';
+            position: absolute;
+            inset: 40%;
+            border: 1px dashed var(--secondary)44;
+            border-radius: 50%;
+        }
+
+        .radar-scan {
+            position: absolute;
+            inset: 0;
+            border: 2px solid var(--secondary);
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: radar-scan 4s linear infinite;
+        }
+
+        .radar-center {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 15px var(--primary);
+            animation: pulse-scale 2s ease-in-out infinite;
+        }
+
         /* ===== FOOTER ===== */
         .footer {
             margin-top: 120px;
@@ -690,6 +852,7 @@
             text-align: center;
             position: relative;
             z-index: 2;
+            animation: fade-in-up 0.8s ease-out;
         }
 
         .footer-text {
@@ -722,7 +885,13 @@
             overflow: hidden;
             font-size: 0.9rem;
             text-shadow: 0 0 8px var(--primary)44;
+            animation: fade-in-up 0.6s ease-out both;
         }
+
+        .social-btn:nth-child(1) { animation-delay: 0s; }
+        .social-btn:nth-child(2) { animation-delay: 0.1s; }
+        .social-btn:nth-child(3) { animation-delay: 0.2s; }
+        .social-btn:nth-child(4) { animation-delay: 0.3s; }
 
         .social-btn:nth-child(2) {
             border-color: var(--secondary);
@@ -797,52 +966,26 @@
             transform: translateY(-2px) scale(1.03);
         }
 
-        /* ===== RADAR ELEMENT ===== */
-        .radar {
-            width: 250px;
-            height: 250px;
+        /* ===== MOUSE TRACKING ===== */
+        .mouse-tracker {
+            position: fixed;
+            width: 20px;
+            height: 20px;
             border: 2px solid var(--primary);
             border-radius: 50%;
-            margin: 40px auto;
-            position: relative;
-            box-shadow: 0 0 30px var(--primary)44, inset 0 0 30px rgba(0, 212, 255, 0.1);
+            pointer-events: none;
+            z-index: 9999;
+            display: none;
+            box-shadow: 0 0 10px var(--primary), inset 0 0 10px var(--primary)44;
         }
 
-        .radar::before {
-            content: '';
-            position: absolute;
-            inset: 20%;
-            border: 1px dashed var(--primary)44;
-            border-radius: 50%;
+        body:hover .mouse-tracker {
+            display: block;
         }
 
-        .radar::after {
-            content: '';
-            position: absolute;
-            inset: 40%;
-            border: 1px dashed var(--secondary)44;
-            border-radius: 50%;
-        }
-
-        .radar-scan {
-            position: absolute;
-            inset: 0;
-            border: 2px solid var(--secondary);
-            border-radius: 50%;
-            opacity: 0.5;
-            animation: radar-scan 4s linear infinite;
-        }
-
-        .radar-center {
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            background: var(--primary);
-            border-radius: 50%;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            box-shadow: 0 0 15px var(--primary);
+        /* ===== 3D PERSPECTIVE ===== */
+        .perspective-section {
+            perspective: 1200px;
         }
 
         /* ===== RESPONSIVE ===== */
@@ -868,33 +1011,12 @@
                 padding: 30px 15px;
             }
         }
-
-        /* ===== MOUSE TRACKING ===== */
-        .mouse-tracker {
-            position: fixed;
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--primary);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            display: none;
-            box-shadow: 0 0 10px var(--primary), inset 0 0 10px var(--primary)44;
-        }
-
-        body:hover .mouse-tracker {
-            display: block;
-        }
-
-        /* ===== 3D PERSPECTIVE ===== */
-        .perspective-section {
-            perspective: 1200px;
-        }
     </style>
 </head>
 <body>
     <div class="matrix-bg" id="matrixBg"></div>
     <div class="scanline-overlay"></div>
+    <div class="particles" id="particles"></div>
     <div class="mouse-tracker" id="mouseTracker"></div>
 
     <div class="container">
@@ -903,7 +1025,7 @@
             <h1 class="header-title" id="typeTitle">AKSHAY TRIPZ</h1>
             <p class="header-subtitle">[ REVERSE ENGINEERING SPECIALIST ]</p>
             <div class="header-divider"></div>
-            <p style="color: var(--primary); font-size: 1rem; letter-spacing: 3px; text-shadow: 0 0 10px var(--primary)44;">
+            <p class="tagline-text">
                 Binary Archaeologist • Vulnerability Researcher • Malware Analyst
             </p>
         </div>
@@ -1001,160 +1123,136 @@
             </div>
         </div>
 
-        <!-- TOOLS & FRAMEWORKS -->
+        <!-- TOOLS SECTION -->
         <div class="tech-section">
-            <h2 class="section-header">🛠️ TOOLKIT & FRAMEWORKS</h2>
+            <h2 class="section-header">🛠️ REVERSE ENGINEERING TOOLS</h2>
             
-            <div style="margin: 30px 0;">
-                <h3 style="color: var(--primary); margin: 30px 0 20px 0; font-size: 1.2rem; text-shadow: 0 0 10px var(--primary)44;">Static Analysis & Disassembly</h3>
-                <div class="tools-3d">
-                    <div class="tool-badge">IDA Pro</div>
-                    <div class="tool-badge">Ghidra</div>
-                    <div class="tool-badge">Radare2</div>
-                    <div class="tool-badge">Binary Ninja</div>
-                    <div class="tool-badge">Hopper</div>
-                    <div class="tool-badge">Cutter</div>
-                    <div class="tool-badge">Rizin</div>
-                    <div class="tool-badge">Capstone</div>
-                </div>
+            <h3 style="color: var(--primary); margin: 40px 0 20px 0; font-size: 1.5rem;">Static Analysis & Disassembly</h3>
+            <div class="tools-3d">
+                <div class="tool-badge">IDA Pro</div>
+                <div class="tool-badge">Ghidra</div>
+                <div class="tool-badge">Radare2</div>
+                <div class="tool-badge">Binary Ninja</div>
+                <div class="tool-badge">Hopper</div>
+                <div class="tool-badge">Cutter</div>
             </div>
 
-            <div style="margin: 30px 0;">
-                <h3 style="color: var(--secondary); margin: 30px 0 20px 0; font-size: 1.2rem; text-shadow: 0 0 10px var(--secondary)44;">Dynamic Analysis & Debugging</h3>
-                <div class="tools-3d">
-                    <div class="tool-badge">x64dbg</div>
-                    <div class="tool-badge">WinDbg</div>
-                    <div class="tool-badge">GDB</div>
-                    <div class="tool-badge">LLDB</div>
-                    <div class="tool-badge">Frida</div>
-                    <div class="tool-badge">Pin</div>
-                    <div class="tool-badge">DynamoRIO</div>
-                    <div class="tool-badge">Valgrind</div>
-                </div>
+            <h3 style="color: var(--secondary); margin: 40px 0 20px 0; font-size: 1.5rem;">Dynamic Analysis & Debugging</h3>
+            <div class="tools-3d">
+                <div class="tool-badge">x64dbg</div>
+                <div class="tool-badge">WinDbg</div>
+                <div class="tool-badge">GDB</div>
+                <div class="tool-badge">Frida</div>
+                <div class="tool-badge">LLDB</div>
+                <div class="tool-badge">DynamoRIO</div>
             </div>
 
-            <div style="margin: 30px 0;">
-                <h3 style="color: var(--accent); margin: 30px 0 20px 0; font-size: 1.2rem; text-shadow: 0 0 10px var(--accent)44;">Malware & Security</h3>
-                <div class="tools-3d">
-                    <div class="tool-badge">Wireshark</div>
-                    <div class="tool-badge">Volatility</div>
-                    <div class="tool-badge">Yara</div>
-                    <div class="tool-badge">VirusTotal</div>
-                    <div class="tool-badge">Any.run</div>
-                    <div class="tool-badge">Cuckoo</div>
-                    <div class="tool-badge">Procmon</div>
-                    <div class="tool-badge">Tcpdump</div>
-                </div>
+            <h3 style="color: var(--accent); margin: 40px 0 20px 0; font-size: 1.5rem;">Malware & Security Analysis</h3>
+            <div class="tools-3d">
+                <div class="tool-badge">Wireshark</div>
+                <div class="tool-badge">Volatility</div>
+                <div class="tool-badge">Yara</div>
+                <div class="tool-badge">VirusTotal</div>
+                <div class="tool-badge">Any.run</div>
+                <div class="tool-badge">ClamAV</div>
+            </div>
+
+            <h3 style="color: var(--cyber-red); margin: 40px 0 20px 0; font-size: 1.5rem;">Scripting & Automation</h3>
+            <div class="tools-3d">
+                <div class="tool-badge">IDAPython</div>
+                <div class="tool-badge">PWNTOOLS</div>
+                <div class="tool-badge">Keystone</div>
+                <div class="tool-badge">Unicorn</div>
+                <div class="tool-badge">Triton</div>
+                <div class="tool-badge">AFL/Fuzzer</div>
             </div>
         </div>
 
-        <!-- RADAR DISPLAY -->
-        <div class="tech-section perspective-section">
-            <h2 class="section-header">📡 ACTIVE SYSTEMS</h2>
-            <div class="radar">
-                <div class="radar-scan"></div>
-                <div class="radar-center"></div>
-            </div>
-            <div style="text-align: center; color: var(--primary); margin-top: 20px; text-shadow: 0 0 10px var(--primary)44;">
-                [SCANNING] Analysis Engine Running • [READY] Exploit Framework Active
-            </div>
+        <!-- CODE BLOCK SHOWCASE -->
+        <div class="code-block">
+            <div class="code-line">apt install radare2 ghidra-tools python3</div>
+            <div class="code-line">git clone https://github.com/AkshayTripz</div>
+            <div class="code-line">./analysis.sh --full-scan --output-json</div>
+            <div class="code-line">[*] Analysis Complete - Vulnerabilities Found: 42</div>
         </div>
 
-        <!-- CODE DISPLAY -->
-        <div class="tech-section">
-            <h2 class="section-header">⚡ REVERSE ENGINEERING WORKFLOW</h2>
-            <div class="code-block">
-                <div class="code-line">>> RE Analysis Framework Initialized</div>
-                <div class="code-line">>> Loading Binary | Mapping Sections | Analyzing Code</div>
-                <div class="code-line">>> Vulnerability Patterns Detected: [+] Control Flow Anomaly</div>
-                <div class="code-line">>> Status: Ready for Exploitation &lt;EOF&gt;</div>
-            </div>
+        <!-- RADAR ELEMENT -->
+        <div class="radar">
+            <div class="radar-scan"></div>
+            <div class="radar-center"></div>
         </div>
 
         <!-- FOOTER -->
         <div class="footer">
-            <p class="footer-text">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</p>
-            <p class="footer-text">Security Through Deep Understanding • Breaking Binaries • Reading Assembly Like Poetry</p>
+            <p class="footer-text">⚡ Security Through Deep Understanding ⚡</p>
             
             <div class="social-links">
-                <a href="https://github.com/AkshayTripz" class="social-btn">🔗 GitHub</a>
-                <a href="https://linkedin.com" class="social-btn">💼 LinkedIn</a>
-                <a href="https://twitter.com" class="social-btn">🐦 Twitter</a>
-                <a href="mailto:your@email.com" class="social-btn">📧 Email</a>
+                <a href="https://github.com/AkshayTripz" class="social-btn">GitHub</a>
+                <a href="https://linkedin.com" class="social-btn">LinkedIn</a>
+                <a href="https://twitter.com" class="social-btn">Twitter</a>
+                <a href="mailto:contact@akshay.dev" class="social-btn">Contact</a>
             </div>
 
-            <p class="footer-text">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</p>
-            <p style="color: #666; font-size: 0.8rem; margin-top: 30px; letter-spacing: 2px;">
-                Last Updated: May 16, 2026 | ADVANCED REVERSE ENGINEERING SPECIALIST
+            <p class="footer-text">Reverse Engineering • Binary Analysis • Security Research</p>
+            <p style="color: #666; font-size: 0.9rem; margin-top: 20px;">
+                Last Updated: May 16, 2026 | Always Learning & Evolving
             </p>
         </div>
     </div>
 
     <script>
-        // Typing animation with mistakes using JavaScript
-        const titleElement = document.getElementById('typeTitle');
-        const text = "AKSHAY TRIPZ";
-        
-        function startTypingAnimation() {
-            let fullText = "";
-            let index = 0;
-            let phase = "typing"; // typing, error, correct
+        // Particle animation generator
+        function createParticles() {
+            const particleContainer = document.getElementById('particles');
+            const particleCount = 30;
             
-            function typeCharacter() {
-                if (phase === "typing") {
-                    if (index < text.length) {
-                        fullText += text[index];
-                        titleElement.textContent = fullText;
-                        index++;
-                        setTimeout(typeCharacter, 80);
-                    } else {
-                        // Transition to error phase
-                        phase = "error";
-                        setTimeout(typeCharacter, 300);
-                    }
-                } else if (phase === "error") {
-                    // Add extra X's to simulate mistake
-                    titleElement.textContent = fullText + "X";
-                    titleElement.style.color = "#ff6666";
-                    titleElement.style.textShadow = "0 0 15px #ff6666, 0 0 30px #ff6666";
-                    
-                    setTimeout(() => {
-                        titleElement.textContent = fullText + "XX";
-                        
-                        setTimeout(() => {
-                            // Clear the mistakes
-                            fullText = text.substring(0, text.length - 1);
-                            titleElement.textContent = fullText;
-                            
-                            setTimeout(() => {
-                                // Correct the final letter
-                                phase = "correct";
-                                titleElement.textContent = text;
-                                titleElement.style.color = "var(--primary)";
-                                titleElement.style.textShadow = "0 0 30px var(--primary), 0 0 60px var(--secondary)";
-                                
-                                // Restart animation after a delay
-                                setTimeout(startTypingAnimation, 3000);
-                            }, 200);
-                        }, 300);
-                    }, 300);
-                }
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.width = (2 + Math.random() * 3) + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.animationDelay = Math.random() * 3 + 's';
+                particle.style.animationDuration = (3 + Math.random() * 4) + 's';
+                particleContainer.appendChild(particle);
             }
-            
-            titleElement.textContent = "";
-            typeCharacter();
         }
-        
-        // Start the typing animation on page load
-        startTypingAnimation();
 
-        // Mouse tracking cursor
-        const mouseTracker = document.getElementById('mouseTracker');
-        
-        document.addEventListener('mousemove', (e) => {
-            mouseTracker.style.left = (e.clientX - 10) + 'px';
-            mouseTracker.style.top = (e.clientY - 10) + 'px';
-        });
+        // Mouse tracker
+        function initMouseTracker() {
+            const tracker = document.getElementById('mouseTracker');
+            document.addEventListener('mousemove', (e) => {
+                tracker.style.left = (e.clientX - 10) + 'px';
+                tracker.style.top = (e.clientY - 10) + 'px';
+            });
+        }
+
+        // Scroll animations
+        function initScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.animation = 'fade-in-up 0.6s ease-out';
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.tech-card, .stat-box, .expertise-box, .tool-badge').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // Initialize all animations
+        createParticles();
+        initMouseTracker();
+        initScrollAnimations();
     </script>
 </body>
 </html>
