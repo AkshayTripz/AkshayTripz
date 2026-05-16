@@ -1,6 +1,6 @@
 <div align="center">
 
-<!-- ANIMATED BACKGROUND -->
+<!-- ANIMATED BACKGROUND & ADVANCED STYLES -->
 <style>
   * {
     margin: 0;
@@ -10,10 +10,11 @@
   body {
     background: #000;
     color: #fff;
-    font-family: 'Courier New', monospace;
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
     overflow-x: hidden;
   }
 
+  /* ===== ADVANCED KEYFRAME ANIMATIONS ===== */
   @keyframes glitchEffect {
     0% { transform: translate(0); }
     20% { transform: translate(-2px, 2px); }
@@ -74,6 +75,22 @@
     50% { color: #FF00FF; }
     75% { color: #00ff00; }
     100% { color: #FF0080; }
+  }
+
+  @keyframes borderPulse {
+    0%, 100% { 
+      border-color: #FF0080;
+      box-shadow: 0 0 10px #FF0080;
+    }
+    50% {
+      border-color: #00ffff;
+      box-shadow: 0 0 20px #00ffff;
+    }
+  }
+
+  @keyframes rotateBorder {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
   }
 
   .main-container {
@@ -144,6 +161,7 @@
     animation: slideInRight 1.5s ease-out;
     margin: 15px 0;
     font-weight: bold;
+    text-shadow: 0 0 10px #FF0080;
   }
 
   .divider {
@@ -169,6 +187,19 @@
     padding-bottom: 15px;
     text-shadow: 0 0 10px #00ffff;
     animation: slideInLeft 1s ease-out;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, #FF0080, #00ffff);
+    animation: borderPulse 2s ease-in-out infinite;
   }
 
   .box {
@@ -206,12 +237,19 @@
     margin-bottom: 12px;
     font-weight: bold;
     text-shadow: 0 0 8px #00ffff;
+    animation: slideInLeft 0.8s ease-out;
   }
 
   .box-content {
     color: #ccc;
     line-height: 1.8;
     font-size: 0.95rem;
+    animation: fadeInContent 0.8s ease-out 0.2s both;
+  }
+
+  @keyframes fadeInContent {
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
 
   .language-item {
@@ -226,6 +264,18 @@
     box-shadow: 0 0 15px rgba(255, 0, 128, 0.6);
     transition: all 0.3s ease;
     position: relative;
+    overflow: hidden;
+  }
+
+  .language-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    animation: shimmer 2s infinite;
   }
 
   .language-item:hover {
@@ -250,6 +300,18 @@
     animation: floatUp 1.5s ease-out;
     transition: all 0.3s ease;
     position: relative;
+    overflow: hidden;
+  }
+
+  .tool-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.3), transparent);
+    animation: shimmer 2.5s infinite;
   }
 
   .tool-card:hover {
@@ -279,12 +341,77 @@
     animation: binaryPulse 3s ease-in-out infinite;
   }
 
+  .stats-bar {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin: 40px 0;
+    gap: 20px;
+  }
+
+  .stat-item {
+    text-align: center;
+    animation: floatUp 1.5s ease-out;
+    padding: 20px;
+    border: 2px solid #FF0080;
+    border-radius: 8px;
+    background: rgba(255, 0, 128, 0.05);
+    transition: all 0.3s ease;
+    min-width: 150px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.2), transparent);
+    animation: shimmer 2.5s infinite;
+  }
+
+  .stat-item:hover {
+    border-color: #00ffff;
+    box-shadow: 0 0 20px #FF0080, 0 0 10px #00ffff;
+    transform: translateY(-10px) scale(1.05);
+  }
+
+  .stat-number {
+    font-size: 2.5rem;
+    color: #FF0080;
+    font-weight: bold;
+    text-shadow: 0 0 10px #FF0080;
+    animation: neonGlow 3s ease-in-out infinite;
+  }
+
+  .stat-label {
+    color: #00ffff;
+    font-size: 1rem;
+    margin-top: 10px;
+    text-shadow: 0 0 5px #00ffff;
+  }
+
   .footer {
     margin-top: 60px;
     padding: 30px;
     text-align: center;
     border-top: 2px solid #FF0080;
     animation: floatUp 2s ease-out;
+    position: relative;
+  }
+
+  .footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, #FF0080, #00ffff);
+    animation: shimmer 3s infinite;
   }
 
   .footer-text {
@@ -310,39 +437,24 @@
     transition: all 0.3s ease;
     animation: floatUp 1.5s ease-out;
     box-shadow: 0 0 15px rgba(255, 0, 128, 0.5);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .social-badge::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.3);
+    animation: shimmer 2s infinite;
   }
 
   .social-badge:hover {
     transform: scale(1.15) translateY(-5px);
     box-shadow: 0 0 30px #FF0080, 0 0 20px #00ffff;
-  }
-
-  .stats-bar {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    margin: 40px 0;
-    gap: 20px;
-  }
-
-  .stat-item {
-    text-align: center;
-    animation: floatUp 1.5s ease-out;
-  }
-
-  .stat-number {
-    font-size: 2.5rem;
-    color: #FF0080;
-    font-weight: bold;
-    text-shadow: 0 0 10px #FF0080;
-    animation: neonGlow 3s ease-in-out infinite;
-  }
-
-  .stat-label {
-    color: #00ffff;
-    font-size: 1rem;
-    margin-top: 10px;
-    text-shadow: 0 0 5px #00ffff;
   }
 
   @media (max-width: 768px) {
@@ -354,6 +466,9 @@
     }
     .tool-grid {
       grid-template-columns: 1fr;
+    }
+    .stats-bar {
+      flex-direction: column;
     }
   }
 </style>
@@ -384,8 +499,12 @@
       <div class="stat-label">Languages</div>
     </div>
     <div class="stat-item">
-      <div class="stat-number">5</div>
-      <div class="stat-label">Architectures</div>
+      <div class="stat-number">8</div>
+      <div class="stat-label">CPU Architectures</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">∞</div>
+      <div class="stat-label">Learning Potential</div>
     </div>
   </div>
 
@@ -398,46 +517,45 @@
       <div class="box-content">
         A dedicated Reverse Engineer specializing in <span style="color: #FF0080; font-weight: bold;">binary analysis</span>, 
         <span style="color: #FF0080; font-weight: bold;">malware research</span>, and <span style="color: #FF0080; font-weight: bold;">vulnerability discovery</span>. 
-        I dissect binaries, break obfuscation, and uncover hidden vulnerabilities through advanced static and dynamic analysis techniques.
+        I dissect binaries, break obfuscation, and uncover hidden vulnerabilities through advanced static and dynamic analysis techniques. With expertise across 8+ CPU architectures and mastery of 15+ programming languages, I deliver comprehensive security insights.
       </div>
     </div>
   </div>
 
-  <!-- LANGUAGES SECTION -->
+  <!-- PROGRAMMING LANGUAGES SECTION -->
   <div class="section">
-    <h2 class="section-title">💻 PROGRAMMING LANGUAGES</h2>
+    <h2 class="section-title">💻 PROGRAMMING LANGUAGES & ARCHITECTURES</h2>
     
     <div class="box">
-      <div class="box-title">Primary Languages</div>
+      <div class="box-title">Primary Assembly Languages</div>
       <div class="box-content">
         <div style="margin: 15px 0;">
-          <span class="language-item">x86/x86-64 Assembly</span>
+          <span class="language-item">x86/x86-64 ASM</span>
+          <span class="language-item">ARM v7/v8</span>
+          <span class="language-item">MIPS</span>
+          <span class="language-item">PowerPC</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="box-title">High-Level Programming Languages</div>
+      <div class="box-content">
+        <div style="margin: 15px 0;">
           <span class="language-item">Python</span>
           <span class="language-item">C/C++</span>
           <span class="language-item">Java</span>
           <span class="language-item">C#</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="box">
-      <div class="box-title">Secondary Languages</div>
-      <div class="box-content">
-        <div style="margin: 15px 0;">
-          <span class="language-item">ARM Assembly</span>
-          <span class="language-item">MIPS Assembly</span>
-          <span class="language-item">PowerPC Assembly</span>
           <span class="language-item">JavaScript</span>
           <span class="language-item">Go</span>
           <span class="language-item">Rust</span>
           <span class="language-item">Bash/Shell</span>
-          <span class="language-item">PowerShell</span>
         </div>
       </div>
     </div>
 
     <div class="box">
-      <div class="box-title">Binary Formats & Architectures</div>
+      <div class="box-title">Binary Formats & Additional Architectures</div>
       <div class="box-content">
         <div style="margin: 15px 0;">
           <span class="language-item">PE (Windows)</span>
@@ -445,6 +563,8 @@
           <span class="language-item">Mach-O (macOS)</span>
           <span class="language-item">DEX (Android)</span>
           <span class="language-item">WebAssembly</span>
+          <span class="language-item">SPARC</span>
+          <span class="language-item">AVR</span>
         </div>
       </div>
     </div>
@@ -583,7 +703,7 @@
       <div class="box-title">✓ Binary Analysis & Disassembly</div>
       <div class="box-content">
         Static disassembly • Control Flow Analysis • Function Identification • 
-        Data Flow Mapping • String Analysis • Import Resolution
+        Data Flow Mapping • String Analysis • Import Resolution • Call Graph Construction
       </div>
     </div>
 
@@ -591,7 +711,7 @@
       <div class="box-title">✓ Dynamic Analysis & Debugging</div>
       <div class="box-content">
         Runtime Monitoring • Breakpoint Debugging • Memory Inspection • 
-        Register Analysis • Hooking & Instrumentation • API Tracing
+        Register Analysis • Hooking & Instrumentation • API Tracing • System Call Tracking
       </div>
     </div>
 
@@ -599,7 +719,7 @@
       <div class="box-title">✓ Vulnerability Research</div>
       <div class="box-content">
         Buffer Overflow Detection • Use-After-Free Analysis • Integer Overflow • 
-        Logic Error Discovery • Privilege Escalation • CVE Research
+        Logic Error Discovery • Privilege Escalation • CVE Research • Exploit Validation
       </div>
     </div>
 
@@ -607,23 +727,60 @@
       <div class="box-title">✓ Malware Analysis</div>
       <div class="box-content">
         Behavioral Analysis • Signature Detection • Packing/Unpacking • 
-        Memory Forensics • Network Analysis • IOC Extraction
+        Memory Forensics • Network Analysis • IOC Extraction • Threat Intelligence
       </div>
     </div>
 
     <div class="box">
-      <div class="box-title">✓ Protection Bypass</div>
+      <div class="box-title">✓ Protection Bypass & Deobfuscation</div>
       <div class="box-content">
         Code Virtualization Reversal • Anti-Debugging Defeat • Control Flow Flattening • 
-        String Decryption • Anti-VM Evasion • Tamper Detection Bypass
+        String Decryption • Anti-VM Evasion • Tamper Detection Bypass • Opaque Predicate Removal
       </div>
     </div>
 
     <div class="box">
-      <div class="box-title">✓ Architecture Knowledge</div>
+      <div class="box-title">✓ Advanced Architecture Knowledge</div>
       <div class="box-content">
         x86/x86-64 • ARM (v7/v8) • MIPS/MIPS64 • PowerPC • 
-        SPARC • AVR • RISC-V • WebAssembly
+        SPARC • AVR • RISC-V • WebAssembly • Microarchitecture Analysis
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="box-title">✓ Exploit Development & ROP</div>
+      <div class="box-content">
+        ROP Chain Construction • ASLR Bypasses • Heap Exploitation • 
+        Format String Attacks • Use-After-Free Exploitation • Side-Channel Analysis
+      </div>
+    </div>
+  </div>
+
+  <!-- TECHNICAL HIGHLIGHTS -->
+  <div class="section">
+    <h2 class="section-title">⚙️ TECHNICAL HIGHLIGHTS</h2>
+    
+    <div class="box">
+      <div class="box-title">Core Competencies</div>
+      <div class="box-content">
+        • Multi-architecture reverse engineering (x86, ARM, MIPS, PowerPC)<br>
+        • Binary packing & unpacking techniques<br>
+        • Symbolic execution & static analysis automation<br>
+        • Cross-platform malware behavior analysis<br>
+        • Custom tool development & IDA scripting<br>
+        • Zero-day vulnerability assessment<br>
+        • Cryptographic implementation analysis<br>
+        • Hardware-software interaction analysis
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="box-title">Methodology</div>
+      <div class="box-content">
+        Combines static and dynamic analysis for comprehensive understanding. Automated 
+        analysis through scripting with manual validation. Emphasis on understanding 
+        original developer intent and potential weaknesses. Documented findings with 
+        reproducible proof-of-concepts.
       </div>
     </div>
   </div>
@@ -636,11 +793,12 @@
       <a href="https://github.com/AkshayTripz" class="social-badge">🔗 GitHub</a>
       <a href="https://linkedin.com" class="social-badge">💼 LinkedIn</a>
       <a href="https://twitter.com" class="social-badge">🐦 Twitter</a>
+      <a href="mailto:contact@akshay.dev" class="social-badge">📧 Email</a>
     </div>
 
-    <p class="footer-text">Reverse Engineering • Binary Analysis • Security Research</p>
+    <p class="footer-text">Reverse Engineering • Binary Analysis • Security Research • Vulnerability Research</p>
     <p style="color: #666; font-size: 0.9rem; margin-top: 20px;">
-      Last Updated: May 15, 2026 | Active & Learning
+      Last Updated: May 16, 2026 | Active & Continuously Learning | Open to Collaboration
     </p>
   </div>
 
@@ -662,6 +820,24 @@
     span.style.animationDelay = Math.random() * 5 + 's';
     matrixBg.appendChild(span);
   }
+
+  // Scroll reveal animations
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, index) => {
+      if (entry.isIntersecting) {
+        entry.target.style.animation = `floatUp 0.6s ease-out ${index * 0.1}s both`;
+      }
+    });
+  }, observerOptions);
+
+  document.querySelectorAll('.box, .tool-card, .stat-item, .language-item').forEach(el => {
+    observer.observe(el);
+  });
 </script>
 
 </div>
