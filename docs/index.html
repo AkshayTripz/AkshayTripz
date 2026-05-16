@@ -23,57 +23,15 @@
 
         /* ===== PROFESSIONAL COLOR SCHEME ===== */
         :root {
-            --primary: #00d4ff;      /* Cyan - Professional Tech */
-            --secondary: #a855f7;    /* Purple - Innovation */
-            --accent: #ff8c00;       /* Orange - Energy */
-            --cyber-red: #ff0040;    /* Red - Danger/Important */
+            --primary: #00d4ff;
+            --secondary: #a855f7;
+            --accent: #ff8c00;
+            --cyber-red: #ff0040;
             --dark-bg: #0a0a0f;
             --grid-color: #00d4ff1a;
         }
 
         /* ===== KEYFRAME ANIMATIONS ===== */
-        @keyframes type-akshay {
-            0% { content: ''; }
-            5% { content: 'A'; }
-            10% { content: 'AK'; }
-            15% { content: 'AKS'; }
-            20% { content: 'AKSH'; }
-            25% { content: 'AKSHA'; }
-            30% { content: 'AKSHAY'; }
-        }
-
-        @keyframes type-space {
-            30% { content: ''; }
-            35% { content: ' '; }
-        }
-
-        @keyframes type-tripz {
-            35% { content: 'AKSHAY '; }
-            40% { content: 'AKSHAY T'; }
-            45% { content: 'AKSHAY TR'; }
-            50% { content: 'AKSHAY TRI'; }
-            55% { content: 'AKSHAY TRIP'; }
-            60% { content: 'AKSHAY TRIPZ'; }
-        }
-
-        @keyframes type-error {
-            60% { content: 'AKSHAY TRIPZ'; color: var(--primary); }
-            65% { content: 'AKSHAY TRIPX'; color: #ff6666; }
-            70% { content: 'AKSHAY TRIPXX'; color: #ff6666; }
-            75% { content: 'AKSHAY TRIP'; color: #ff6666; }
-            80% { content: 'AKSHAY TRIPZ'; color: var(--primary); }
-            100% { content: 'AKSHAY TRIPZ'; color: var(--primary); }
-        }
-
-        @keyframes error-glow {
-            60% { text-shadow: 0 0 30px var(--primary), 0 0 60px var(--secondary); }
-            65% { text-shadow: 0 0 15px #ff6666, 0 0 30px #ff6666; }
-            70% { text-shadow: 0 0 20px #ff6666, 0 0 40px #ff6666; }
-            75% { text-shadow: 0 0 15px #ff6666, 0 0 30px #ff6666; }
-            80% { text-shadow: 0 0 30px var(--primary), 0 0 60px var(--secondary); }
-            100% { text-shadow: 0 0 30px var(--primary), 0 0 60px var(--secondary); }
-        }
-
         @keyframes glitch-effect {
             0% { transform: translate(0); }
             20% { transform: translate(-3px, 3px); }
@@ -81,21 +39,6 @@
             60% { transform: translate(3px, 3px); }
             80% { transform: translate(3px, -3px); }
             100% { transform: translate(0); }
-        }
-
-        @keyframes crawl-legs {
-            0%, 100% { 
-                transform: translateX(0px) rotateX(0deg);
-            }
-            25% { 
-                transform: translateX(5px) rotateX(5deg);
-            }
-            50% { 
-                transform: translateX(0px) rotateX(0deg);
-            }
-            75% { 
-                transform: translateX(-5px) rotateX(-5deg);
-            }
         }
 
         @keyframes cyber-pulse {
@@ -200,29 +143,6 @@
             z-index: 998;
         }
 
-        /* ===== 3D BUG ELEMENT ===== */
-        .bug-container {
-            position: fixed;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            width: 200px;
-            height: 200px;
-            pointer-events: none;
-            z-index: 50;
-            opacity: 0.4;
-        }
-
-        .bug-svg {
-            width: 100%;
-            height: 100%;
-            filter: drop-shadow(0 0 20px var(--primary)) drop-shadow(0 0 40px rgba(168, 85, 247, 0.3));
-        }
-
-        .bug-legs {
-            animation: crawl-legs 1.5s ease-in-out infinite;
-        }
-
         /* ===== CONTAINER & LAYOUT ===== */
         .container {
             max-width: 1400px;
@@ -250,13 +170,9 @@
             transform-style: preserve-3d;
             color: var(--primary);
             text-shadow: 0 0 30px var(--primary), 0 0 60px var(--secondary);
-            animation: glitch-effect 0.3s infinite, type-error 15s ease-in-out infinite;
+            animation: glitch-effect 0.3s infinite;
             min-height: 80px;
             position: relative;
-        }
-
-        .header-title::before {
-            content: '';
         }
 
         .header-subtitle {
@@ -951,11 +867,6 @@
             .container {
                 padding: 30px 15px;
             }
-
-            .bug-container {
-                width: 100px;
-                height: 100px;
-            }
         }
 
         /* ===== MOUSE TRACKING ===== */
@@ -985,52 +896,11 @@
     <div class="matrix-bg" id="matrixBg"></div>
     <div class="scanline-overlay"></div>
     <div class="mouse-tracker" id="mouseTracker"></div>
-    
-    <!-- 3D Bug -->
-    <div class="bug-container">
-        <svg class="bug-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-            <!-- Bug Body -->
-            <ellipse cx="100" cy="100" rx="40" ry="50" fill="#00d4ff" opacity="0.8"/>
-            
-            <!-- Bug Head -->
-            <circle cx="100" cy="45" r="25" fill="#00d4ff" opacity="0.9"/>
-            
-            <!-- Bug Eyes -->
-            <circle cx="92" cy="40" r="4" fill="#ff0040"/>
-            <circle cx="108" cy="40" r="4" fill="#ff0040"/>
-            
-            <!-- Bug Antennae -->
-            <line x1="95" y1="20" x2="85" y2="5" stroke="#a855f7" stroke-width="2"/>
-            <line x1="105" y1="20" x2="115" y2="5" stroke="#a855f7" stroke-width="2"/>
-            
-            <!-- Left Front Leg -->
-            <line x1="70" y1="80" x2="40" y2="60" stroke="#00d4ff" stroke-width="3" class="bug-legs"/>
-            
-            <!-- Left Middle Leg -->
-            <line x1="65" y1="110" x2="30" y2="120" stroke="#00d4ff" stroke-width="3" class="bug-legs"/>
-            
-            <!-- Left Back Leg -->
-            <line x1="70" y1="140" x2="40" y2="160" stroke="#00d4ff" stroke-width="3" class="bug-legs"/>
-            
-            <!-- Right Front Leg -->
-            <line x1="130" y1="80" x2="160" y2="60" stroke="#00d4ff" stroke-width="3" class="bug-legs"/>
-            
-            <!-- Right Middle Leg -->
-            <line x1="135" y1="110" x2="170" y2="120" stroke="#00d4ff" stroke-width="3" class="bug-legs"/>
-            
-            <!-- Right Back Leg -->
-            <line x1="130" y1="140" x2="160" y2="160" stroke="#00d4ff" stroke-width="3" class="bug-legs"/>
-            
-            <!-- Wings -->
-            <ellipse cx="80" cy="90" rx="12" ry="35" fill="none" stroke="#a855f7" stroke-width="2" opacity="0.6"/>
-            <ellipse cx="120" cy="90" rx="12" ry="35" fill="none" stroke="#a855f7" stroke-width="2" opacity="0.6"/>
-        </svg>
-    </div>
 
     <div class="container">
         <!-- HEADER -->
         <div class="header">
-            <h1 class="header-title">AKSHAY TRIPZ</h1>
+            <h1 class="header-title" id="typeTitle">AKSHAY TRIPZ</h1>
             <p class="header-subtitle">[ REVERSE ENGINEERING SPECIALIST ]</p>
             <div class="header-divider"></div>
             <p style="color: var(--primary); font-size: 1rem; letter-spacing: 3px; text-shadow: 0 0 10px var(--primary)44;">
@@ -1221,6 +1091,63 @@
     </div>
 
     <script>
+        // Typing animation with mistakes using JavaScript
+        const titleElement = document.getElementById('typeTitle');
+        const text = "AKSHAY TRIPZ";
+        
+        function startTypingAnimation() {
+            let fullText = "";
+            let index = 0;
+            let phase = "typing"; // typing, error, correct
+            
+            function typeCharacter() {
+                if (phase === "typing") {
+                    if (index < text.length) {
+                        fullText += text[index];
+                        titleElement.textContent = fullText;
+                        index++;
+                        setTimeout(typeCharacter, 80);
+                    } else {
+                        // Transition to error phase
+                        phase = "error";
+                        setTimeout(typeCharacter, 300);
+                    }
+                } else if (phase === "error") {
+                    // Add extra X's to simulate mistake
+                    titleElement.textContent = fullText + "X";
+                    titleElement.style.color = "#ff6666";
+                    titleElement.style.textShadow = "0 0 15px #ff6666, 0 0 30px #ff6666";
+                    
+                    setTimeout(() => {
+                        titleElement.textContent = fullText + "XX";
+                        
+                        setTimeout(() => {
+                            // Clear the mistakes
+                            fullText = text.substring(0, text.length - 1);
+                            titleElement.textContent = fullText;
+                            
+                            setTimeout(() => {
+                                // Correct the final letter
+                                phase = "correct";
+                                titleElement.textContent = text;
+                                titleElement.style.color = "var(--primary)";
+                                titleElement.style.textShadow = "0 0 30px var(--primary), 0 0 60px var(--secondary)";
+                                
+                                // Restart animation after a delay
+                                setTimeout(startTypingAnimation, 3000);
+                            }, 200);
+                        }, 300);
+                    }, 300);
+                }
+            }
+            
+            titleElement.textContent = "";
+            typeCharacter();
+        }
+        
+        // Start the typing animation on page load
+        startTypingAnimation();
+
         // Mouse tracking cursor
         const mouseTracker = document.getElementById('mouseTracker');
         
