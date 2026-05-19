@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <style>
+      @keyframes binaryFlow {
+        0% { transform: translateY(-100%); opacity: 0; }
+        10% { opacity: 1; }
+        90% { opacity: 1; }
+        100% { transform: translateY(100%); opacity: 0; }
+      }
+      .binary { animation: binaryFlow 4s linear infinite; font-weight: bold; }
+    </style>
+  </defs>
+  <rect width="200" height="200" fill="#0a0a0f" opacity="0.3" rx="8"/>
+  <g text-anchor="middle" font-family="JetBrains Mono" font-size="14" fill="#00d4ff">
+    <text x="50" y="50" class="binary" style="animation-delay: 0s">01</text>
+    <text x="100" y="50" class="binary" style="animation-delay: 0.5s">10</text>
+    <text x="150" y="50" class="binary" style="animation-delay: 1s">11</text>
+    <text x="50" y="100" class="binary" style="animation-delay: 1.5s">10</text>
+    <text x="100" y="100" class="binary" style="animation-delay: 2s">01</text>
+    <text x="150" y="100" class="binary" style="animation-delay: 2.5s">11</text>
+    <text x="50" y="150" class="binary" style="animation-delay: 3s">11</text>
+    <text x="100" y="150" class="binary" style="animation-delay: 3.5s">00</text>
+    <text x="150" y="150" class="binary" style="animation-delay: 4s">10</text>
+  </g>
+  <rect width="200" height="200" fill="none" stroke="#a855f7" stroke-width="2" rx="8" opacity="0.5"/>
+</svg>
