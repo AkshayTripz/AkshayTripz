@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Akshay Tripz - Advanced Reverse Engineering Specialist</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -17,24 +16,29 @@
             height: 100%;
             background: #0a0a0f;
             color: #fff;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
             overflow-x: hidden;
             scroll-behavior: smooth;
         }
 
+        /* ===== PROFESSIONAL COLOR SCHEME ===== */
         :root {
             --primary: #00d4ff;
             --secondary: #a855f7;
             --accent: #ff8c00;
             --cyber-red: #ff0040;
             --dark-bg: #0a0a0f;
-            --text-primary: #ffffff;
-            --text-secondary: #e0e0e0;
+            --grid-color: #00d4ff1a;
         }
 
+        /* ===== ADVANCED KEYFRAME ANIMATIONS ===== */
         @keyframes smooth-shine {
-            0% { background-position: -1000px 0; }
-            100% { background-position: 1000px 0; }
+            0% {
+                background-position: -1000px 0;
+            }
+            100% {
+                background-position: 1000px 0;
+            }
         }
 
         @keyframes cyber-pulse {
@@ -49,8 +53,12 @@
         }
 
         @keyframes float-3d {
-            0%, 100% { transform: translateY(0px) rotateX(0deg) rotateZ(0deg); }
-            50% { transform: translateY(-20px) rotateX(5deg) rotateZ(2deg); }
+            0%, 100% { 
+                transform: translateY(0px) rotateX(0deg) rotateZ(0deg);
+            }
+            50% { 
+                transform: translateY(-20px) rotateX(5deg) rotateZ(2deg);
+            }
         }
 
         @keyframes border-glow {
@@ -80,8 +88,12 @@
         }
 
         @keyframes cyber-world-shift {
-            0% { background-position: 0% 0%; }
-            100% { background-position: 100% 100%; }
+            0% {
+                background-position: 0% 0%;
+            }
+            100% {
+                background-position: 100% 100%;
+            }
         }
 
         @keyframes particle-float {
@@ -96,26 +108,73 @@
         }
 
         @keyframes slide-in-down {
-            from { transform: translateY(-30px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            from {
+                transform: translateY(-30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         @keyframes fade-in-up {
-            from { transform: translateY(30px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         @keyframes pulse-scale {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes sparkle-burst {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(0.3);
+            }
         }
 
         @keyframes light-sweep {
-            0% { left: -100%; opacity: 0; }
-            50% { opacity: 1; }
-            100% { left: 100%; opacity: 0; }
+            0% {
+                left: -100%;
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                left: 100%;
+                opacity: 0;
+            }
         }
 
+        @keyframes pulse-ring {
+            0% {
+                r: 0;
+                opacity: 1;
+            }
+            100% {
+                r: 80;
+                opacity: 0;
+            }
+        }
+
+        /* ===== CYBER WORLD BACKGROUND ===== */
         body::before {
             content: '';
             position: fixed;
@@ -162,6 +221,7 @@
             z-index: 998;
         }
 
+        /* ===== PARTICLE EFFECTS ===== */
         .particles {
             position: fixed;
             top: 0;
@@ -193,6 +253,7 @@
             z-index: 999;
         }
 
+        /* ===== CONTAINER & LAYOUT ===== */
         .container {
             max-width: 1400px;
             margin: 0 auto;
@@ -201,6 +262,7 @@
             z-index: 2;
         }
 
+        /* ===== HEADER SECTION ===== */
         .header {
             text-align: center;
             margin-bottom: 100px;
@@ -227,6 +289,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            text-shadow: none;
             min-height: 80px;
             position: relative;
             animation: smooth-shine 3s ease-in-out infinite;
@@ -244,9 +307,9 @@
             bottom: 0;
             background: linear-gradient(90deg,
                 transparent 0%,
-                rgba(255, 255, 255, 0.1) 25%,
-                rgba(255, 255, 255, 0.2) 50%,
-                rgba(255, 255, 255, 0.1) 75%,
+                rgba(255, 255, 255, 0.2) 25%,
+                rgba(255, 255, 255, 0.3) 50%,
+                rgba(255, 255, 255, 0.2) 75%,
                 transparent 100%);
             background-size: 200% 100%;
             background-position: -200% 0;
@@ -256,12 +319,12 @@
         }
 
         .header-subtitle {
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             color: var(--secondary);
             margin: 20px 0;
-            letter-spacing: 3px;
+            letter-spacing: 4px;
             text-shadow: 0 0 20px var(--secondary)44;
-            font-weight: 400;
+            font-weight: 300;
             animation: fade-in-up 0.8s ease-out 0.2s both;
         }
 
@@ -278,11 +341,11 @@
             color: var(--primary);
             font-size: 1rem;
             letter-spacing: 3px;
-            font-weight: 300;
             text-shadow: 0 0 10px var(--primary)44;
             animation: fade-in-up 0.8s ease-out 0.4s both;
         }
 
+        /* ===== TECH STACK SECTION ===== */
         .tech-section {
             margin: 80px 0;
         }
@@ -293,10 +356,8 @@
             margin-bottom: 50px;
             position: relative;
             padding-left: 40px;
-            font-weight: 700;
             text-shadow: 0 0 15px var(--primary)44;
             animation: slide-in-down 0.6s ease-out;
-            letter-spacing: 1px;
         }
 
         .section-header::before {
@@ -318,6 +379,7 @@
             box-shadow: 0 0 10px var(--primary);
         }
 
+        /* ===== TECH CARD GRID ===== */
         .tech-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -328,7 +390,7 @@
         .tech-card {
             background: linear-gradient(135deg, rgba(0, 212, 255, 0.08), rgba(168, 85, 247, 0.08));
             border: 2px solid var(--primary);
-            border-radius: 12px;
+            border-radius: 8px;
             padding: 30px;
             position: relative;
             overflow: hidden;
@@ -337,10 +399,6 @@
             transform-style: preserve-3d;
             perspective: 1000px;
             animation: fade-in-up 0.6s ease-out both;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
         }
 
         .tech-card:nth-child(1) { animation-delay: 0.1s; }
@@ -369,32 +427,33 @@
             background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(168, 85, 247, 0.15));
         }
 
-        .tech-card-svg {
-            width: 120px;
-            height: 120px;
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 2;
+        .tech-card:active {
+            transform: translateY(-5px) rotateX(4deg);
+            box-shadow: 0 0 50px var(--secondary), 0 0 100px var(--primary);
+        }
+
+        .tech-card-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            animation: float-3d 4s ease-in-out infinite;
         }
 
         .tech-card-title {
             font-size: 1.3rem;
             color: var(--primary);
             margin-bottom: 12px;
-            font-weight: 700;
+            font-weight: bold;
             position: relative;
             z-index: 2;
             text-shadow: 0 0 10px var(--primary)44;
-            letter-spacing: 0.5px;
         }
 
         .tech-card-desc {
-            color: var(--text-secondary);
+            color: #b0b0b0;
             font-size: 0.95rem;
             line-height: 1.6;
             position: relative;
             z-index: 2;
-            font-weight: 300;
         }
 
         .tech-card-meta {
@@ -406,9 +465,9 @@
             font-size: 0.8rem;
             color: var(--secondary);
             opacity: 0.7;
-            font-weight: 500;
         }
 
+        /* ===== STAT BOXES ===== */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -419,7 +478,7 @@
         .stat-box {
             background: rgba(0, 212, 255, 0.05);
             border: 2px solid var(--primary);
-            border-radius: 12px;
+            border-radius: 8px;
             padding: 30px;
             text-align: center;
             position: relative;
@@ -449,17 +508,58 @@
             background: rgba(255, 0, 64, 0.05);
         }
 
+        .stat-box::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.2), transparent);
+            animation: shimmer 2.5s infinite;
+        }
+
+        .stat-box:nth-child(2)::after {
+            background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.2), transparent);
+        }
+
+        .stat-box:nth-child(3)::after {
+            background: linear-gradient(90deg, transparent, rgba(255, 140, 0, 0.2), transparent);
+        }
+
+        .stat-box:nth-child(4)::after {
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 64, 0.2), transparent);
+        }
+
         .stat-box:hover {
             transform: translateY(-10px) scale(1.05);
+        }
+
+        .stat-box:nth-child(1):hover {
             box-shadow: 0 0 30px var(--primary), 0 10px 30px rgba(0, 212, 255, 0.2);
+            border-color: var(--primary);
+        }
+
+        .stat-box:nth-child(2):hover {
+            box-shadow: 0 0 30px var(--secondary), 0 10px 30px rgba(168, 85, 247, 0.2);
+            border-color: var(--secondary);
+        }
+
+        .stat-box:nth-child(3):hover {
+            box-shadow: 0 0 30px var(--accent), 0 10px 30px rgba(255, 140, 0, 0.2);
+            border-color: var(--accent);
+        }
+
+        .stat-box:nth-child(4):hover {
+            box-shadow: 0 0 30px var(--cyber-red), 0 10px 30px rgba(255, 0, 64, 0.2);
+            border-color: var(--cyber-red);
         }
 
         .stat-number {
             font-size: 2.8rem;
-            font-weight: 900;
+            font-weight: bold;
             animation: cyber-pulse 2s ease-in-out infinite;
             text-shadow: 0 0 20px currentColor;
-            letter-spacing: -1px;
         }
 
         .stat-box:nth-child(1) .stat-number { color: var(--primary); }
@@ -471,9 +571,7 @@
             font-size: 0.9rem;
             margin-top: 10px;
             text-shadow: 0 0 8px currentColor;
-            letter-spacing: 1px;
-            font-weight: 500;
-            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
         .stat-box:nth-child(1) .stat-label { color: var(--primary); }
@@ -481,6 +579,7 @@
         .stat-box:nth-child(3) .stat-label { color: var(--accent); }
         .stat-box:nth-child(4) .stat-label { color: var(--cyber-red); }
 
+        /* ===== EXPERTISE BOXES ===== */
         .expertise-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -491,7 +590,7 @@
         .expertise-box {
             background: linear-gradient(135deg, rgba(0, 212, 255, 0.06), rgba(168, 85, 247, 0.06));
             border: 2px solid var(--primary);
-            border-radius: 12px;
+            border-radius: 8px;
             padding: 30px;
             position: relative;
             overflow: hidden;
@@ -517,18 +616,85 @@
             background: linear-gradient(135deg, rgba(255, 140, 0, 0.06), rgba(168, 85, 247, 0.06));
         }
 
+        .expertise-box:nth-child(4) {
+            border-color: var(--primary);
+        }
+
+        .expertise-box:nth-child(5) {
+            border-color: var(--secondary);
+        }
+
+        .expertise-box:nth-child(6) {
+            border-color: var(--accent);
+        }
+
+        .expertise-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.1), transparent);
+            border-radius: 50%;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .expertise-box:nth-child(2)::before {
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.1), transparent);
+        }
+
+        .expertise-box:nth-child(3)::before {
+            background: radial-gradient(circle, rgba(255, 140, 0, 0.1), transparent);
+        }
+
         .expertise-box:hover {
             transform: translateY(-12px) rotateY(5deg);
+        }
+
+        .expertise-box:nth-child(1):hover {
+            border-color: var(--primary);
             box-shadow: 0 0 40px var(--primary), 0 0 80px var(--secondary);
+        }
+
+        .expertise-box:nth-child(2):hover {
+            border-color: var(--secondary);
+            box-shadow: 0 0 40px var(--secondary), 0 0 80px var(--primary);
+        }
+
+        .expertise-box:nth-child(3):hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 40px var(--accent), 0 0 80px var(--secondary);
+        }
+
+        .expertise-box:nth-child(4):hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 40px var(--primary), 0 0 80px var(--secondary);
+        }
+
+        .expertise-box:nth-child(5):hover {
+            border-color: var(--secondary);
+            box-shadow: 0 0 40px var(--secondary), 0 0 80px var(--primary);
+        }
+
+        .expertise-box:nth-child(6):hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 40px var(--accent), 0 0 80px var(--secondary);
+        }
+
+        .expertise-box:hover::before {
+            opacity: 1;
+            width: 300px;
+            height: 300px;
         }
 
         .expertise-title {
             font-size: 1.2rem;
             margin-bottom: 15px;
-            font-weight: 700;
+            font-weight: bold;
             position: relative;
             z-index: 2;
-            letter-spacing: 0.5px;
         }
 
         .expertise-box:nth-child(1) .expertise-title { color: var(--primary); }
@@ -539,14 +705,23 @@
         .expertise-box:nth-child(6) .expertise-title { color: var(--accent); }
 
         .expertise-desc {
-            color: var(--text-secondary);
+            color: #c0c0c0;
             font-size: 0.95rem;
             line-height: 1.7;
             position: relative;
             z-index: 2;
-            font-weight: 300;
         }
 
+        .expertise-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2rem;
+            opacity: 0.3;
+            z-index: 1;
+        }
+
+        /* ===== TOOLS SHOWCASE ===== */
         .tools-showcase {
             margin: 80px 0;
         }
@@ -570,17 +745,121 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            font-weight: 600;
+            font-weight: bold;
             text-shadow: 0 0 8px var(--primary)44;
             animation: fade-in-up 0.5s ease-out both;
         }
 
-        .tool-badge:hover {
-            transform: translateY(-8px) scale(1.08) rotateX(15deg);
+        .tool-badge:nth-child(4n+2) {
             border-color: var(--secondary);
-            box-shadow: 0 0 20px var(--secondary), 0 8px 25px rgba(168, 85, 247, 0.3);
+            color: var(--secondary);
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(0, 212, 255, 0.1));
         }
 
+        .tool-badge:nth-child(4n+3) {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: linear-gradient(135deg, rgba(255, 140, 0, 0.1), rgba(168, 85, 247, 0.1));
+        }
+
+        .tool-badge:nth-child(4n+4) {
+            border-color: var(--cyber-red);
+            color: var(--cyber-red);
+            background: linear-gradient(135deg, rgba(255, 0, 64, 0.1), rgba(255, 140, 0, 0.1));
+        }
+
+        .tool-badge::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.4), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        .tool-badge:nth-child(4n+2)::after {
+            background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.4), transparent);
+        }
+
+        .tool-badge:nth-child(4n+3)::after {
+            background: linear-gradient(90deg, transparent, rgba(255, 140, 0, 0.4), transparent);
+        }
+
+        .tool-badge:nth-child(4n+4)::after {
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 64, 0.4), transparent);
+        }
+
+        .tool-badge:hover {
+            transform: translateY(-8px) scale(1.08) rotateX(15deg);
+        }
+
+        .tool-badge:nth-child(4n+1):hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px var(--primary), 0 8px 25px rgba(0, 212, 255, 0.3);
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(168, 85, 247, 0.2));
+            color: var(--primary);
+        }
+
+        .tool-badge:nth-child(4n+2):hover {
+            border-color: var(--secondary);
+            box-shadow: 0 0 20px var(--secondary), 0 8px 25px rgba(168, 85, 247, 0.3);
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(0, 212, 255, 0.2));
+            color: var(--secondary);
+        }
+
+        .tool-badge:nth-child(4n+3):hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 20px var(--accent), 0 8px 25px rgba(255, 140, 0, 0.3);
+            background: linear-gradient(135deg, rgba(255, 140, 0, 0.2), rgba(168, 85, 247, 0.2));
+            color: var(--accent);
+        }
+
+        .tool-badge:nth-child(4n+4):hover {
+            border-color: var(--cyber-red);
+            box-shadow: 0 0 20px var(--cyber-red), 0 8px 25px rgba(255, 0, 64, 0.3);
+            background: linear-gradient(135deg, rgba(255, 0, 64, 0.2), rgba(255, 140, 0, 0.2));
+            color: var(--cyber-red);
+        }
+
+        .tool-badge:active {
+            transform: translateY(-3px) scale(1.05);
+        }
+
+        /* ===== CODE BLOCK ===== */
+        .code-block {
+            background: rgba(0, 20, 40, 0.8);
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            padding: 25px;
+            margin: 40px 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            position: relative;
+            box-shadow: 0 0 20px var(--primary)44, inset 0 0 20px rgba(0, 212, 255, 0.05);
+            animation: fade-in-up 0.8s ease-out;
+        }
+
+        .code-block::before {
+            content: '$ ';
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        .code-line {
+            color: var(--primary);
+            line-height: 1.8;
+            text-shadow: 0 0 5px var(--primary)44;
+            animation: code-blink 2s infinite;
+        }
+
+        .code-line:nth-child(2) { animation-delay: 0.3s; }
+        .code-line:nth-child(3) { animation-delay: 0.6s; }
+        .code-line:nth-child(4) { animation-delay: 0.9s; }
+
+        /* ===== ANIMATED RADAR ELEMENT ===== */
         .radar {
             width: 250px;
             height: 250px;
@@ -630,6 +909,7 @@
             animation: pulse-scale 2s ease-in-out infinite;
         }
 
+        /* ===== FOOTER ===== */
         .footer {
             margin-top: 120px;
             padding-top: 60px;
@@ -646,7 +926,6 @@
             font-size: 0.95rem;
             text-shadow: 0 0 10px var(--primary)44;
             letter-spacing: 2px;
-            font-weight: 400;
         }
 
         .social-links {
@@ -664,7 +943,7 @@
             color: var(--primary);
             text-decoration: none;
             border-radius: 8px;
-            font-weight: 600;
+            font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
@@ -679,13 +958,76 @@
         .social-btn:nth-child(3) { animation-delay: 0.2s; }
         .social-btn:nth-child(4) { animation-delay: 0.3s; }
 
-        .social-btn:hover {
+        .social-btn:nth-child(2) {
+            border-color: var(--secondary);
+            color: var(--secondary);
+            background: rgba(168, 85, 247, 0.08);
+        }
+
+        .social-btn:nth-child(3) {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(255, 140, 0, 0.08);
+        }
+
+        .social-btn:nth-child(4) {
+            border-color: var(--cyber-red);
+            color: var(--cyber-red);
+            background: rgba(255, 0, 64, 0.08);
+        }
+
+        .social-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        .social-btn:nth-child(2)::before {
+            background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.3), transparent);
+        }
+
+        .social-btn:nth-child(3)::before {
+            background: linear-gradient(90deg, transparent, rgba(255, 140, 0, 0.3), transparent);
+        }
+
+        .social-btn:nth-child(4)::before {
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 64, 0.3), transparent);
+        }
+
+        .social-btn:nth-child(1):hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 30px var(--primary), 0 0 60px var(--secondary);
+            transform: translateY(-5px) scale(1.05);
+            background: rgba(0, 212, 255, 0.15);
+        }
+
+        .social-btn:nth-child(2):hover {
             border-color: var(--secondary);
             box-shadow: 0 0 30px var(--secondary), 0 0 60px var(--primary);
             transform: translateY(-5px) scale(1.05);
             background: rgba(168, 85, 247, 0.15);
         }
 
+        .social-btn:nth-child(3):hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 30px var(--accent), 0 0 60px var(--secondary);
+            transform: translateY(-5px) scale(1.05);
+            background: rgba(255, 140, 0, 0.15);
+        }
+
+        .social-btn:nth-child(4):hover {
+            border-color: var(--cyber-red);
+            box-shadow: 0 0 30px var(--cyber-red), 0 0 60px var(--accent);
+            transform: translateY(-5px) scale(1.05);
+            background: rgba(255, 0, 64, 0.15);
+        }
+
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             .header-title {
                 font-size: 2.5rem;
@@ -703,19 +1045,11 @@
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
-
-            .tools-3d {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .tech-card-svg {
-                width: 100px;
-                height: 100px;
-            }
         }
     </style>
 </head>
 <body>
+    <!-- Background elements -->
     <div class="matrix-bg"></div>
     <div class="scanline-overlay"></div>
     <div class="particles" id="particles"></div>
@@ -754,101 +1088,37 @@
             <h2 class="section-header">TECHNICAL EXPERTISE</h2>
             <div class="tech-grid">
                 <div class="tech-card">
-                    <svg width="100" height="100" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="tech-card-svg">
-                        <rect width="200" height="200" fill="#0a0a0f" opacity="0.3" rx="8"/>
-                        <g text-anchor="middle" font-family="JetBrains Mono" font-size="14" fill="#00d4ff">
-                            <text x="50" y="50" style="animation: binaryFlow 4s linear infinite; animation-delay: 0s">01</text>
-                            <text x="100" y="50" style="animation: binaryFlow 4s linear infinite; animation-delay: 0.5s">10</text>
-                            <text x="150" y="50" style="animation: binaryFlow 4s linear infinite; animation-delay: 1s">11</text>
-                            <text x="50" y="100" style="animation: binaryFlow 4s linear infinite; animation-delay: 1.5s">10</text>
-                            <text x="100" y="100" style="animation: binaryFlow 4s linear infinite; animation-delay: 2s">01</text>
-                            <text x="150" y="100" style="animation: binaryFlow 4s linear infinite; animation-delay: 2.5s">11</text>
-                        </g>
-                        <rect width="200" height="200" fill="none" stroke="#a855f7" stroke-width="2" rx="8" opacity="0.5"/>
-                    </svg>
+                    <div class="tech-card-icon">⚙️</div>
                     <div class="tech-card-title">Binary Analysis</div>
                     <div class="tech-card-desc">Deep dive into executable files, control flow analysis, and code decompilation</div>
                     <div class="tech-card-meta">Expert Level</div>
                 </div>
                 <div class="tech-card">
-                    <svg width="100" height="100" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="tech-card-svg">
-                        <rect width="200" height="200" fill="#0a0a0f" opacity="0.3" rx="8"/>
-                        <circle cx="100" cy="100" r="80" fill="none" stroke="#00d4ff" stroke-width="1.5" opacity="0.3" style="animation: shieldPulse 2s ease-in-out infinite"/>
-                        <circle cx="100" cy="100" r="70" fill="none" stroke="#a855f7" stroke-width="1" opacity="0.4"/>
-                        <rect x="85" y="95" width="30" height="35" rx="3" fill="none" stroke="#00d4ff" stroke-width="2" style="animation: lockRotate 6s linear infinite; transform-origin: 100px 100px"/>
-                        <path d="M 90 95 Q 90 80 100 80 Q 110 80 110 95" fill="none" stroke="#a855f7" stroke-width="2"/>
-                        <rect width="200" height="200" fill="none" stroke="#ff8c00" stroke-width="2" rx="8" opacity="0.5"/>
-                    </svg>
+                    <div class="tech-card-icon">🔐</div>
                     <div class="tech-card-title">Vulnerability Research</div>
                     <div class="tech-card-desc">Identifying and exploiting security flaws across multiple platforms</div>
                     <div class="tech-card-meta">Expert Level</div>
                 </div>
                 <div class="tech-card">
-                    <svg width="100" height="100" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="tech-card-svg">
-                        <rect width="200" height="200" fill="#0a0a0f" opacity="0.3" rx="8"/>
-                        <circle cx="100" cy="100" r="15" fill="none" stroke="#ff0040" stroke-width="2"/>
-                        <circle cx="100" cy="100" r="12" fill="none" stroke="#00d4ff" stroke-width="1" opacity="0.6"/>
-                        <g style="animation: orbitRotate 8s linear infinite; transform-origin: 100px 100px">
-                            <circle cx="100" cy="50" r="3" fill="#a855f7"/>
-                            <circle cx="150" cy="100" r="3" fill="#00d4ff"/>
-                            <circle cx="100" cy="150" r="3" fill="#a855f7"/>
-                            <circle cx="50" cy="100" r="3" fill="#00d4ff"/>
-                        </g>
-                        <rect width="200" height="200" fill="none" stroke="#ff0040" stroke-width="2" rx="8" opacity="0.5"/>
-                    </svg>
+                    <div class="tech-card-icon">🦠</div>
                     <div class="tech-card-title">Malware Analysis</div>
                     <div class="tech-card-desc">Static and dynamic analysis of malicious software and threats</div>
                     <div class="tech-card-meta">Expert Level</div>
                 </div>
                 <div class="tech-card">
-                    <svg width="100" height="100" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="tech-card-svg">
-                        <rect width="200" height="200" fill="#0a0a0f" opacity="0.3" rx="8"/>
-                        <g style="animation: decode 3s ease-in-out infinite; transform-origin: 100px 100px">
-                            <rect x="40" y="60" width="120" height="8" rx="2" fill="none" stroke="#00d4ff" stroke-width="1.5"/>
-                        </g>
-                        <g style="animation: decode 3s ease-in-out infinite; animation-delay: 0.5s; transform-origin: 100px 100px">
-                            <rect x="40" y="80" width="100" height="8" rx="2" fill="none" stroke="#a855f7" stroke-width="1.5"/>
-                        </g>
-                        <g style="animation: decode 3s ease-in-out infinite; animation-delay: 1s; transform-origin: 100px 100px">
-                            <rect x="40" y="100" width="110" height="8" rx="2" fill="none" stroke="#ff8c00" stroke-width="1.5"/>
-                        </g>
-                        <rect width="200" height="200" fill="none" stroke="#a855f7" stroke-width="2" rx="8" opacity="0.5"/>
-                    </svg>
+                    <div class="tech-card-icon">🔍</div>
                     <div class="tech-card-title">Deobfuscation</div>
                     <div class="tech-card-desc">Breaking through code obfuscation and protection mechanisms</div>
                     <div class="tech-card-meta">Expert Level</div>
                 </div>
                 <div class="tech-card">
-                    <svg width="100" height="100" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="tech-card-svg">
-                        <rect width="200" height="200" fill="#0a0a0f" opacity="0.3" rx="8"/>
-                        <g style="animation: stackFlow 2s ease-in-out infinite; transform-origin: 100px 100px">
-                            <rect x="50" y="50" width="100" height="20" fill="none" stroke="#00d4ff" stroke-width="2" rx="2"/>
-                        </g>
-                        <g style="animation: stackFlow 2s ease-in-out infinite; animation-delay: 0.5s; transform-origin: 100px 100px">
-                            <rect x="50" y="80" width="100" height="20" fill="none" stroke="#a855f7" stroke-width="2" rx="2"/>
-                        </g>
-                        <g style="animation: stackFlow 2s ease-in-out infinite; animation-delay: 1s; transform-origin: 100px 100px">
-                            <rect x="50" y="110" width="100" height="20" fill="none" stroke="#ff8c00" stroke-width="2" rx="2"/>
-                        </g>
-                        <rect width="200" height="200" fill="none" stroke="#00d4ff" stroke-width="2" rx="8" opacity="0.5"/>
-                    </svg>
+                    <div class="tech-card-icon">💾</div>
                     <div class="tech-card-title">Architecture Support</div>
                     <div class="tech-card-desc">Mastery across x86, ARM, MIPS, PowerPC, and more</div>
                     <div class="tech-card-meta">8+ Architectures</div>
                 </div>
                 <div class="tech-card">
-                    <svg width="100" height="100" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="tech-card-svg">
-                        <rect width="200" height="200" fill="#0a0a0f" opacity="0.3" rx="8"/>
-                        <g style="animation: toolRotate 4s linear infinite; transform-origin: 100px 100px">
-                            <circle cx="100" cy="100" r="40" fill="none" stroke="#00d4ff" stroke-width="2"/>
-                            <rect x="95" y="55" width="10" height="15" fill="#a855f7"/>
-                            <rect x="95" y="130" width="10" height="15" fill="#a855f7"/>
-                            <rect x="130" y="95" width="15" height="10" fill="#a855f7"/>
-                            <rect x="55" y="95" width="15" height="10" fill="#a855f7"/>
-                        </g>
-                        <circle cx="100" cy="100" r="30" fill="none" stroke="#ff8c00" stroke-width="1" opacity="0.5"/>
-                        <rect width="200" height="200" fill="none" stroke="#ff8c00" stroke-width="2" rx="8" opacity="0.5"/>
-                    </svg>
+                    <div class="tech-card-icon">🛠️</div>
                     <div class="tech-card-title">Advanced Tools</div>
                     <div class="tech-card-desc">IDA Pro, Ghidra, Binary Ninja, Frida, and specialized utilities</div>
                     <div class="tech-card-meta">Industry Standard</div>
@@ -861,28 +1131,34 @@
             <h2 class="section-header">AREAS OF EXPERTISE</h2>
             <div class="expertise-grid">
                 <div class="expertise-box">
+                    <div class="expertise-icon">🔧</div>
+                    <div class="expertise-title">Binary Analysis & Disassembly</div>
+                    <div class="expertise-desc">Static disassembly, control flow analysis, function identification, data flow mapping, string analysis</div>
+                </div>
+                <div class="expertise-box">
+                    <div class="expertise-icon">🔬</div>
                     <div class="expertise-title">Dynamic Analysis & Debugging</div>
                     <div class="expertise-desc">Runtime monitoring, breakpoint debugging, memory inspection, register analysis, API tracing</div>
                 </div>
                 <div class="expertise-box">
-                    <div class="expertise-title">Exploit Development</div>
-                    <div class="expertise-desc">ROP chain construction, ASLR bypasses, heap exploitation, format string attacks</div>
+                    <div class="expertise-icon">🎯</div>
+                    <div class="expertise-title">Vulnerability Research</div>
+                    <div class="expertise-desc">Buffer overflow detection, use-after-free analysis, integer overflow, privilege escalation</div>
                 </div>
                 <div class="expertise-box">
-                    <div class="expertise-title">Impact Analysis</div>
-                    <div class="expertise-desc">Threat assessment, risk evaluation, mitigation strategies, compliance verification</div>
+                    <div class="expertise-icon">⚡</div>
+                    <div class="expertise-title">Malware Analysis</div>
+                    <div class="expertise-desc">Behavioral analysis, signature detection, packing/unpacking, memory forensics, network analysis</div>
                 </div>
                 <div class="expertise-box">
-                    <div class="expertise-title">Forensics Analysis</div>
-                    <div class="expertise-desc">Evidence collection, timeline reconstruction, artifact analysis, incident response</div>
+                    <div class="expertise-icon">🔓</div>
+                    <div class="expertise-title">Protection Bypass & Deobfuscation</div>
+                    <div class="expertise-desc">Code virtualization reversal, anti-debugging defeat, control flow flattening, string decryption</div>
                 </div>
                 <div class="expertise-box">
-                    <div class="expertise-title">Network Analysis</div>
-                    <div class="expertise-desc">Traffic capture, protocol analysis, threat identification, communication mapping</div>
-                </div>
-                <div class="expertise-box">
-                    <div class="expertise-title">Protection Bypass</div>
-                    <div class="expertise-desc">Anti-debugging defeat, control flow flattening, string decryption, tamper detection bypass</div>
+                    <div class="expertise-icon">🏛️</div>
+                    <div class="expertise-title">Advanced Architecture Knowledge</div>
+                    <div class="expertise-desc">x86/x86-64, ARM v7/v8, MIPS, PowerPC, SPARC, AVR, RISC-V, WebAssembly</div>
                 </div>
             </div>
         </div>
@@ -929,6 +1205,7 @@
     </div>
 
     <script>
+        // ===== INTERACTIVE SPARKLE EFFECT ON TOUCH/CLICK =====
         document.addEventListener('mousemove', (e) => {
             createSparkle(e.clientX, e.clientY);
         });
@@ -952,11 +1229,10 @@
             }, 600);
         }
 
+        // ===== PARTICLE GENERATION =====
         function generateParticles() {
             const particlesContainer = document.getElementById('particles');
-            const particleCount = window.innerWidth < 768 ? 15 : 30;
-            
-            for (let i = 0; i < particleCount; i++) {
+            for (let i = 0; i < 30; i++) {
                 const particle = document.createElement('div');
                 particle.classList.add('particle');
                 particle.style.left = Math.random() * 100 + '%';
@@ -966,6 +1242,7 @@
             }
         }
 
+        // ===== INTERSECTION OBSERVER FOR SCROLL ANIMATIONS =====
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
@@ -984,8 +1261,10 @@
             observer.observe(el);
         });
 
+        // Initialize particles
         generateParticles();
 
+        // ===== HEADER INTERACTIVITY =====
         const headerTitle = document.querySelector('.header-title');
         headerTitle.addEventListener('click', () => {
             headerTitle.style.animation = 'none';
@@ -993,6 +1272,28 @@
                 headerTitle.style.animation = 'smooth-shine 1.5s ease-in-out infinite';
             }, 10);
         });
+
+        // ===== STAT BOX CLICK EFFECTS =====
+        document.querySelectorAll('.stat-box').forEach(box => {
+            box.addEventListener('click', function() {
+                this.style.animation = 'none';
+                setTimeout(() => {
+                    this.style.animation = 'pulse-scale 0.6s ease-out';
+                }, 10);
+            });
+        });
+
+        // ===== RESPONSIVE TOUCH FEEDBACK =====
+        if (window.innerWidth <= 768) {
+            document.querySelectorAll('.tech-card, .expertise-box, .tool-badge').forEach(el => {
+                el.addEventListener('touchstart', function() {
+                    this.style.transform = 'scale(1.02)';
+                });
+                el.addEventListener('touchend', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+        }
     </script>
 </body>
 </html>
