@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <style>
+      @keyframes debugFlow {
+        0% { stroke-dashoffset: 100; }
+        100% { stroke-dashoffset: 0; }
+      }
+      @keyframes breakpointPulse {
+        0%, 100% { r: 5; }
+        50% { r: 8; }
+      }
+      .debug { animation: debugFlow 3s linear infinite; }
+      .breakpoint { animation: breakpointPulse 1.5s ease-in-out infinite; }
+    </style>
+  </defs>
+  <rect width="200" height="200" fill="#0a0a0f" opacity="0.3" rx="8"/>
+  
+  <!-- Debug path -->
+  <path d="M 50 100 L 100 70 L 150 100 L 100 130 Z" class="debug" fill="none" stroke="#00d4ff" stroke-width="2" stroke-dasharray="100"/>
+  
+  <!-- Breakpoint indicators -->
+  <circle cx="50" cy="100" r="5" class="breakpoint" fill="#ff0040"/>
+  <circle cx="100" cy="70" r="5" class="breakpoint" fill="#ff0040" style="animation-delay: 0.5s"/>
+  <circle cx="150" cy="100" r="5" class="breakpoint" fill="#ff0040" style="animation-delay: 1s"/>
+  <circle cx="100" cy="130" r="5" class="breakpoint" fill="#ff0040" style="animation-delay: 1.5s"/>
+  
+  <rect width="200" height="200" fill="none" stroke="#00d4ff" stroke-width="2" rx="8" opacity="0.5"/>
+</svg>
