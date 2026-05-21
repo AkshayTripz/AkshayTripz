@@ -1,0 +1,148 @@
+<svg width="1920" height="620" viewBox="0 0 1920 620" xmlns="http://www.w3.org/2000/svg" aria-labelledby="title desc">
+  <title id="title">Dec By Akshay - Binary Archaeologist &amp; Malware Analyser</title>
+  
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0a0f1a"/>
+      <stop offset="100%" stop-color="#1a2a22"/>
+    </linearGradient>
+
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1920" height="620" fill="url(#bg)"/>
+
+  <!-- Central Panel -->
+  <rect x="380" y="115" width="1160" height="370" rx="32" fill="#0f1f1a" stroke="#00ff88" stroke-width="7" filter="url(#glow)">
+    <animate attributeName="stroke-opacity" values="0.7;1;0.7" dur="4s" repeatCount="indefinite"/>
+  </rect>
+  <rect x="410" y="145" width="1100" height="310" rx="22" fill="none" stroke="#66ffaa" stroke-width="2.5" opacity="0.6"/>
+
+  <!-- Futuristic Attached Tech Frames -->
+  <path d="M380 130 L250 80 L150 130 L150 430 L250 480 L380 400 Z" fill="none" stroke="#00ff88" stroke-width="6" opacity="0.85" filter="url(#glow)" id="leftFrame"/>
+  <path d="M365 150 L265 105 L170 150 L170 410 L255 455 L365 380 Z" fill="none" stroke="#66ffaa" stroke-width="3" opacity="0.75" filter="url(#glow)" id="leftInner"/>
+
+  <path d="M1540 130 L1670 80 L1770 130 L1770 430 L1670 480 L1540 400 Z" fill="none" stroke="#00ff88" stroke-width="6" opacity="0.85" filter="url(#glow)" id="rightFrame"/>
+  <path d="M1555 150 L1655 105 L1750 150 L1750 410 L1665 455 L1555 380 Z" fill="none" stroke="#66ffaa" stroke-width="3" opacity="0.75" filter="url(#glow)" id="rightInner"/>
+
+  <!-- Frame Animations -->
+  <animate href="#leftFrame" attributeName="stroke-dashoffset" values="400;0" dur="5s" repeatCount="indefinite"/>
+  <animate href="#leftInner" attributeName="stroke-dashoffset" values="250;0" dur="6.2s" repeatCount="indefinite"/>
+  <animate href="#rightFrame" attributeName="stroke-dashoffset" values="0;400" dur="5s" repeatCount="indefinite"/>
+  <animate href="#rightInner" attributeName="stroke-dashoffset" values="0;250" dur="6.2s" repeatCount="indefinite"/>
+
+  <!-- Left Frame Tech Elements -->
+  <g transform="translate(225 245)">
+    <polygon points="0,28 22,5 48,5 70,28 48,51 22,51" fill="none" stroke="#00ff88" stroke-width="2.8">
+      <animateTransform attributeName="transform" type="rotate" from="0 35 28" to="360 35 28" dur="9s" repeatCount="indefinite"/>
+    </polygon>
+    <text x="35" y="34" font-size="12" fill="#ccffdd" font-family="monospace" text-anchor="middle">RE</text>
+  </g>
+
+  <circle cx="210" cy="175" r="6" fill="#66ffaa">
+    <animate attributeName="r" values="4;9;4" dur="1.7s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- Right Frame Tech Elements -->
+  <g transform="translate(1645 245)">
+    <polygon points="0,28 22,5 48,5 70,28 48,51 22,51" fill="none" stroke="#00ff88" stroke-width="2.8">
+      <animateTransform attributeName="transform" type="rotate" from="0 35 28" to="-360 35 28" dur="10s" repeatCount="indefinite"/>
+    </polygon>
+    <text x="35" y="34" font-size="12" fill="#ccffdd" font-family="monospace" text-anchor="middle">0x</text>
+  </g>
+
+  <circle cx="1710" cy="175" r="6" fill="#66ffaa">
+    <animate attributeName="r" values="4;9;4" dur="1.7s" repeatCount="indefinite" begin="1.1s"/>
+  </circle>
+
+  <!-- Middle Line -->
+  <line x1="380" y1="265" x2="1540" y2="265" stroke="#66ffaa" stroke-width="3" opacity="0.75" stroke-dasharray="18 10" id="middleLine"/>
+  <animate href="#middleLine" attributeName="stroke-dashoffset" values="60;0" dur="2s" repeatCount="indefinite"/>
+
+  <!-- Main Title -->
+  <text id="titleText" 
+        x="960" y="255" 
+        text-anchor="middle"
+        font-family="Arial Black, Impact, sans-serif" 
+        font-size="88" 
+        font-weight="900"
+        letter-spacing="-2.5"
+        fill="#f0fff0"
+        stroke="#00ff88"
+        stroke-width="3.5"
+        paint-order="stroke fill"
+        filter="url(#glow)">DEC BY AKSHAY</text>
+
+  <animate href="#titleText" attributeName="stroke-dasharray" values="0,2400;2400,0" dur="3.5s" fill="freeze"/>
+  <animate href="#titleText" attributeName="stroke-dashoffset" values="2400;0" dur="3.5s" fill="freeze"/>
+
+  <!-- Subtitle -->
+  <text x="960" y="312" text-anchor="middle" font-family="Courier New, monospace" font-size="27.5" fill="#66ffaa" letter-spacing="6">BINARY ARCHAEOLOGIST &amp; MALWARE ANALYSER</text>
+
+  <!-- Tools Container - Expanded for 5 Tools -->
+  <rect x="470" y="370" width="980" height="95" rx="18" fill="#13241f" stroke="#00ff88" stroke-width="5"/>
+
+  <!-- Tools (5 Tools - Perfectly Centered) -->
+  <g font-family="Arial, sans-serif" font-size="14.8" font-weight="700" text-anchor="middle">
+    <!-- Binary Ninja -->
+    <rect x="505" y="385" width="160" height="62" rx="10" fill="#1c2f28" stroke="#00ff88" stroke-width="3" id="tool1"/>
+    <text x="585" y="419" fill="#e0ffe0">BINARY NINJA</text>
+
+    <!-- IDA Pro -->
+    <rect x="680" y="385" width="160" height="62" rx="10" fill="#1c2f28" stroke="#00cc77" stroke-width="3" id="tool2"/>
+    <text x="760" y="419" fill="#e0ffe0">IDA PRO</text>
+
+    <!-- Ghidra -->
+    <rect x="875" y="385" width="160" height="62" rx="10" fill="#1c2f28" stroke="#00ff88" stroke-width="3" id="tool3"/>
+    <text x="953" y="419" fill="#e0ffe0">GHIDRA</text>
+
+    <!-- x64dbg -->
+    <rect x="1073" y="385" width="160" height="62" rx="10" fill="#1c2f28" stroke="#00cc77" stroke-width="3" id="tool4"/>
+    <text x="1156" y="419" fill="#e0ffe0">x64dbg</text>
+
+    <!-- dnSpy -->
+    <rect x="1250" y="385" width="160" height="62" rx="10" fill="#1c2f28" stroke="#00ff88" stroke-width="3" id="tool5"/>
+    <text x="1330" y="419" fill="#e0ffe0">dnSpy</text>
+  </g>
+
+  <!-- Tool Pulse Animations -->
+  <animate href="#tool1" attributeName="stroke-opacity" values="0.7;1;0.7" dur="3s" repeatCount="indefinite"/>
+  <animate href="#tool2" attributeName="stroke-opacity" values="0.7;1;0.7" dur="3.4s" repeatCount="indefinite" begin="0.3s"/>
+  <animate href="#tool3" attributeName="stroke-opacity" values="0.7;1;0.7" dur="2.8s" repeatCount="indefinite" begin="0.6s"/>
+  <animate href="#tool4" attributeName="stroke-opacity" values="0.7;1;0.7" dur="3.2s" repeatCount="indefinite" begin="0.9s"/>
+  <animate href="#tool5" attributeName="stroke-opacity" values="0.7;1;0.7" dur="2.9s" repeatCount="indefinite" begin="1.2s"/>
+
+  <!-- Binary Streams -->
+  <g font-family="Courier New, monospace" font-size="15.5" fill="#88ffbb" opacity="0.75">
+    <text x="65" y="130" id="b1">10110101 11001011</text>
+    <text x="55" y="175" id="b2">01101110 00101101</text>
+  </g>
+  <g font-family="Courier New, monospace" font-size="15.5" fill="#88ffbb" opacity="0.75">
+    <text x="1550" y="130" id="b3">10011100 01101011</text>
+    <text x="1545" y="175" id="b4">11101001 01001101</text>
+  </g>
+
+  <animate href="#b1" attributeName="y" values="130;680" dur="18s" repeatCount="indefinite"/>
+  <animate href="#b2" attributeName="y" values="175;680" dur="22s" repeatCount="indefinite"/>
+  <animate href="#b3" attributeName="y" values="130;680" dur="16s" repeatCount="indefinite"/>
+  <animate href="#b4" attributeName="y" values="175;680" dur="20s" repeatCount="indefinite"/>
+
+  <!-- Water -->
+  <rect x="0" y="535" width="1920" height="85" fill="#00281f" opacity="0.8"/>
+  <path d="M0 555 Q240 530 480 555 Q720 580 960 555 Q1200 530 1440 555 Q1680 580 1920 555 L1920 620 L0 620 Z" fill="#00ff88" opacity="0.22">
+    <animate attributeName="d" values="M0 555 Q240 530 480 555 Q720 580 960 555 Q1200 530 1440 555 Q1680 580 1920 555 L1920 620 L0 620 Z;
+                                     M0 555 Q240 580 480 555 Q720 530 960 555 Q1200 580 1440 555 Q1680 530 1920 555 L1920 620 L0 620 Z" 
+             dur="8s" repeatCount="indefinite"/>
+  </path>
+
+  <!-- Bottom Bar -->
+  <rect x="0" y="560" width="1920" height="60" fill="#050f0a"/>
+  <text x="960" y="595" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="15.5" fill="#aaffcc" letter-spacing="3">LOW-LEVEL REVERSE ENGINEERING • BINARY ANALYSIS • QT INTERNALS • PLUGIN &amp; MALWARE RESEARCH</text>
+</svg>
