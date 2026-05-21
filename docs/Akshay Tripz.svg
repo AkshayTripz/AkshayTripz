@@ -70,7 +70,7 @@
   <text id="titleText" 
         x="960" y="255" 
         text-anchor="middle"
-        font-family="Arial Black, Impact, sans-serif" 
+        font-family="Space Grotesk, Impact, sans-serif" 
         font-size="88" 
         font-weight="900"
         letter-spacing="-2.5"
