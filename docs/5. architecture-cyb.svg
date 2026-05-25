@@ -1,0 +1,17 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <style>
+            @keyframes layer-slide { 0% { transform: translateX(-50px); opacity: 0; } 50% { opacity: 1; } 100% { transform: translateX(0); opacity: 1; } }
+            @keyframes pulse-box { 0%, 100% { filter: drop-shadow(0 0 3px #00d9ff); } 50% { filter: drop-shadow(0 0 10px #b700ff); } }
+            @keyframes rotate-slow { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+            .slide { animation: layer-slide 2s ease-out forwards; }
+            .pulse { animation: pulse-box 2s ease-in-out infinite; }
+            .rotate { animation: rotate-slow 6s linear infinite; }
+        </style>
+    </defs>
+    <rect width="200" height="200" fill="#0f1419" rx="10"/>
+    <rect x="30" y="40" width="140" height="30" fill="none" stroke="#00d9ff" stroke-width="2" class="pulse"/>
+    <rect x="30" y="85" width="140" height="30" fill="none" stroke="#b700ff" stroke-width="2" class="pulse" style="animation-delay: 0.3s"/>
+    <rect x="30" y="130" width="140" height="30" fill="none" stroke="#ff006e" stroke-width="2" class="pulse" style="animation-delay: 0.6s"/>
+    <circle cx="170" cy="155" r="15" fill="none" stroke="#00d9ff" stroke-width="2" class="rotate"/>
+</svg>
