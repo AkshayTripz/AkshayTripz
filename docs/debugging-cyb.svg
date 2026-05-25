@@ -1,0 +1,18 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <style>
+            @keyframes trace-path { 0% { stroke-dashoffset: 300; } 100% { stroke-dashoffset: 0; } }
+            @keyframes blink-dot { 0%, 100% { r: 3; opacity: 1; } 50% { r: 6; opacity: 0.5; } }
+            @keyframes swing { 0%, 100% { transform: rotate(-10deg); } 50% { transform: rotate(10deg); } }
+            .trace { animation: trace-path 3s linear infinite; stroke-dasharray: 300; }
+            .blink { animation: blink-dot 1s ease-in-out infinite; }
+            .swing { animation: swing 2s ease-in-out infinite; transform-origin: 100px 50px; }
+        </style>
+    </defs>
+    <rect width="200" height="200" fill="#0f1419" rx="10"/>
+    <path d="M 50 80 L 100 50 L 150 80 L 120 120 L 80 120 Z" fill="none" stroke="#ff006e" stroke-width="2" class="trace"/>
+    <circle cx="50" cy="80" r="4" fill="#00d9ff" class="blink"/>
+    <circle cx="100" cy="50" r="4" fill="#b700ff" class="blink" style="animation-delay: 0.2s"/>
+    <circle cx="150" cy="80" r="4" fill="#ff006e" class="blink" style="animation-delay: 0.4s"/>
+    <circle cx="100" cy="120" r="8" fill="none" stroke="#00d9ff" stroke-width="2" class="swing"/>
+</svg>
