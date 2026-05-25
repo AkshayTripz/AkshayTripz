@@ -1,0 +1,18 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <style>
+            @keyframes expand-contract { 0%, 100% { r: 50px; } 50% { r: 70px; } }
+            @keyframes flow-line { 0% { stroke-dashoffset: 200; } 100% { stroke-dashoffset: 0; } }
+            @keyframes spark-move { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(20px, -20px); } }
+            .expand { animation: expand-contract 3s ease-in-out infinite; }
+            .flow { animation: flow-line 2s linear infinite; stroke-dasharray: 100; }
+            .spark { animation: spark-move 2s ease-in-out infinite; }
+        </style>
+    </defs>
+    <rect width="200" height="200" fill="#0f1419" rx="10"/>
+    <circle cx="100" cy="100" r="50" fill="none" stroke="#00d9ff" stroke-width="2" class="expand"/>
+    <path d="M 50 100 Q 70 70 100 50 Q 130 70 150 100 Q 130 130 100 150 Q 70 130 50 100" fill="none" stroke="#b700ff" stroke-width="2" class="flow"/>
+    <circle cx="100" cy="100" r="30" fill="none" stroke="#ff006e" stroke-width="1.5" opacity="0.7"/>
+    <circle cx="140" cy="60" r="5" fill="#00d9ff" class="spark"/>
+    <circle cx="60" cy="140" r="5" fill="#b700ff" class="spark"/>
+</svg>
