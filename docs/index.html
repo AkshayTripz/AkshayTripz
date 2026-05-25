@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Akshay Tripz - Cyberpunk Reverse Engineering</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Press+Start+2P&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+    <title>Akshay Tripz - Security Research & Reverse Engineering</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -15,151 +15,143 @@
         html, body {
             width: 100%;
             height: 100%;
-            background: #0d0221;
-            color: #00ff88;
-            font-family: 'Orbitron', 'Courier Prime', monospace;
+            background: #ffffff;
+            color: #1a1a1a;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             overflow-x: hidden;
             scroll-behavior: smooth;
+            line-height: 1.6;
         }
 
         :root {
-            --neon-green: #00ff88;
-            --neon-pink: #ff006e;
-            --neon-blue: #00d9ff;
-            --neon-purple: #b700ff;
-            --dark-bg: #0d0221;
-            --grid-bg: #1a0033;
-            --text-secondary: #88ff00;
-            --danger: #ff0055;
+            --primary: #0066ff;
+            --secondary: #00d4ff;
+            --accent: #ff6b35;
+            --dark-text: #1a1a1a;
+            --light-text: #666666;
+            --border-light: #e5e5e5;
+            --bg-light: #f8f9fa;
+            --success: #00cc88;
         }
 
-        /* ===== AGGRESSIVE GLITCH ANIMATIONS ===== */
-        @keyframes glitch-shake {
-            0%, 100% { transform: translate(0, 0) skewX(0deg); }
-            20% { transform: translate(-5px, 5px) skewX(-5deg); }
-            40% { transform: translate(5px, -5px) skewX(5deg); }
-            60% { transform: translate(-3px, 3px) skewX(-3deg); }
-            80% { transform: translate(3px, -3px) skewX(3deg); }
-        }
-
-        @keyframes neon-flare {
-            0%, 100% { 
-                text-shadow: 
-                    0 0 10px var(--neon-green),
-                    0 0 20px var(--neon-green),
-                    0 0 40px var(--neon-pink);
-                letter-spacing: 2px;
+        /* ===== AGGRESSIVE ANIMATIONS ===== */
+        @keyframes slide-in-down {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
             }
-            50% { 
-                text-shadow: 
-                    0 0 20px var(--neon-pink),
-                    0 0 40px var(--neon-pink),
-                    0 0 80px var(--neon-blue),
-                    0 0 120px var(--neon-purple);
-                letter-spacing: 4px;
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
-        @keyframes cyber-pulse {
-            0%, 100% { 
-                background-color: var(--dark-bg);
-                box-shadow: inset 0 0 20px var(--neon-green);
+        @keyframes slide-in-up {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
             }
-            50% { 
-                background-color: #1a0033;
-                box-shadow: inset 0 0 40px var(--neon-pink), 0 0 20px var(--neon-green);
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
-        @keyframes circuit-burst {
-            0% { 
-                transform: scale(1) rotate(0deg);
+        @keyframes slide-in-left {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slide-in-right {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes scale-bounce {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            60% {
+                transform: scale(1.05);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 0 20px rgba(0, 102, 255, 0);
+            }
+        }
+
+        @keyframes float-up {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        @keyframes gradient-shift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes line-expand {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100%;
+            }
+        }
+
+        @keyframes rotate-slow {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes bounce-in {
+            0% {
+                opacity: 0;
+                transform: scale(0.3) translateY(50px);
+            }
+            50% {
                 opacity: 1;
             }
-            100% { 
-                transform: scale(2) rotate(360deg);
-                opacity: 0;
+            100% {
+                transform: scale(1) translateY(0);
             }
-        }
-
-        @keyframes scan-line {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(100vh); }
-        }
-
-        @keyframes digital-rain {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(100vh); }
-        }
-
-        @keyframes neon-blink {
-            0%, 49%, 100% { opacity: 1; }
-            50%, 99% { opacity: 0.3; }
-        }
-
-        @keyframes matrix-fall {
-            0% { transform: translateY(-20px) rotateZ(-15deg); opacity: 0; }
-            50% { opacity: 1; }
-            100% { transform: translateY(0) rotateZ(0deg); opacity: 1; }
-        }
-
-        @keyframes bar-slide {
-            0% { width: 0; }
-            100% { width: 100%; }
-        }
-
-        @keyframes color-shift {
-            0% { color: var(--neon-green); }
-            25% { color: var(--neon-blue); }
-            50% { color: var(--neon-pink); }
-            75% { color: var(--neon-purple); }
-            100% { color: var(--neon-green); }
-        }
-
-        @keyframes particle-float {
-            0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-100px) translateX(50px) rotate(360deg); opacity: 0; }
-        }
-
-        /* ===== BACKGROUND EFFECTS ===== */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                repeating-linear-gradient(
-                    0deg,
-                    rgba(0, 255, 136, 0.03) 0px,
-                    transparent 1px,
-                    transparent 2px,
-                    rgba(0, 255, 136, 0.03) 3px
-                ),
-                repeating-linear-gradient(
-                    90deg,
-                    rgba(0, 217, 255, 0.02) 0px,
-                    transparent 2px,
-                    transparent 4px,
-                    rgba(0, 217, 255, 0.02) 6px
-                );
-            pointer-events: none;
-            z-index: 0;
-            animation: scan-line 8s linear infinite;
-        }
-
-        body::after {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 20% 50%, rgba(255, 0, 110, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 50%, rgba(0, 217, 255, 0.1) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: 0;
         }
 
         /* ===== HEADER ===== */
@@ -170,9 +162,9 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
-            background: linear-gradient(135deg, #0d0221 0%, #1a0033 50%, #0d0221 100%);
-            z-index: 1;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border-bottom: 2px solid var(--border-light);
         }
 
         header::before {
@@ -182,8 +174,9 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at center, rgba(0, 255, 136, 0.05) 0%, transparent 70%);
-            animation: cyber-pulse 4s ease-in-out infinite;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(0, 102, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(0, 212, 255, 0.08) 0%, transparent 50%);
             pointer-events: none;
         }
 
@@ -191,63 +184,40 @@
             position: relative;
             z-index: 2;
             text-align: center;
-            max-width: 1200px;
-            padding: 0 20px;
+            max-width: 900px;
+            animation: slide-in-down 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .hero-title {
-            font-family: 'Press Start 2P', 'Orbitron', monospace;
-            font-size: 4rem;
+            font-size: 4.5rem;
             font-weight: 900;
-            letter-spacing: 8px;
+            color: var(--dark-text);
             margin-bottom: 20px;
-            color: var(--neon-green);
-            animation: neon-flare 2s ease-in-out infinite, glitch-shake 0.5s ease-in-out 3s infinite;
-            text-transform: uppercase;
-            position: relative;
-            z-index: 3;
-        }
-
-        .hero-title::before {
-            content: 'AKSHAY TRIPZ';
-            position: absolute;
-            left: 2px;
-            top: 2px;
-            color: var(--neon-pink);
-            opacity: 0.8;
-            animation: glitch-shake 0.3s ease-in-out infinite;
-            z-index: -1;
-        }
-
-        .hero-title::after {
-            content: 'AKSHAY TRIPZ';
-            position: absolute;
-            left: -2px;
-            top: -2px;
-            color: var(--neon-blue);
-            opacity: 0.8;
-            animation: glitch-shake 0.3s ease-in-out infinite reverse;
-            z-index: -1;
+            letter-spacing: -2px;
+            line-height: 1.1;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: slide-in-down 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
         }
 
         .hero-subtitle {
-            font-size: 1.2rem;
-            color: var(--neon-blue);
-            letter-spacing: 3px;
+            font-size: 1.3rem;
+            color: var(--light-text);
             margin-bottom: 30px;
-            animation: neon-blink 3s ease-in-out infinite;
-            text-transform: uppercase;
-            font-weight: 700;
+            letter-spacing: 0.5px;
+            animation: slide-in-up 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+            font-weight: 500;
         }
 
         .hero-description {
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-            max-width: 800px;
+            font-size: 1.05rem;
+            color: var(--light-text);
+            max-width: 700px;
             margin: 0 auto 50px;
             line-height: 1.8;
-            letter-spacing: 1px;
-            animation: matrix-fall 1.5s ease-out;
+            animation: slide-in-up 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both;
         }
 
         .cta-buttons {
@@ -255,319 +225,350 @@
             gap: 20px;
             justify-content: center;
             flex-wrap: wrap;
-            margin-bottom: 60px;
-            animation: matrix-fall 2s ease-out;
+            animation: slide-in-up 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s both;
         }
 
-        .cyber-btn {
-            padding: 15px 40px;
-            font-size: 0.9rem;
-            border: 3px solid var(--neon-green);
-            background: transparent;
-            color: var(--neon-green);
+        .btn-primary {
+            padding: 16px 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--primary) 0%, #0052cc 100%);
+            color: white;
             cursor: pointer;
-            font-family: 'Orbitron', monospace;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             position: relative;
             overflow: hidden;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 10px var(--neon-green);
+            box-shadow: 0 10px 30px rgba(0, 102, 255, 0.2);
         }
 
-        .cyber-btn::before {
+        .btn-primary::before {
             content: '';
             position: absolute;
             top: 0;
             left: -100%;
             width: 100%;
             height: 100%;
-            background: var(--neon-green);
-            z-index: -1;
-            transition: left 0.3s ease;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.4s ease;
         }
 
-        .cyber-btn:hover {
-            color: #0d0221;
-            box-shadow: 0 0 30px var(--neon-green), inset 0 0 20px var(--neon-green);
-            transform: scale(1.1) translateY(-5px);
-            animation: glitch-shake 0.2s ease-in-out;
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0, 102, 255, 0.35);
         }
 
-        .cyber-btn:hover::before {
-            left: 0;
+        .btn-primary:hover::before {
+            left: 100%;
         }
 
-        .cyber-btn.pink {
-            border-color: var(--neon-pink);
-            color: var(--neon-pink);
-            box-shadow: 0 0 10px var(--neon-pink);
+        .btn-secondary {
+            padding: 16px 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            background: transparent;
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .cyber-btn.pink::before {
-            background: var(--neon-pink);
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0, 102, 255, 0.25);
         }
 
-        .cyber-btn.pink:hover {
-            color: #0d0221;
-            box-shadow: 0 0 30px var(--neon-pink), inset 0 0 20px var(--neon-pink);
-        }
-
-        /* ===== SCROLL INDICATOR ===== */
-        .scroll-down {
+        .scroll-indicator {
             position: absolute;
             bottom: 40px;
             left: 50%;
             transform: translateX(-50%);
-            animation: particle-float 2s ease-in-out infinite;
+            animation: float-up 2s ease-in-out infinite;
         }
 
-        .scroll-down svg {
+        .scroll-indicator svg {
             width: 30px;
             height: 30px;
-            stroke: var(--neon-green);
+            stroke: var(--primary);
             stroke-width: 2;
-            filter: drop-shadow(0 0 10px var(--neon-green));
+            fill: none;
         }
 
-        /* ===== MAIN CONTAINER ===== */
+        /* ===== CONTAINER ===== */
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
-            position: relative;
-            z-index: 1;
         }
 
         /* ===== SECTIONS ===== */
-        .section {
+        section {
             padding: 100px 0;
             position: relative;
-            border-top: 2px solid var(--neon-green);
-            background: linear-gradient(135deg, rgba(13, 2, 33, 0.8) 0%, rgba(26, 0, 51, 0.8) 100%);
+            border-bottom: 1px solid var(--border-light);
         }
 
-        .section-title {
-            font-family: 'Press Start 2P', monospace;
-            font-size: 2.5rem;
-            color: var(--neon-pink);
-            letter-spacing: 4px;
-            margin-bottom: 50px;
-            text-transform: uppercase;
-            animation: color-shift 6s ease-in-out infinite;
-            position: relative;
-            display: inline-block;
-            text-shadow: 0 0 10px var(--neon-pink);
+        .section-header {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--dark-text);
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+            animation: slide-in-left 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .section-title::after {
+        .section-header::after {
             content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, var(--neon-green), var(--neon-pink), var(--neon-blue));
-            animation: bar-slide 1.5s ease-out forwards;
+            display: block;
+            width: 80px;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            margin-top: 20px;
+            border-radius: 3px;
+            animation: line-expand 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--light-text);
+            margin-bottom: 50px;
+            animation: slide-in-left 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
         }
 
         /* ===== STATS GRID ===== */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
+            gap: 30px;
             margin-top: 50px;
         }
 
-        .stat-box {
+        .stat-card {
             padding: 40px 30px;
-            border: 2px solid var(--neon-green);
-            background: rgba(0, 255, 136, 0.05);
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: scale-bounce 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
             position: relative;
             overflow: hidden;
-            animation: matrix-fall 1s ease-out forwards;
         }
 
-        .stat-box:nth-child(1) { animation-delay: 0.1s; }
-        .stat-box:nth-child(2) { animation-delay: 0.2s; }
-        .stat-box:nth-child(3) { animation-delay: 0.3s; }
-        .stat-box:nth-child(4) { animation-delay: 0.4s; }
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+        .stat-card:nth-child(4) { animation-delay: 0.4s; }
 
-        .stat-box::before {
+        .stat-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, var(--neon-green), transparent);
-            animation: bar-slide 2s ease-in-out infinite;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
         }
 
-        .stat-box:hover {
-            border-color: var(--neon-pink);
-            box-shadow: 0 0 30px var(--neon-pink), inset 0 0 20px rgba(255, 0, 110, 0.1);
-            transform: scale(1.05) rotateY(5deg);
-            background: rgba(255, 0, 110, 0.08);
+        .stat-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 15px 40px rgba(0, 102, 255, 0.15);
+            transform: translateY(-8px);
         }
 
         .stat-number {
             font-size: 3rem;
-            color: var(--neon-green);
             font-weight: 900;
+            color: var(--primary);
             margin-bottom: 10px;
-            text-shadow: 0 0 20px var(--neon-green);
-            animation: color-shift 4s ease-in-out infinite;
+            line-height: 1;
         }
 
         .stat-label {
-            font-size: 0.85rem;
-            color: var(--neon-blue);
-            letter-spacing: 2px;
-            text-transform: uppercase;
+            font-size: 0.95rem;
+            color: var(--light-text);
+            letter-spacing: 0.5px;
+            font-weight: 500;
         }
 
         /* ===== EXPERTISE GRID ===== */
         .expertise-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 35px;
             margin-top: 50px;
         }
 
-        .expertise-item {
-            padding: 30px;
-            border: 2px solid var(--neon-blue);
-            background: rgba(0, 217, 255, 0.03);
+        .expertise-card {
+            padding: 35px;
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: bounce-in 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
             position: relative;
             overflow: hidden;
-            animation: matrix-fall 1s ease-out forwards;
-            transition: all 0.3s ease;
         }
 
-        .expertise-item:nth-child(odd) { animation-delay: 0.1s; }
-        .expertise-item:nth-child(even) { animation-delay: 0.2s; }
+        .expertise-card:nth-child(1) { animation-delay: 0.1s; }
+        .expertise-card:nth-child(2) { animation-delay: 0.15s; }
+        .expertise-card:nth-child(3) { animation-delay: 0.2s; }
+        .expertise-card:nth-child(4) { animation-delay: 0.25s; }
+        .expertise-card:nth-child(5) { animation-delay: 0.3s; }
+        .expertise-card:nth-child(6) { animation-delay: 0.35s; }
+        .expertise-card:nth-child(7) { animation-delay: 0.4s; }
+        .expertise-card:nth-child(8) { animation-delay: 0.45s; }
+        .expertise-card:nth-child(9) { animation-delay: 0.5s; }
+        .expertise-card:nth-child(10) { animation-delay: 0.55s; }
+        .expertise-card:nth-child(11) { animation-delay: 0.6s; }
+        .expertise-card:nth-child(12) { animation-delay: 0.65s; }
 
-        .expertise-item::before {
+        .expertise-card::before {
             content: '';
             position: absolute;
             top: -50%;
             left: -50%;
             width: 200%;
             height: 200%;
-            background: linear-gradient(45deg, transparent 30%, var(--neon-blue), transparent 70%);
+            background: linear-gradient(45deg, transparent 30%, rgba(0, 102, 255, 0.1), transparent 70%);
             transform: rotate(45deg);
-            opacity: 0;
-            animation: particle-float 3s ease-in-out infinite paused;
+            animation: rotate-slow 8s linear infinite paused;
         }
 
-        .expertise-item:hover {
-            border-color: var(--neon-pink);
-            background: rgba(255, 0, 110, 0.08);
-            box-shadow: 0 0 40px var(--neon-pink), inset 0 0 20px rgba(255, 0, 110, 0.1);
-            transform: scale(1.08) translateY(-10px);
+        .expertise-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 20px 50px rgba(0, 102, 255, 0.15);
+            transform: translateY(-10px);
         }
 
-        .expertise-item:hover::before {
-            opacity: 0.2;
+        .expertise-card:hover::before {
             animation-play-state: running;
+        }
+
+        .expertise-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.1) 0%, rgba(0, 212, 255, 0.05) 100%);
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 24px;
         }
 
         .expertise-title {
             font-size: 1.3rem;
-            color: var(--neon-pink);
-            margin-bottom: 15px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 12px;
         }
 
         .expertise-text {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            line-height: 1.6;
+            color: var(--light-text);
+            font-size: 0.95rem;
+            line-height: 1.7;
             margin-bottom: 15px;
         }
 
         .expertise-meta {
-            font-size: 0.8rem;
-            color: var(--neon-blue);
-            letter-spacing: 1px;
-            font-style: italic;
+            font-size: 0.85rem;
+            color: var(--primary);
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
         /* ===== SVG SHOWCASE ===== */
         .svg-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 25px;
             margin-top: 50px;
         }
 
-        .svg-container {
+        .svg-card {
             aspect-ratio: 1;
-            border: 2px solid var(--neon-green);
-            background: rgba(0, 255, 136, 0.05);
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: scale-bounce 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
             position: relative;
             overflow: hidden;
-            cursor: pointer;
-            animation: matrix-fall 0.8s ease-out forwards;
-            transition: all 0.4s ease;
         }
 
-        .svg-container:nth-child(1) { animation-delay: 0.1s; }
-        .svg-container:nth-child(2) { animation-delay: 0.15s; }
-        .svg-container:nth-child(3) { animation-delay: 0.2s; }
-        .svg-container:nth-child(4) { animation-delay: 0.25s; }
-        .svg-container:nth-child(5) { animation-delay: 0.3s; }
-        .svg-container:nth-child(6) { animation-delay: 0.35s; }
-        .svg-container:nth-child(7) { animation-delay: 0.4s; }
-        .svg-container:nth-child(8) { animation-delay: 0.45s; }
-        .svg-container:nth-child(9) { animation-delay: 0.5s; }
-        .svg-container:nth-child(10) { animation-delay: 0.55s; }
-        .svg-container:nth-child(11) { animation-delay: 0.6s; }
-        .svg-container:nth-child(12) { animation-delay: 0.65s; }
+        .svg-card:nth-child(1) { animation-delay: 0.1s; }
+        .svg-card:nth-child(2) { animation-delay: 0.15s; }
+        .svg-card:nth-child(3) { animation-delay: 0.2s; }
+        .svg-card:nth-child(4) { animation-delay: 0.25s; }
+        .svg-card:nth-child(5) { animation-delay: 0.3s; }
+        .svg-card:nth-child(6) { animation-delay: 0.35s; }
+        .svg-card:nth-child(7) { animation-delay: 0.4s; }
+        .svg-card:nth-child(8) { animation-delay: 0.45s; }
+        .svg-card:nth-child(9) { animation-delay: 0.5s; }
+        .svg-card:nth-child(10) { animation-delay: 0.55s; }
+        .svg-card:nth-child(11) { animation-delay: 0.6s; }
+        .svg-card:nth-child(12) { animation-delay: 0.65s; }
 
-        .svg-container:hover {
-            border-color: var(--neon-pink);
-            background: rgba(255, 0, 110, 0.1);
-            box-shadow: 0 0 40px var(--neon-pink), inset 0 0 20px rgba(255, 0, 110, 0.15);
-            transform: scale(1.12) rotateZ(5deg);
-            animation: glitch-shake 0.3s ease-in-out;
+        .svg-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0) 0%, rgba(0, 102, 255, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
 
-        .svg-container img {
-            width: 90%;
-            height: 90%;
+        .svg-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 20px 50px rgba(0, 102, 255, 0.2);
+            transform: translateY(-10px) scale(1.05);
+        }
+
+        .svg-card:hover::before {
+            opacity: 1;
+        }
+
+        .svg-image {
+            width: 85%;
+            height: 85%;
             object-fit: contain;
-            filter: drop-shadow(0 0 10px var(--neon-green));
-            transition: all 0.3s ease;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .svg-container:hover img {
-            filter: drop-shadow(0 0 25px var(--neon-pink)) drop-shadow(0 0 15px var(--neon-blue));
-            transform: scale(1.15) rotate(10deg);
+        .svg-card:hover .svg-image {
+            transform: scale(1.15) rotate(5deg);
         }
 
         .svg-label {
             position: absolute;
-            bottom: 10px;
-            left: 10px;
-            right: 10px;
-            font-size: 0.75rem;
-            color: var(--neon-blue);
-            letter-spacing: 1px;
+            bottom: 15px;
+            left: 15px;
+            right: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary);
             text-align: center;
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(10px);
             transition: all 0.3s ease;
-            text-transform: uppercase;
         }
 
-        .svg-container:hover .svg-label {
+        .svg-card:hover .svg-label {
             opacity: 1;
             transform: translateY(0);
         }
@@ -575,19 +576,16 @@
         /* ===== FOOTER ===== */
         footer {
             padding: 60px 0;
+            background: var(--bg-light);
+            border-top: 1px solid var(--border-light);
             text-align: center;
-            background: linear-gradient(180deg, transparent 0%, rgba(255, 0, 110, 0.1) 100%);
-            border-top: 2px solid var(--neon-pink);
-            position: relative;
-            z-index: 1;
         }
 
         .footer-text {
-            color: var(--neon-blue);
+            color: var(--light-text);
             margin: 15px 0;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
         }
 
         .social-links {
@@ -599,15 +597,14 @@
         }
 
         .social-link {
-            padding: 10px 25px;
-            border: 2px solid var(--neon-green);
-            color: var(--neon-green);
+            padding: 12px 28px;
+            border: 2px solid var(--primary);
+            color: var(--primary);
             text-decoration: none;
-            font-weight: 700;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             position: relative;
             overflow: hidden;
         }
@@ -619,15 +616,14 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: var(--neon-green);
+            background: var(--primary);
             z-index: -1;
             transition: left 0.3s ease;
         }
 
         .social-link:hover {
-            color: #0d0221;
-            box-shadow: 0 0 20px var(--neon-green);
-            transform: scale(1.1);
+            color: white;
+            transform: translateY(-3px);
         }
 
         .social-link:hover::before {
@@ -637,13 +633,11 @@
         /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             .hero-title {
-                font-size: 2rem;
-                letter-spacing: 4px;
+                font-size: 2.5rem;
             }
 
-            .section-title {
-                font-size: 1.5rem;
-                letter-spacing: 2px;
+            .section-header {
+                font-size: 2rem;
             }
 
             .stats-grid {
@@ -657,19 +651,23 @@
             .svg-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
-        }
-
-        @media (max-width: 480px) {
-            .hero-title {
-                font-size: 1.3rem;
-            }
 
             .cta-buttons {
                 flex-direction: column;
             }
 
-            .cyber-btn {
+            .btn-primary, .btn-secondary {
                 width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 1.8rem;
+            }
+
+            .section-header {
+                font-size: 1.5rem;
             }
 
             .svg-grid {
@@ -682,19 +680,17 @@
     <!-- HERO HEADER -->
     <header>
         <div class="hero">
-            <h1 class="hero-title">AKSHAY TRIPZ</h1>
-            <p class="hero-subtitle">>> CYBER WARFARE SPECIALIST <<<</p>
+            <h1 class="hero-title">Advanced Security Research & Reverse Engineering</h1>
+            <p class="hero-subtitle">Akshay Tripz | Cybersecurity Specialist</p>
             <p class="hero-description">
-                Advanced Reverse Engineering | Binary Exploitation | Malware Dissection<br>
-                Vulnerability Research | System Penetration | Code Analysis Mastery
+                Expert in binary analysis, vulnerability research, malware dissection, and advanced exploitation techniques. Delivering cutting-edge security solutions through deep system understanding.
             </p>
             <div class="cta-buttons">
-                <button class="cyber-btn">ENTER SYSTEM</button>
-                <button class="cyber-btn pink">EXPLOIT CHAIN</button>
-                <button class="cyber-btn">CONTACT HQ</button>
+                <button class="btn-primary">View Research</button>
+                <button class="btn-secondary">Get in Touch</button>
             </div>
         </div>
-        <div class="scroll-down">
+        <div class="scroll-indicator">
             <svg viewBox="0 0 24 24">
                 <polyline points="12 5 12 19"></polyline>
                 <polyline points="19 12 12 19 5 12"></polyline>
@@ -705,116 +701,161 @@
     <!-- MAIN CONTENT -->
     <div class="container">
         <!-- STATS SECTION -->
-        <section class="section">
-            <h2 class="section-title">SYSTEM STATUS</h2>
+        <section>
+            <h2 class="section-header">Professional Metrics</h2>
+            <p class="section-subtitle">Proven expertise across critical security domains</p>
             <div class="stats-grid">
-                <div class="stat-box">
+                <div class="stat-card">
                     <div class="stat-number">12+</div>
-                    <div class="stat-label">RE Techniques</div>
+                    <div class="stat-label">RE Techniques Mastered</div>
                 </div>
-                <div class="stat-box">
+                <div class="stat-card">
                     <div class="stat-number">8+</div>
                     <div class="stat-label">CVE Discoveries</div>
                 </div>
-                <div class="stat-box">
+                <div class="stat-card">
                     <div class="stat-number">15+</div>
                     <div class="stat-label">Tools Developed</div>
                 </div>
-                <div class="stat-box">
-                    <div class="stat-number">∞</div>
-                    <div class="stat-label">Dedication Level</div>
+                <div class="stat-card">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Dedication Excellence</div>
                 </div>
             </div>
         </section>
 
         <!-- EXPERTISE SECTION -->
-        <section class="section">
-            <h2 class="section-title">CORE MODULES</h2>
+        <section>
+            <h2 class="section-header">Core Expertise</h2>
+            <p class="section-subtitle">Specialized knowledge in advanced security research and analysis</p>
             <div class="expertise-grid">
-                <div class="expertise-item">
+                <div class="expertise-card">
+                    <div class="expertise-icon">🔬</div>
                     <div class="expertise-title">Binary Analysis</div>
-                    <div class="expertise-text">Deep executable dissection, assembly language mastery, and architecture understanding.</div>
+                    <div class="expertise-text">Deep executable dissection, assembly language interpretation, and architectural understanding across multiple platforms.</div>
                     <div class="expertise-meta">IDA Pro • Ghidra • Radare2</div>
                 </div>
-                <div class="expertise-item">
+                <div class="expertise-card">
+                    <div class="expertise-icon">🔍</div>
                     <div class="expertise-title">Vulnerability Research</div>
-                    <div class="expertise-text">Zero-day discovery, CVE exploitation, and advanced vulnerability development.</div>
+                    <div class="expertise-text">Zero-day discovery, CVE analysis, and advanced exploitation technique development for security assessment.</div>
                     <div class="expertise-meta">Fuzzing • Symbolic Execution</div>
                 </div>
-                <div class="expertise-item">
+                <div class="expertise-card">
+                    <div class="expertise-icon">🦠</div>
                     <div class="expertise-title">Malware Analysis</div>
-                    <div class="expertise-text">Sophisticated malware detection, classification, and behavioral dissection.</div>
+                    <div class="expertise-text">Detection, classification, and behavioral analysis of sophisticated malware and ransomware families.</div>
                     <div class="expertise-meta">Dynamic • Static Analysis</div>
                 </div>
-                <div class="expertise-item">
+                <div class="expertise-card">
+                    <div class="expertise-icon">🔐</div>
                     <div class="expertise-title">Deobfuscation</div>
-                    <div class="expertise-text">Advanced code deobfuscation and anti-analysis bypass techniques.</div>
-                    <div class="expertise-meta">Control Flow Recovery</div>
+                    <div class="expertise-text">Advanced code deobfuscation, anti-analysis bypass, and control flow recovery for comprehensive understanding.</div>
+                    <div class="expertise-meta">Control Flow Graphs</div>
                 </div>
-                <div class="expertise-item">
-                    <div class="expertise-title">Architecture Mastery</div>
-                    <div class="expertise-text">x86/x64, ARM, MIPS architecture expertise and ISA understanding.</div>
-                    <div class="expertise-meta">Multi-Platform Exploitation</div>
+                <div class="expertise-card">
+                    <div class="expertise-icon">⚙️</div>
+                    <div class="expertise-title">Architecture Analysis</div>
+                    <div class="expertise-text">x86/x64, ARM, MIPS architecture expertise and processor-specific exploitation methodologies.</div>
+                    <div class="expertise-meta">Multi-Platform • ISA</div>
                 </div>
-                <div class="expertise-item">
-                    <div class="expertise-title">Tool Development</div>
-                    <div class="expertise-text">Custom RE frameworks, analysis tools, and security automation.</div>
+                <div class="expertise-card">
+                    <div class="expertise-icon">🛠️</div>
+                    <div class="expertise-title">Tools Development</div>
+                    <div class="expertise-text">Building custom RE frameworks, analysis tools, and automation scripts for enhanced security research.</div>
                     <div class="expertise-meta">Python • C/C++ • Assembly</div>
+                </div>
+                <div class="expertise-card">
+                    <div class="expertise-icon">🐛</div>
+                    <div class="expertise-title">Dynamic Debugging</div>
+                    <div class="expertise-text">Real-time process debugging, strategic breakpoints, and runtime behavior modification techniques.</div>
+                    <div class="expertise-meta">GDB • WinDbg • x64dbg</div>
+                </div>
+                <div class="expertise-card">
+                    <div class="expertise-icon">💾</div>
+                    <div class="expertise-title">Memory Forensics</div>
+                    <div class="expertise-text">Memory dump analysis, heap exploitation, and advanced memory corruption research techniques.</div>
+                    <div class="expertise-meta">Volatility • Custom Tools</div>
+                </div>
+                <div class="expertise-card">
+                    <div class="expertise-icon">📡</div>
+                    <div class="expertise-title">Network Analysis</div>
+                    <div class="expertise-text">Protocol reverse engineering, PCAP analysis, and network-based vulnerability assessment.</div>
+                    <div class="expertise-meta">Wireshark • Custom Dissectors</div>
+                </div>
+                <div class="expertise-card">
+                    <div class="expertise-icon">📊</div>
+                    <div class="expertise-title">Code Analysis</div>
+                    <div class="expertise-text">Source code review, taint analysis, and data flow tracking for vulnerability identification.</div>
+                    <div class="expertise-meta">Semantic Analysis • CFG</div>
+                </div>
+                <div class="expertise-card">
+                    <div class="expertise-icon">💣</div>
+                    <div class="expertise-title">Exploit Development</div>
+                    <div class="expertise-text">End-to-end exploit chain development, ROP gadget optimization, and payload engineering.</div>
+                    <div class="expertise-meta">ROP • JOP • Heap Spray</div>
+                </div>
+                <div class="expertise-card">
+                    <div class="expertise-icon">🔗</div>
+                    <div class="expertise-title">Packet Analysis</div>
+                    <div class="expertise-text">Protocol analysis, capture analysis, and network communication reconstruction for deep understanding.</div>
+                    <div class="expertise-meta">PCAP Parsing • Forensics</div>
                 </div>
             </div>
         </section>
 
-        <!-- SVG VISUALIZATION SECTION -->
-        <section class="section">
-            <h2 class="section-title">ATTACK VECTORS</h2>
+        <!-- SVG SHOWCASE SECTION -->
+        <section>
+            <h2 class="section-header">Analysis & Research</h2>
+            <p class="section-subtitle">Advanced visualization of security research methodologies</p>
             <div class="svg-grid">
-                <div class="svg-container">
-                    <img src="binary-analysis-cyb.svg" alt="Binary Analysis">
-                    <div class="svg-label">Binary Dissect</div>
+                <div class="svg-card">
+                    <img src="binary-analysis-cyb.svg" alt="Binary Analysis" class="svg-image">
+                    <div class="svg-label">Binary Analysis</div>
                 </div>
-                <div class="svg-container">
-                    <img src="vulnerability-exploit.svg" alt="Vulnerability">
-                    <div class="svg-label">Vuln Exploit</div>
+                <div class="svg-card">
+                    <img src="vulnerability-exploit.svg" alt="Vulnerability" class="svg-image">
+                    <div class="svg-label">Vulnerability Research</div>
                 </div>
-                <div class="svg-container">
-                    <img src="malware-hunter.svg" alt="Malware">
-                    <div class="svg-label">Malware Hunt</div>
+                <div class="svg-card">
+                    <img src="malware-hunter.svg" alt="Malware" class="svg-image">
+                    <div class="svg-label">Malware Analysis</div>
                 </div>
-                <div class="svg-container">
-                    <img src="deobfuscation-cyb.svg" alt="Deobfuscation">
-                    <div class="svg-label">Deobfuscate</div>
+                <div class="svg-card">
+                    <img src="deobfuscation-cyb.svg" alt="Deobfuscation" class="svg-image">
+                    <div class="svg-label">Deobfuscation</div>
                 </div>
-                <div class="svg-container">
-                    <img src="architecture-cyb.svg" alt="Architecture">
-                    <div class="svg-label">Architecture</div>
+                <div class="svg-card">
+                    <img src="architecture-cyb.svg" alt="Architecture" class="svg-image">
+                    <div class="svg-label">Architecture Study</div>
                 </div>
-                <div class="svg-container">
-                    <img src="memory-forensics-cyb.svg" alt="Memory">
+                <div class="svg-card">
+                    <img src="memory-forensics-cyb.svg" alt="Memory" class="svg-image">
                     <div class="svg-label">Memory Forensics</div>
                 </div>
-                <div class="svg-container">
-                    <img src="debugging-cyb.svg" alt="Debugging">
-                    <div class="svg-label">Debug Attack</div>
+                <div class="svg-card">
+                    <img src="debugging-cyb.svg" alt="Debugging" class="svg-image">
+                    <div class="svg-label">Dynamic Debugging</div>
                 </div>
-                <div class="svg-container">
-                    <img src="network-breach.svg" alt="Network">
-                    <div class="svg-label">Network Breach</div>
+                <div class="svg-card">
+                    <img src="network-breach.svg" alt="Network" class="svg-image">
+                    <div class="svg-label">Network Analysis</div>
                 </div>
-                <div class="svg-container">
-                    <img src="code-dissect.svg" alt="Code Analysis">
-                    <div class="svg-label">Code Dissect</div>
+                <div class="svg-card">
+                    <img src="code-dissect.svg" alt="Code" class="svg-image">
+                    <div class="svg-label">Code Analysis</div>
                 </div>
-                <div class="svg-container">
-                    <img src="exploit-chain-cyb.svg" alt="Exploit Chain">
-                    <div class="svg-label">Exploit Chain</div>
+                <div class="svg-card">
+                    <img src="exploit-chain-cyb.svg" alt="Exploits" class="svg-image">
+                    <div class="svg-label">Exploit Development</div>
                 </div>
-                <div class="svg-container">
-                    <img src="packet-sniff.svg" alt="Packets">
-                    <div class="svg-label">Packet Sniff</div>
+                <div class="svg-card">
+                    <img src="packet-sniff.svg" alt="Packets" class="svg-image">
+                    <div class="svg-label">Packet Analysis</div>
                 </div>
-                <div class="svg-container">
-                    <img src="system-breach.svg" alt="System">
-                    <div class="svg-label">System Breach</div>
+                <div class="svg-card">
+                    <img src="system-breach.svg" alt="System" class="svg-image">
+                    <div class="svg-label">System Security</div>
                 </div>
             </div>
         </section>
@@ -822,22 +863,22 @@
 
     <!-- FOOTER -->
     <footer>
-        <div class="footer-text">NEURAL NETWORK ENCRYPTED DIVISION</div>
+        <div class="footer-text">Security Research & Advanced Analysis Division</div>
         <div class="social-links">
             <a href="https://github.com/AkshayTripz" class="social-link" target="_blank">GitHub</a>
             <a href="https://twitter.com" class="social-link" target="_blank">Twitter</a>
             <a href="https://linkedin.com" class="social-link" target="_blank">LinkedIn</a>
-            <a href="mailto:contact@akshay.dev" class="social-link" target="_blank">Email</a>
+            <a href="mailto:contact@akshay.dev" class="social-link" target="_blank">Contact</a>
         </div>
-        <div class="footer-text">© 2026 • AKSHAY TRIPZ • SECURITY DIVISION</div>
+        <div class="footer-text">© 2026 Akshay Tripz. Advanced Security Research. All rights reserved.</div>
     </footer>
 
     <script>
-        // Aggressive particle burst on button click
-        document.querySelectorAll('.cyber-btn').forEach(btn => {
+        // Particle burst on button click
+        document.querySelectorAll('.btn-primary, .btn-secondary').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 const rect = this.getBoundingClientRect();
-                for (let i = 0; i < 15; i++) {
+                for (let i = 0; i < 12; i++) {
                     createParticle(rect.left + rect.width / 2, rect.top + rect.height / 2);
                 }
             });
@@ -848,23 +889,45 @@
             particle.style.position = 'fixed';
             particle.style.left = x + 'px';
             particle.style.top = y + 'px';
-            particle.style.width = '10px';
-            particle.style.height = '10px';
-            particle.style.background = ['var(--neon-green)', 'var(--neon-pink)', 'var(--neon-blue)'][Math.floor(Math.random() * 3)];
+            particle.style.width = '8px';
+            particle.style.height = '8px';
+            particle.style.background = 'var(--primary)';
             particle.style.borderRadius = '50%';
             particle.style.pointerEvents = 'none';
             particle.style.zIndex = '9999';
-            particle.style.animation = 'particle-float 1s ease-out forwards';
+            particle.style.opacity = '1';
+            
+            const vx = (Math.random() - 0.5) * 8;
+            const vy = (Math.random() - 0.5) * 8 - 3;
+            
+            let posX = x;
+            let posY = y;
+            const duration = 800;
+            const start = Date.now();
+            
             document.body.appendChild(particle);
-            setTimeout(() => particle.remove(), 1000);
+            
+            const animate = () => {
+                const elapsed = Date.now() - start;
+                const progress = elapsed / duration;
+                
+                posX += vx;
+                posY += vy;
+                vy += 0.1; // gravity
+                
+                particle.style.left = posX + 'px';
+                particle.style.top = posY + 'px';
+                particle.style.opacity = 1 - progress;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    particle.remove();
+                }
+            };
+            
+            animate();
         }
-
-        // Interactive glow on mouse move
-        document.addEventListener('mousemove', (e) => {
-            const root = document.documentElement;
-            root.style.setProperty('--mouse-x', e.clientX + 'px');
-            root.style.setProperty('--mouse-y', e.clientY + 'px');
-        });
 
         // Scroll animations
         const observer = new IntersectionObserver((entries) => {
@@ -875,7 +938,7 @@
             });
         }, { threshold: 0.1 });
 
-        document.querySelectorAll('.stat-box, .expertise-item, .svg-container').forEach(el => {
+        document.querySelectorAll('.stat-card, .expertise-card, .svg-card').forEach(el => {
             observer.observe(el);
         });
     </script>
