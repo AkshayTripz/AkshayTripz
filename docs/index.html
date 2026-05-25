@@ -37,13 +37,12 @@
 
         /* ===== AGGRESSIVE ANIMATIONS ===== */
         @keyframes title-glow-pulse {
-            0%, 40% {
+            0%, 100% {
                 text-shadow: 
                     0 0 10px var(--primary),
                     0 0 20px var(--primary),
                     0 0 40px var(--secondary),
                     0 0 80px rgba(0, 217, 255, 0.5);
-                transform: scale(1);
             }
             50% {
                 text-shadow: 
@@ -51,16 +50,6 @@
                     0 0 40px var(--secondary),
                     0 0 80px var(--primary),
                     0 0 160px rgba(183, 0, 255, 0.4);
-                transform: scale(1.02);
-            }
-        }
-
-        @keyframes title-shimmer {
-            0% {
-                background-position: -1000px 0;
-            }
-            100% {
-                background-position: 1000px 0;
             }
         }
 
@@ -162,6 +151,15 @@
             }
         }
 
+        @keyframes cursor-blink {
+            0%, 49% {
+                opacity: 1;
+            }
+            50%, 100% {
+                opacity: 0;
+            }
+        }
+
         /* ===== HEADER ===== */
         header {
             position: relative;
@@ -227,13 +225,27 @@
             margin-bottom: 20px;
             letter-spacing: -2px;
             line-height: 1.1;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
-            background-size: 200% 100%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: title-glow-pulse 3s ease-in-out infinite, slide-in-down 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+            color: var(--primary);
+            animation: title-glow-pulse 3s ease-in-out infinite;
             text-shadow: 0 0 30px rgba(0, 217, 255, 0.3);
+            min-height: 6.5rem;
+            font-family: 'IBM Plex Mono', monospace;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .typing-text {
+            position: relative;
+            display: inline-block;
+        }
+
+        .typing-text::after {
+            content: '|';
+            position: absolute;
+            right: -0.1em;
+            animation: cursor-blink 1s infinite;
+            color: var(--secondary);
         }
 
         .hero-subtitle {
@@ -728,7 +740,9 @@
     <!-- HERO HEADER -->
     <header>
         <div class="hero">
-            <h1 class="hero-title">AKSHAY TRIPZ</h1>
+            <h1 class="hero-title">
+                <span class="typing-text" id="typingText"></span>
+            </h1>
             <p class="hero-subtitle">Security Research & Reverse Engineering Specialist</p>
             <p class="hero-description">
                 Expert in binary analysis, vulnerability research, malware dissection, and advanced exploitation techniques. Delivering cutting-edge security solutions through deep system understanding and advanced reverse engineering methodologies.
@@ -922,6 +936,46 @@
     </footer>
 
     <script>
+        // Typing animation for title
+        const typingElement = document.getElementById('typingText');
+        const fullText = 'AKSHAY TRIPZ';
+        let displayedText = '';
+        let index = 0;
+
+        function typeWriter() {
+            if (index < fullText.length) {
+                displayedText += fullText[index];
+                typingElement.textContent = displayedText;
+                index++;
+                
+                if (index <= 6) {
+                    // Type "AKSHAY" normally
+                    setTimeout(typeWriter, 100);
+                } else if (index === 7) {
+                    // Pause and slow down
+                    setTimeout(typeWriter, 300);
+                } else if (index <= 9) {
+                    // Type wrong letters slowly
+                    typingElement.textContent = displayedText.substring(0, 6) + ' XYZ';
+                    setTimeout(() => {
+                        displayedText = 'AKSHAY ';
+                        typingElement.textContent = displayedText;
+                        index = 7;
+                        setTimeout(typeWriter, 200);
+                    }, 800);
+                    return;
+                } else if (index <= fullText.length) {
+                    // Type remaining letters
+                    setTimeout(typeWriter, 100);
+                }
+            }
+        }
+
+        // Start typing animation after page loads
+        window.addEventListener('load', () => {
+            setTimeout(typeWriter, 500);
+        });
+
         // Particle burst on button click
         document.querySelectorAll('.btn-primary, .btn-secondary').forEach(btn => {
             btn.addEventListener('click', function(e) {
