@@ -1,26 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
-  <defs>
-    <style>
-      @keyframes binaryFlow {
-        0% { transform: translateY(-100%); opacity: 0; }
-        10% { opacity: 1; }
-        90% { opacity: 1; }
-        100% { transform: translateY(100%); opacity: 0; }
-      }
-      .binary { animation: binaryFlow 4s linear infinite; font-weight: bold; }
-    </style>
-  </defs>
-  <rect width="200" height="200" fill="#0a0a0f" opacity="0.3" rx="8"/>
-  <g text-anchor="middle" font-family="JetBrains Mono" font-size="14" fill="#00d4ff">
-    <text x="50" y="50" class="binary" style="animation-delay: 0s">01</text>
-    <text x="100" y="50" class="binary" style="animation-delay: 0.5s">10</text>
-    <text x="150" y="50" class="binary" style="animation-delay: 1s">11</text>
-    <text x="50" y="100" class="binary" style="animation-delay: 1.5s">10</text>
-    <text x="100" y="100" class="binary" style="animation-delay: 2s">01</text>
-    <text x="150" y="100" class="binary" style="animation-delay: 2.5s">11</text>
-    <text x="50" y="150" class="binary" style="animation-delay: 3s">11</text>
-    <text x="100" y="150" class="binary" style="animation-delay: 3.5s">00</text>
-    <text x="150" y="150" class="binary" style="animation-delay: 4s">10</text>
-  </g>
-  <rect width="200" height="200" fill="none" stroke="#a855f7" stroke-width="2" rx="8" opacity="0.5"/>
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <style>
+            @keyframes pulse-glow { 0%, 100% { filter: drop-shadow(0 0 5px #00d9ff); } 50% { filter: drop-shadow(0 0 15px #b700ff); } }
+            @keyframes rotate-fast { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+            @keyframes float-bounce { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+            .pulse { animation: pulse-glow 2s ease-in-out infinite; }
+            .rotate { animation: rotate-fast 3s linear infinite; }
+            .bounce { animation: float-bounce 2s ease-in-out infinite; }
+        </style>
+    </defs>
+    <rect width="200" height="200" fill="#0f1419" rx="10"/>
+    <circle cx="100" cy="100" r="70" fill="none" stroke="#00d9ff" stroke-width="2" class="rotate"/>
+    <circle cx="100" cy="100" r="50" fill="none" stroke="#b700ff" stroke-width="2" opacity="0.6" class="pulse"/>
+    <path d="M 100 40 L 100 160 M 40 100 L 160 100" stroke="#00d9ff" stroke-width="3" class="pulse" stroke-linecap="round"/>
+    <circle cx="100" cy="100" r="30" fill="none" stroke="#ff006e" stroke-width="2" class="bounce"/>
+    <rect x="85" y="85" width="30" height="30" fill="none" stroke="#00d9ff" stroke-width="1.5" opacity="0.8"/>
 </svg>
