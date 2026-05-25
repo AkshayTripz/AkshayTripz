@@ -1,0 +1,17 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <style>
+            @keyframes packet-fall { 0% { transform: translateY(-100px); opacity: 1; } 100% { transform: translateY(100px); opacity: 0; } }
+            @keyframes wave-pulse { 0%, 100% { filter: drop-shadow(0 0 2px #00d9ff); } 50% { filter: drop-shadow(0 0 8px #00d9ff); } }
+            @keyframes rotate-dish { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+            .packet { animation: packet-fall 2s ease-in infinite; }
+            .wave { animation: wave-pulse 1s ease-in-out infinite; }
+            .dish { animation: rotate-dish 3s linear infinite; }
+        </style>
+    </defs>
+    <rect width="200" height="200" fill="#0f1419" rx="10"/>
+    <path d="M 100 40 Q 80 60 100 80 Q 120 60 100 40" fill="none" stroke="#00d9ff" stroke-width="2" class="dish"/>
+    <path d="M 100 40 Q 70 65 100 90 Q 130 65 100 40" fill="none" stroke="#00d9ff" stroke-width="1.5" class="wave" style="animation-delay: 0.3s"/>
+    <rect x="80" y="120" width="40" height="40" fill="none" stroke="#b700ff" stroke-width="2" class="packet"/>
+    <circle cx="100" cy="140" r="15" fill="none" stroke="#ff006e" stroke-width="1" opacity="0.7"/>
+</svg>
