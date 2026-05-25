@@ -1,0 +1,19 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <style>
+            @keyframes node-pulse { 0%, 100% { r: 5; filter: drop-shadow(0 0 2px #00d9ff); } 50% { r: 8; filter: drop-shadow(0 0 8px #b700ff); } }
+            @keyframes line-glow { 0%, 100% { stroke-width: 1; filter: drop-shadow(0 0 2px #00d9ff); } 50% { stroke-width: 2; filter: drop-shadow(0 0 6px #ff006e); } }
+            @keyframes center-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+            .node { animation: node-pulse 1.5s ease-in-out infinite; }
+            .line { animation: line-glow 2s ease-in-out infinite; }
+            .center { animation: center-spin 4s linear infinite; }
+        </style>
+    </defs>
+    <rect width="200" height="200" fill="#0f1419" rx="10"/>
+    <circle cx="50" cy="50" r="6" fill="#00d9ff" class="node"/>
+    <circle cx="150" cy="50" r="6" fill="#b700ff" class="node" style="animation-delay: 0.2s"/>
+    <circle cx="100" cy="150" r="6" fill="#ff006e" class="node" style="animation-delay: 0.4s"/>
+    <line x1="50" y1="50" x2="100" y2="150" stroke="#00d9ff" stroke-width="1" class="line"/>
+    <line x1="150" y1="50" x2="100" y2="150" stroke="#b700ff" stroke-width="1" class="line" style="animation-delay: 0.2s"/>
+    <circle cx="100" cy="100" r="12" fill="none" stroke="#ff006e" stroke-width="2" class="center"/>
+</svg>
