@@ -49,7 +49,7 @@
             color: var(--text-primary);
         }
 
-        /* ===== CONTINUOUS ANIMATIONS ===== */
+        /* ===== ANIMATIONS ===== */
         @keyframes nameSlideIn {
             0% {
                 opacity: 0;
@@ -66,12 +66,18 @@
             }
         }
 
-        @keyframes namePulseScale {
+        @keyframes nameWave {
             0%, 100% {
-                transform: scaleY(1);
+                transform: translateY(0) scaleY(1);
+            }
+            25% {
+                transform: translateY(-15px) scaleY(1.05);
             }
             50% {
-                transform: scaleY(1.03);
+                transform: translateY(0) scaleY(1);
+            }
+            75% {
+                transform: translateY(-8px) scaleY(1.02);
             }
         }
 
@@ -88,17 +94,11 @@
             0%, 100% {
                 color: var(--primary);
             }
-            50% {
+            33% {
                 color: var(--secondary);
             }
-        }
-
-        @keyframes nameShadowPulse {
-            0%, 100% {
-                text-shadow: 0 0 10px rgba(0, 217, 255, 0.3), 0 0 20px rgba(0, 217, 255, 0.1);
-            }
-            50% {
-                text-shadow: 0 0 20px rgba(0, 217, 255, 0.6), 0 0 40px rgba(0, 217, 255, 0.3);
+            66% {
+                color: var(--accent);
             }
         }
 
@@ -120,49 +120,21 @@
             }
         }
 
-        @keyframes backgroundFloat {
+        @keyframes float {
             0%, 100% {
-                transform: translate(0, 0) rotate(0deg);
-                opacity: 0.8;
-            }
-            25% {
-                transform: translate(50px, -50px) rotate(90deg);
-                opacity: 0.5;
+                transform: translateY(0px) rotate(0deg);
             }
             50% {
-                transform: translate(100px, 0) rotate(180deg);
-                opacity: 0.8;
-            }
-            75% {
-                transform: translate(50px, 50px) rotate(270deg);
-                opacity: 0.5;
+                transform: translateY(-20px) rotate(10deg);
             }
         }
 
-        @keyframes backgroundGradientShift {
+        @keyframes floatReverse {
             0%, 100% {
-                background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-light) 100%);
+                transform: translateY(0px) rotate(0deg);
             }
             50% {
-                background: linear-gradient(45deg, var(--bg-dark) 0%, var(--bg-light) 100%);
-            }
-        }
-
-        @keyframes backgroundPulseGlow {
-            0%, 100% {
-                opacity: 0.1;
-            }
-            50% {
-                opacity: 0.2;
-            }
-        }
-
-        @keyframes orbitParticle {
-            0% {
-                transform: rotate(0deg) translateX(150px) rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg) translateX(150px) rotate(-360deg);
+                transform: translateY(20px) rotate(-10deg);
             }
         }
 
@@ -216,6 +188,32 @@
             }
             to {
                 opacity: 1;
+            }
+        }
+
+        @keyframes particleFloat {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) translateX(0);
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100vh) translateX(var(--tx, 0px));
+            }
+        }
+
+        @keyframes particleRotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
             }
         }
 
@@ -283,78 +281,45 @@
             padding: 80px 40px;
             position: relative;
             overflow: hidden;
-            animation: backgroundGradientShift 12s ease-in-out infinite;
+            background: var(--bg-dark);
         }
 
-        /* Animated Background Elements */
-        header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(0, 217, 255, 0.15) 0%, transparent 70%);
-            animation: backgroundFloat 15s ease-in-out infinite;
-            pointer-events: none;
-        }
-
-        header::after {
-            content: '';
-            position: absolute;
-            bottom: -30%;
-            left: -30%;
-            width: 180%;
-            height: 180%;
-            background: radial-gradient(circle, rgba(183, 0, 255, 0.1) 0%, transparent 60%);
-            animation: backgroundFloat 18s ease-in-out infinite reverse;
-            pointer-events: none;
-        }
-
-        .background-particles {
+        /* Particle Background Container */
+        .particle-background {
             position: absolute;
             width: 100%;
             height: 100%;
+            top: 0;
+            left: 0;
             pointer-events: none;
+            overflow: hidden;
         }
 
         .particle {
             position: absolute;
-            width: 4px;
-            height: 4px;
-            background: var(--primary);
-            border-radius: 50%;
-            opacity: 0.4;
+            font-family: 'Roboto Mono', monospace;
+            font-weight: 600;
+            opacity: 0.6;
+            animation: particleFloat linear;
+            pointer-events: none;
         }
 
-        .particle:nth-child(1) {
-            top: 20%;
-            left: 10%;
-            animation: orbitParticle 20s linear infinite;
+        .particle.binary {
+            color: var(--primary);
+            font-size: 12px;
+            letter-spacing: 2px;
         }
 
-        .particle:nth-child(2) {
-            top: 60%;
-            right: 15%;
-            animation: orbitParticle 25s linear infinite reverse;
+        .particle.hex {
+            color: var(--secondary);
+            font-size: 11px;
+            letter-spacing: 1px;
         }
 
-        .particle:nth-child(3) {
-            bottom: 20%;
-            left: 30%;
-            animation: orbitParticle 30s linear infinite;
-        }
-
-        .particle:nth-child(4) {
-            top: 40%;
-            right: 30%;
-            animation: orbitParticle 22s linear infinite reverse;
-        }
-
-        .particle:nth-child(5) {
-            bottom: 30%;
-            right: 10%;
-            animation: orbitParticle 28s linear infinite;
+        .particle.text {
+            color: var(--accent);
+            font-size: 10px;
+            letter-spacing: 1px;
         }
 
         .hero-content {
@@ -374,10 +339,9 @@
             font-weight: 900;
             animation: 
                 nameSlideIn 1.2s cubic-bezier(0.34, 1.56, 0.64, 1),
-                namePulseScale 4s ease-in-out infinite 1.2s,
+                nameWave 4s ease-in-out infinite 1.2s,
                 nameLetterFloat 3s ease-in-out infinite 1.5s,
-                nameColorShift 6s ease-in-out infinite 1.8s,
-                nameShadowPulse 3s ease-in-out infinite 2s;
+                nameColorShift 6s ease-in-out infinite 1.8s;
             margin-bottom: 10px;
             line-height: 1.1;
         }
@@ -780,13 +744,8 @@
 
     <!-- HEADER -->
     <header>
-        <div class="background-particles">
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-        </div>
+        <!-- Particle Background -->
+        <div class="particle-background" id="particleBackground"></div>
 
         <div class="hero-content">
             <div class="name-container">
@@ -798,7 +757,7 @@
             <p class="hero-subtitle">Reverse Engineering • Vulnerability Research • Malware Analysis</p>
             
             <div class="hero-description">
-                <p>With over a decade of experience in <span class="highlight-text">advanced security research</span>, I specialize in uncovering critical vulnerabilities, conducting sophisticated reverse engineering, and developing cutting-edge security solutions.</p>
+                <p>With over a decade of experience in <span class="highlight-text">advanced security research</span>, I specialize in uncovering critical vulnerabilities, conducting sophisticated threat analysis, and developing cutting-edge exploitation techniques.</p>
                 
                 <p>My expertise spans <span class="highlight-text">binary analysis, exploit development, and malware dissection</span>, delivering comprehensive security assessments for complex systems and applications.</p>
                 
@@ -819,13 +778,13 @@
             
             <div class="about-intro">
                 <div class="about-text">
-                    <p><strong>Extensive Experience</strong> in advanced security research with proven track record in identifying zero-day vulnerabilities and developing sophisticated exploitation techniques.</p>
+                    <p><strong>Extensive Experience</strong> in advanced security research with proven track record in identifying zero-day vulnerabilities and developing sophisticated exploitation frameworks.</p>
                     
                     <p><strong>Deep Technical Expertise</strong> across multiple platforms and architectures, from low-level kernel exploitation to complex application security assessments.</p>
                     
                     <p><strong>Research Focus</strong> on emerging threats, advanced persistent threats (APT), and development of novel detection and mitigation methodologies.</p>
                     
-                    <p><strong>Collaborative Approach</strong> with industry leaders and security communities, contributing to responsible disclosure practices and advancing collective cybersecurity knowledge.</p>
+                    <p><strong>Collaborative Approach</strong> with industry leaders and security communities, contributing to responsible disclosure practices and advancing collective cybersecurity standards.</p>
                 </div>
 
                 <div class="about-stats">
@@ -942,6 +901,72 @@
     </footer>
 
     <script>
+        // Particle System with Binary, Hex, and Security-related text
+        const particleTexts = {
+            binary: [
+                '01010101', '10101010', '11001100', '10011001', 
+                '11110000', '00001111', '11111111', '00000000',
+                '10110110', '01101101', '11010110', '01010110'
+            ],
+            hex: [
+                '0xDEADBEEF', '0xCAFEBABE', '0xFEEDC0DE', '0xBEEFCAFE',
+                '0xDEADC0DE', '0xABADCAFE', '0xFACECAFE', '0x8BADF00D',
+                '0xC0FFEE', '0xDECAFBAD', '0xFEEDFACE', '0xDEEDDEED'
+            ],
+            text: [
+                'ReverseEng', 'Exploit', 'Vulnerability', 'Binary',
+                'Malware', 'Payload', 'Assembly', 'Debug',
+                'Disassemble', 'Patch', 'Inject', 'Hook',
+                'Obfuscate', 'Decompile', 'Analyze', 'Breach'
+            ]
+        };
+
+        function createParticle() {
+            const particleContainer = document.getElementById('particleBackground');
+            if (!particleContainer) return;
+
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+
+            // Random selection of particle type
+            const types = ['binary', 'hex', 'text'];
+            const randomType = types[Math.floor(Math.random() * types.length)];
+            const textArray = particleTexts[randomType];
+            const randomText = textArray[Math.floor(Math.random() * textArray.length)];
+
+            particle.textContent = randomText;
+            particle.classList.add(randomType);
+
+            // Random horizontal position
+            const randomLeft = Math.random() * 100;
+            particle.style.left = randomLeft + '%';
+            particle.style.bottom = '-50px';
+
+            // Random animation duration between 8-15 seconds
+            const duration = 8 + Math.random() * 7;
+            particle.style.setProperty('--duration', duration + 's');
+            particle.style.animation = `particleFloat ${duration}s linear forwards`;
+
+            // Random horizontal drift
+            const drift = (Math.random() - 0.5) * 100;
+            particle.style.setProperty('--tx', drift + 'px');
+
+            particleContainer.appendChild(particle);
+
+            // Remove particle after animation completes
+            setTimeout(() => {
+                particle.remove();
+            }, duration * 1000);
+        }
+
+        // Create particles at intervals for continuous effect
+        setInterval(createParticle, 400);
+
+        // Create initial burst of particles
+        for (let i = 0; i < 8; i++) {
+            setTimeout(createParticle, i * 100);
+        }
+
         // Theme Toggle
         function toggleTheme() {
             document.body.classList.toggle('red-yellow-theme');
@@ -956,7 +981,7 @@
             }
         });
 
-        // Smooth scroll for buttons - NO particle effect
+        // Smooth scroll for buttons
         document.querySelectorAll('.btn').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
