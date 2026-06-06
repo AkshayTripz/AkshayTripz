@@ -49,7 +49,7 @@
             color: var(--text-primary);
         }
 
-        /* ===== ANIMATIONS ===== */
+        /* ===== CONTINUOUS ANIMATIONS ===== */
         @keyframes nameSlideIn {
             0% {
                 opacity: 0;
@@ -66,12 +66,103 @@
             }
         }
 
+        @keyframes namePulseScale {
+            0%, 100% {
+                transform: scaleY(1);
+            }
+            50% {
+                transform: scaleY(1.03);
+            }
+        }
+
+        @keyframes nameLetterFloat {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        @keyframes nameColorShift {
+            0%, 100% {
+                color: var(--primary);
+            }
+            50% {
+                color: var(--secondary);
+            }
+        }
+
+        @keyframes nameShadowPulse {
+            0%, 100% {
+                text-shadow: 0 0 10px rgba(0, 217, 255, 0.3), 0 0 20px rgba(0, 217, 255, 0.1);
+            }
+            50% {
+                text-shadow: 0 0 20px rgba(0, 217, 255, 0.6), 0 0 40px rgba(0, 217, 255, 0.3);
+            }
+        }
+
         @keyframes nameUnderline {
             from {
                 width: 0;
             }
             to {
                 width: 100%;
+            }
+        }
+
+        @keyframes underlineGradientFlow {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        @keyframes backgroundFloat {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg);
+                opacity: 0.8;
+            }
+            25% {
+                transform: translate(50px, -50px) rotate(90deg);
+                opacity: 0.5;
+            }
+            50% {
+                transform: translate(100px, 0) rotate(180deg);
+                opacity: 0.8;
+            }
+            75% {
+                transform: translate(50px, 50px) rotate(270deg);
+                opacity: 0.5;
+            }
+        }
+
+        @keyframes backgroundGradientShift {
+            0%, 100% {
+                background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-light) 100%);
+            }
+            50% {
+                background: linear-gradient(45deg, var(--bg-dark) 0%, var(--bg-light) 100%);
+            }
+        }
+
+        @keyframes backgroundPulseGlow {
+            0%, 100% {
+                opacity: 0.1;
+            }
+            50% {
+                opacity: 0.2;
+            }
+        }
+
+        @keyframes orbitParticle {
+            0% {
+                transform: rotate(0deg) translateX(150px) rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg) translateX(150px) rotate(-360deg);
             }
         }
 
@@ -125,24 +216,6 @@
             }
             to {
                 opacity: 1;
-            }
-        }
-
-        @keyframes cardHover {
-            0%, 100% {
-                box-shadow: 0 10px 30px rgba(0, 217, 255, 0.2);
-            }
-            50% {
-                box-shadow: 0 15px 50px rgba(0, 217, 255, 0.4);
-            }
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-15px);
             }
         }
 
@@ -208,11 +281,12 @@
             align-items: center;
             justify-content: center;
             padding: 80px 40px;
-            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-light) 100%);
             position: relative;
             overflow: hidden;
+            animation: backgroundGradientShift 12s ease-in-out infinite;
         }
 
+        /* Animated Background Elements */
         header::before {
             content: '';
             position: absolute;
@@ -220,9 +294,67 @@
             right: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(0, 217, 255, 0.1) 0%, transparent 70%);
-            animation: float 8s ease-in-out infinite;
+            background: radial-gradient(circle, rgba(0, 217, 255, 0.15) 0%, transparent 70%);
+            animation: backgroundFloat 15s ease-in-out infinite;
             pointer-events: none;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -30%;
+            width: 180%;
+            height: 180%;
+            background: radial-gradient(circle, rgba(183, 0, 255, 0.1) 0%, transparent 60%);
+            animation: backgroundFloat 18s ease-in-out infinite reverse;
+            pointer-events: none;
+        }
+
+        .background-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0.4;
+        }
+
+        .particle:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            animation: orbitParticle 20s linear infinite;
+        }
+
+        .particle:nth-child(2) {
+            top: 60%;
+            right: 15%;
+            animation: orbitParticle 25s linear infinite reverse;
+        }
+
+        .particle:nth-child(3) {
+            bottom: 20%;
+            left: 30%;
+            animation: orbitParticle 30s linear infinite;
+        }
+
+        .particle:nth-child(4) {
+            top: 40%;
+            right: 30%;
+            animation: orbitParticle 22s linear infinite reverse;
+        }
+
+        .particle:nth-child(5) {
+            bottom: 30%;
+            right: 10%;
+            animation: orbitParticle 28s linear infinite;
         }
 
         .hero-content {
@@ -240,17 +372,24 @@
         .hero-name {
             font-size: 5.5rem;
             font-weight: 900;
-            color: var(--primary);
-            animation: nameSlideIn 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: 
+                nameSlideIn 1.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+                namePulseScale 4s ease-in-out infinite 1.2s,
+                nameLetterFloat 3s ease-in-out infinite 1.5s,
+                nameColorShift 6s ease-in-out infinite 1.8s,
+                nameShadowPulse 3s ease-in-out infinite 2s;
             margin-bottom: 10px;
             line-height: 1.1;
         }
 
         .name-underline {
             height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent), var(--primary));
+            background-size: 200% 100%;
             margin: 0 auto;
-            animation: nameUnderline 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both;
+            animation: 
+                nameUnderline 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both,
+                underlineGradientFlow 4s ease-in-out infinite 1.3s;
             width: 100%;
             max-width: 400px;
             border-radius: 2px;
@@ -641,6 +780,14 @@
 
     <!-- HEADER -->
     <header>
+        <div class="background-particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+
         <div class="hero-content">
             <div class="name-container">
                 <h1 class="hero-name">AKSHAY TRIPZ</h1>
@@ -813,13 +960,6 @@
         document.querySelectorAll('.btn').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
-            });
-        });
-
-        // Social link interactions
-        document.querySelectorAll('.social-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                // Just let the link work normally
             });
         });
     </script>
