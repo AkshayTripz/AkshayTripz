@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Akshay Tripz - Security Research & Reverse Engineering</title>
+    <title>Akshay Tripz - Advanced Security Research</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800;900&family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -22,7 +22,6 @@
             transition: background-color 0.5s ease, color 0.5s ease;
         }
 
-        /* ===== THEME VARIABLES ===== */
         :root {
             --primary: #00d9ff;
             --secondary: #b700ff;
@@ -51,10 +50,35 @@
         }
 
         /* ===== ANIMATIONS ===== */
+        @keyframes nameSlideIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-40px) perspective(1000px) rotateX(90deg);
+                letter-spacing: 10px;
+            }
+            50% {
+                letter-spacing: 8px;
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) perspective(1000px) rotateX(0);
+                letter-spacing: 2px;
+            }
+        }
+
+        @keyframes nameUnderline {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100%;
+            }
+        }
+
         @keyframes fadeInScale {
             from {
                 opacity: 0;
-                transform: scale(0.9);
+                transform: scale(0.95);
             }
             to {
                 opacity: 1;
@@ -65,29 +89,29 @@
         @keyframes slideInLeft {
             from {
                 opacity: 0;
-                transform: translateX(-80px) rotateY(20deg);
+                transform: translateX(-60px);
             }
             to {
                 opacity: 1;
-                transform: translateX(0) rotateY(0);
+                transform: translateX(0);
             }
         }
 
         @keyframes slideInRight {
             from {
                 opacity: 0;
-                transform: translateX(80px) rotateY(-20deg);
+                transform: translateX(60px);
             }
             to {
                 opacity: 1;
-                transform: translateX(0) rotateY(0);
+                transform: translateX(0);
             }
         }
 
         @keyframes slideUp {
             from {
                 opacity: 0;
-                transform: translateY(80px);
+                transform: translateY(40px);
             }
             to {
                 opacity: 1;
@@ -95,47 +119,21 @@
             }
         }
 
-        @keyframes bounceIn {
-            0% {
+        @keyframes fadeIn {
+            from {
                 opacity: 0;
-                transform: scale(0) rotate(-360deg);
             }
-            50% {
+            to {
                 opacity: 1;
-                transform: scale(1.05);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1) rotate(0);
             }
         }
 
-        @keyframes glowPulse {
+        @keyframes cardHover {
             0%, 100% {
-                box-shadow: 0 0 20px currentColor, inset 0 0 20px rgba(255, 215, 0, 0.1);
-                transform: scale(1);
+                box-shadow: 0 10px 30px rgba(0, 217, 255, 0.2);
             }
             50% {
-                box-shadow: 0 0 40px currentColor, inset 0 0 30px rgba(255, 215, 0, 0.2);
-                transform: scale(1.05);
-            }
-        }
-
-        @keyframes textGlow {
-            0%, 100% {
-                text-shadow: 0 0 10px currentColor;
-            }
-            50% {
-                text-shadow: 0 0 20px currentColor, 0 0 30px currentColor;
-            }
-        }
-
-        @keyframes shimmer {
-            0% {
-                background-position: -1000px 0;
-            }
-            100% {
-                background-position: 1000px 0;
+                box-shadow: 0 15px 50px rgba(0, 217, 255, 0.4);
             }
         }
 
@@ -144,34 +142,7 @@
                 transform: translateY(0px);
             }
             50% {
-                transform: translateY(-20px);
-            }
-        }
-
-        @keyframes rotate {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        @keyframes typewriter {
-            from {
-                width: 0;
-            }
-            to {
-                width: 100%;
-            }
-        }
-
-        @keyframes wiggle {
-            0%, 100% {
-                transform: rotateZ(-2deg);
-            }
-            50% {
-                transform: rotateZ(2deg);
+                transform: translateY(-15px);
             }
         }
 
@@ -232,225 +203,226 @@
 
         /* ===== HEADER ===== */
         header {
-            position: relative;
             min-height: 100vh;
             display: flex;
             align-items: center;
+            justify-content: center;
             padding: 80px 40px;
             background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-light) 100%);
+            position: relative;
             overflow: hidden;
         }
 
         header::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 30% 50%, rgba(0, 217, 255, 0.15) 0%, transparent 50%),
-                        radial-gradient(circle at 70% 30%, rgba(183, 0, 255, 0.15) 0%, transparent 50%);
-            animation: float 6s ease-in-out infinite;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 217, 255, 0.1) 0%, transparent 70%);
+            animation: float 8s ease-in-out infinite;
             pointer-events: none;
         }
 
-        .header-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: center;
-            max-width: 1400px;
-            margin: 0 auto;
+        .hero-content {
+            text-align: center;
+            max-width: 900px;
             position: relative;
             z-index: 2;
         }
 
-        .hero-text h1 {
-            font-size: 4.5rem;
-            font-weight: 900;
-            margin-bottom: 20px;
-            line-height: 1.1;
-            color: var(--primary);
-            animation: slideInLeft 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
-            text-shadow: 0 0 30px rgba(0, 217, 255, 0.3);
-        }
-
-        .hero-text h1 span {
-            color: var(--secondary);
-            animation: textGlow 2s ease-in-out infinite;
-        }
-
-        .hero-text .tagline {
-            font-size: 1.3rem;
-            color: var(--accent);
+        .name-container {
             margin-bottom: 30px;
-            font-weight: 600;
-            animation: slideInLeft 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+            position: relative;
+        }
+
+        .hero-name {
+            font-size: 5.5rem;
+            font-weight: 900;
+            color: var(--primary);
+            animation: nameSlideIn 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+            margin-bottom: 10px;
+            line-height: 1.1;
+        }
+
+        .name-underline {
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+            margin: 0 auto;
+            animation: nameUnderline 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 2px;
+        }
+
+        .job-title {
+            font-size: 1.4rem;
+            color: var(--secondary);
+            margin-top: 25px;
             letter-spacing: 2px;
+            animation: slideUp 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+            color: var(--accent);
+            margin-top: 15px;
+            letter-spacing: 1px;
+            animation: slideUp 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both;
         }
 
         .hero-description {
-            font-size: 1rem;
-            color: var(--text-secondary);
-            margin-bottom: 30px;
-            line-height: 1.8;
-            animation: slideInLeft 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
-            max-width: 500px;
+            margin-top: 40px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .hero-description p {
-            margin-bottom: 15px;
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.8;
+            animation: slideUp 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s both;
         }
 
-        .hero-buttons {
+        .highlight-text {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .hero-cta {
             display: flex;
             gap: 20px;
-            animation: slideInLeft 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both;
+            justify-content: center;
+            margin-top: 50px;
+            flex-wrap: wrap;
+            animation: fadeIn 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s both;
         }
 
         .btn {
-            padding: 15px 40px;
-            font-size: 1rem;
+            padding: 14px 40px;
+            font-size: 0.95rem;
             font-weight: 700;
             border: 2px solid;
-            border-radius: 8px;
+            border-radius: 6px;
             cursor: pointer;
             transition: all 0.4s ease;
             text-transform: uppercase;
             letter-spacing: 1px;
+            background: none;
             position: relative;
-            overflow: hidden;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
             border-color: var(--primary);
-            color: var(--bg-dark);
-            box-shadow: 0 0 30px rgba(0, 217, 255, 0.3);
+            color: var(--primary);
         }
 
         .btn-primary:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 10px 50px rgba(0, 217, 255, 0.5);
-            animation: glowPulse 0.6s ease-in-out;
+            background: var(--primary);
+            color: var(--bg-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 217, 255, 0.3);
         }
 
         .btn-secondary {
-            background: transparent;
             border-color: var(--accent);
             color: var(--accent);
-            box-shadow: 0 0 20px rgba(255, 0, 110, 0.2);
         }
 
         .btn-secondary:hover {
             background: var(--accent);
             color: var(--bg-dark);
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 10px 40px rgba(255, 0, 110, 0.5);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 0, 110, 0.3);
         }
 
-        .hero-visual {
-            position: relative;
-            height: 400px;
-            animation: slideInRight 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
-        }
-
-        .visual-box {
-            position: absolute;
-            border: 2px solid var(--primary);
-            border-radius: 12px;
-            background: linear-gradient(135deg, rgba(0, 217, 255, 0.05), rgba(183, 0, 255, 0.05));
-            animation: bounceIn 1s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .visual-box:nth-child(1) {
-            width: 300px;
-            height: 200px;
-            top: 0;
-            right: 0;
-            animation-delay: 0.3s;
-            box-shadow: 0 0 30px var(--primary);
-        }
-
-        .visual-box:nth-child(2) {
-            width: 250px;
-            height: 150px;
-            bottom: 0;
-            left: 0;
-            border-color: var(--secondary);
-            animation-delay: 0.5s;
-            box-shadow: 0 0 30px var(--secondary);
-        }
-
-        .visual-text {
-            position: absolute;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--primary);
-            letter-spacing: 1.5px;
-            top: 20px;
-            left: 20px;
-        }
-
-        /* ===== ABOUT SECTION ===== */
-        .about {
+        /* ===== SECTIONS ===== */
+        .section {
             padding: 100px 40px;
+            position: relative;
+        }
+
+        .section-dark {
             background: var(--bg-dark);
+        }
+
+        .section-light {
+            background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-dark) 100%);
         }
 
         .section-title {
             font-size: 3rem;
             font-weight: 900;
-            margin-bottom: 50px;
+            margin-bottom: 60px;
             text-align: center;
             color: var(--primary);
             animation: slideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            display: inline-block;
+            width: 100%;
         }
 
-        .about-content {
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        /* ===== ABOUT SECTION ===== */
+        .about {
+            max-width: 1200px;
+            margin: 0 auto;
+            animation: fadeInScale 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .about-intro {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 60px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .about-text {
-            animation: slideInLeft 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .about-text h3 {
-            font-size: 1.5rem;
-            color: var(--accent);
-            margin-bottom: 20px;
-            margin-top: 30px;
+            align-items: center;
+            margin-top: 50px;
         }
 
         .about-text p {
             color: var(--text-secondary);
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            font-size: 1.05rem;
             line-height: 1.8;
+            animation: slideInLeft 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
         }
 
         .about-stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 30px;
-            animation: slideInRight 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: slideInRight 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
         }
 
-        .stat-item {
+        .stat-card {
             background: linear-gradient(135deg, rgba(0, 217, 255, 0.1), rgba(183, 0, 255, 0.1));
-            padding: 30px;
-            border-radius: 12px;
-            border: 1px solid var(--primary);
+            padding: 35px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
             text-align: center;
-            animation: bounceIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: all 0.4s ease;
         }
 
-        .stat-item:nth-child(2) { animation-delay: 0.1s; }
-        .stat-item:nth-child(3) { animation-delay: 0.2s; }
-        .stat-item:nth-child(4) { animation-delay: 0.3s; }
+        .stat-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 10px 40px rgba(0, 217, 255, 0.2);
+            transform: translateY(-8px);
+        }
 
         .stat-number {
             font-size: 2.5rem;
@@ -460,35 +432,29 @@
         }
 
         .stat-label {
-            font-size: 0.9rem;
             color: var(--text-secondary);
+            font-size: 0.95rem;
             letter-spacing: 1px;
         }
 
-        .stat-item:hover {
-            transform: scale(1.08) translateY(-10px);
-            box-shadow: 0 10px 40px var(--primary);
-        }
-
         /* ===== EXPERTISE SECTION ===== */
-        .expertise {
-            padding: 100px 40px;
-            background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-dark) 100%);
+        .expertise-container {
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .expertise-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 30px;
-            max-width: 1400px;
-            margin: 0 auto;
+            margin-top: 50px;
         }
 
         .expertise-card {
             background: var(--bg-dark);
-            padding: 40px 30px;
-            border: 2px solid var(--border);
-            border-radius: 12px;
+            padding: 40px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
             transition: all 0.4s ease;
             animation: slideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
             position: relative;
@@ -508,24 +474,26 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 4px;
+            height: 3px;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
         }
 
         .expertise-icon {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             margin-bottom: 15px;
         }
 
         .expertise-card h3 {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             color: var(--primary);
-            margin-bottom: 15px;
+            margin-bottom: 12px;
+            font-weight: 700;
         }
 
         .expertise-card p {
             color: var(--text-secondary);
-            line-height: 1.7;
+            font-size: 0.95rem;
+            line-height: 1.6;
             margin-bottom: 15px;
         }
 
@@ -536,164 +504,130 @@
         }
 
         .expertise-card:hover {
-            transform: translateY(-15px) scale(1.05) rotateY(5deg);
             border-color: var(--primary);
-            box-shadow: 0 20px 60px rgba(0, 217, 255, 0.3);
-            animation: glowPulse 2s ease-in-out infinite;
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 217, 255, 0.2);
         }
 
         /* ===== SERVICES SECTION ===== */
-        .services {
-            padding: 100px 40px;
-            background: var(--bg-dark);
-        }
-
-        .service-list {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            max-width: 1400px;
+        .services-container {
+            max-width: 1200px;
             margin: 0 auto;
         }
 
-        .service-item {
-            padding: 30px;
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 35px;
+            margin-top: 50px;
+        }
+
+        .service-card {
+            padding: 40px 30px;
             border-left: 4px solid var(--primary);
             background: linear-gradient(135deg, rgba(0, 217, 255, 0.05), rgba(183, 0, 255, 0.05));
-            border-radius: 8px;
+            border-radius: 6px;
             transition: all 0.4s ease;
             animation: slideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .service-item:nth-child(1) { animation-delay: 0.1s; }
-        .service-item:nth-child(2) { animation-delay: 0.2s; }
-        .service-item:nth-child(3) { animation-delay: 0.3s; }
-        .service-item:nth-child(4) { animation-delay: 0.4s; }
+        .service-card:nth-child(1) { animation-delay: 0.1s; }
+        .service-card:nth-child(2) { animation-delay: 0.2s; }
+        .service-card:nth-child(3) { animation-delay: 0.3s; }
+        .service-card:nth-child(4) { animation-delay: 0.4s; }
 
-        .service-item h3 {
-            font-size: 1.3rem;
+        .service-card h3 {
+            font-size: 1.2rem;
             color: var(--secondary);
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
-        .service-item p {
+        .service-card p {
             color: var(--text-secondary);
-            line-height: 1.8;
+            line-height: 1.7;
         }
 
-        .service-item:hover {
-            transform: translateX(20px);
+        .service-card:hover {
+            transform: translateX(15px);
             border-left-color: var(--accent);
-            box-shadow: 0 10px 40px rgba(0, 217, 255, 0.2);
-        }
-
-        /* ===== CTA SECTION ===== */
-        .cta {
-            padding: 100px 40px;
-            background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-dark) 100%);
-            text-align: center;
-        }
-
-        .cta h2 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            color: var(--primary);
-            animation: slideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .cta p {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            margin-bottom: 40px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            animation: slideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
-        }
-
-        .cta-button {
-            padding: 18px 50px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: var(--bg-dark);
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.4s ease;
-            animation: bounceIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
-            box-shadow: 0 10px 40px rgba(0, 217, 255, 0.3);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .cta-button:hover {
-            transform: scale(1.08) translateY(-5px);
-            box-shadow: 0 20px 60px rgba(0, 217, 255, 0.5);
+            box-shadow: 0 10px 30px rgba(0, 217, 255, 0.15);
         }
 
         /* ===== FOOTER ===== */
         footer {
-            padding: 40px;
+            padding: 50px 40px;
             text-align: center;
             border-top: 1px solid var(--border);
             background: var(--bg-dark);
+            animation: fadeIn 0.8s ease 1s both;
         }
 
         .social-links {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             display: flex;
             justify-content: center;
             gap: 20px;
+            flex-wrap: wrap;
         }
 
         .social-link {
             color: var(--primary);
             text-decoration: none;
             font-weight: 600;
+            font-size: 0.9rem;
             transition: all 0.3s ease;
-            padding: 8px 16px;
+            padding: 8px 20px;
             border: 1px solid var(--primary);
             border-radius: 4px;
+            letter-spacing: 0.5px;
         }
 
         .social-link:hover {
             background: var(--primary);
             color: var(--bg-dark);
-            transform: scale(1.1);
+            transform: scale(1.08);
         }
 
         footer p {
             color: var(--text-secondary);
             font-size: 0.9rem;
+            letter-spacing: 0.5px;
         }
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
-            .header-content {
+            .hero-name {
+                font-size: 3rem;
+            }
+
+            .about-intro {
                 grid-template-columns: 1fr;
-                gap: 30px;
+                gap: 40px;
             }
 
-            .hero-text h1 {
-                font-size: 2.5rem;
+            .section-title {
+                font-size: 2rem;
             }
 
-            .about-content {
-                grid-template-columns: 1fr;
+            .hero-cta {
+                flex-direction: column;
             }
 
-            .service-list {
-                grid-template-columns: 1fr;
-            }
-
-            .hero-visual {
-                display: none;
+            .btn {
+                width: 100%;
             }
 
             .theme-toggle {
                 top: 20px;
                 right: 20px;
+            }
+
+            .expertise-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -707,136 +641,146 @@
 
     <!-- HEADER -->
     <header>
-        <div class="header-content">
-            <div class="hero-text">
-                <h1>AKSHAY <span>TRIPZ</span></h1>
-                <p class="tagline">SECURITY RESEARCHER</p>
-                <div class="hero-description">
-                    <p>Advanced Reverse Engineering Specialist with expertise in binary analysis, vulnerability research, and malware dissection. Delivering cutting-edge security solutions through deep system understanding.</p>
-                    <p>I specialize in uncovering vulnerabilities, analyzing complex systems, and developing sophisticated exploitation techniques.</p>
-                </div>
-                <div class="hero-buttons">
-                    <button class="btn btn-primary">Start Journey</button>
-                    <button class="btn btn-secondary">Learn More</button>
-                </div>
+        <div class="hero-content">
+            <div class="name-container">
+                <h1 class="hero-name">AKSHAY TRIPZ</h1>
+                <div class="name-underline"></div>
             </div>
-            <div class="hero-visual">
-                <div class="visual-box">
-                    <div class="visual-text">SECURITY</div>
-                </div>
-                <div class="visual-box">
-                    <div class="visual-text">ANALYSIS</div>
-                </div>
+            
+            <p class="job-title">Advanced Security Researcher</p>
+            <p class="hero-subtitle">Reverse Engineering • Vulnerability Research • Malware Analysis</p>
+            
+            <div class="hero-description">
+                <p>With over a decade of experience in <span class="highlight-text">advanced security research</span>, I specialize in uncovering critical vulnerabilities, conducting sophisticated reverse engineering, and developing cutting-edge security solutions.</p>
+                
+                <p>My expertise spans <span class="highlight-text">binary analysis, exploit development, and malware dissection</span>, delivering comprehensive security assessments for complex systems and applications.</p>
+                
+                <p>I am committed to advancing the cybersecurity field through rigorous research, responsible disclosure, and continuous innovation in threat detection and mitigation strategies.</p>
+            </div>
+
+            <div class="hero-cta">
+                <button class="btn btn-primary" onclick="document.querySelector('.about').scrollIntoView({behavior: 'smooth'})">Learn About Me</button>
+                <button class="btn btn-secondary" onclick="document.querySelector('footer').scrollIntoView({behavior: 'smooth'})">Get in Touch</button>
             </div>
         </div>
     </header>
 
     <!-- ABOUT SECTION -->
-    <section class="about">
-        <h2 class="section-title">About Me</h2>
-        <div class="about-content">
-            <div class="about-text">
-                <h3>Who I Am</h3>
-                <p>I am a dedicated security researcher with a passion for uncovering hidden vulnerabilities and understanding complex systems at the deepest level. My journey in cybersecurity spans across multiple domains, from kernel exploitation to sophisticated malware analysis.</p>
-                
-                <h3>My Approach</h3>
-                <p>Every challenge is an opportunity to learn. I approach security research with meticulous attention to detail, combining theoretical knowledge with practical experimentation to develop innovative solutions.</p>
-                
-                <h3>Mission</h3>
-                <p>To advance the field of cybersecurity through rigorous research, responsible disclosure, and knowledge sharing with the security community.</p>
-            </div>
-            <div class="about-stats">
-                <div class="stat-item">
-                    <div class="stat-number">12+</div>
-                    <div class="stat-label">RE Techniques</div>
+    <section class="section section-dark">
+        <div class="about">
+            <h2 class="section-title">Professional Profile</h2>
+            
+            <div class="about-intro">
+                <div class="about-text">
+                    <p><strong>Extensive Experience</strong> in advanced security research with proven track record in identifying zero-day vulnerabilities and developing sophisticated exploitation techniques.</p>
+                    
+                    <p><strong>Deep Technical Expertise</strong> across multiple platforms and architectures, from low-level kernel exploitation to complex application security assessments.</p>
+                    
+                    <p><strong>Research Focus</strong> on emerging threats, advanced persistent threats (APT), and development of novel detection and mitigation methodologies.</p>
+                    
+                    <p><strong>Collaborative Approach</strong> with industry leaders and security communities, contributing to responsible disclosure practices and advancing collective cybersecurity knowledge.</p>
                 </div>
-                <div class="stat-item">
-                    <div class="stat-number">8+</div>
-                    <div class="stat-label">CVE Discoveries</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">15+</div>
-                    <div class="stat-label">Tools Built</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">100%</div>
-                    <div class="stat-label">Commitment</div>
+
+                <div class="about-stats">
+                    <div class="stat-card">
+                        <div class="stat-number">12+</div>
+                        <div class="stat-label">Reverse Engineering Techniques</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">8+</div>
+                        <div class="stat-label">CVE Discoveries</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">15+</div>
+                        <div class="stat-label">Security Tools Developed</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">Professional Commitment</div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- EXPERTISE SECTION -->
-    <section class="expertise">
-        <h2 class="section-title">Core Expertise</h2>
-        <div class="expertise-grid">
-            <div class="expertise-card">
-                <div class="expertise-icon">🔬</div>
-                <h3>Binary Analysis</h3>
-                <p>Deep executable dissection, assembly language mastery, and comprehensive architectural understanding across multiple platforms and instruction sets.</p>
-                <div class="expertise-meta">IDA Pro • Ghidra • Radare2 • x86/x64</div>
-            </div>
-            <div class="expertise-card">
-                <div class="expertise-icon">🔍</div>
-                <h3>Vulnerability Research</h3>
-                <p>Zero-day discovery, advanced fuzzing, symbolic execution, and development of sophisticated exploitation techniques for security assessments.</p>
-                <div class="expertise-meta">Fuzzing • Symbolic Execution • Taint Analysis</div>
-            </div>
-            <div class="expertise-card">
-                <div class="expertise-icon">🦠</div>
-                <h3>Malware Analysis</h3>
-                <p>Detection, classification, behavioral analysis of sophisticated malware families, ransomware, and advanced persistent threat analysis.</p>
-                <div class="expertise-meta">Dynamic • Static • Behavioral Analysis</div>
-            </div>
-            <div class="expertise-card">
-                <div class="expertise-icon">🔐</div>
-                <h3>Deobfuscation</h3>
-                <p>Advanced code deobfuscation, anti-analysis bypass techniques, and control flow recovery for comprehensive code understanding.</p>
-                <div class="expertise-meta">CFG Recovery • Control Flow Analysis</div>
-            </div>
-            <div class="expertise-card">
-                <div class="expertise-icon">⚙️</div>
-                <h3>Exploit Development</h3>
-                <p>End-to-end exploit chain development, ROP gadget optimization, payload engineering, and heap exploitation techniques.</p>
-                <div class="expertise-meta">ROP • JOP • Heap Spray • Kernel Exploits</div>
-            </div>
-            <div class="expertise-card">
-                <div class="expertise-icon">📡</div>
-                <h3>Network Analysis</h3>
-                <p>Protocol reverse engineering, PCAP analysis, network forensics, and advanced packet-level vulnerability assessment methodologies.</p>
-                <div class="expertise-meta">Wireshark • Custom Dissectors • PCAP Parsing</div>
+    <section class="section section-light">
+        <div class="expertise-container">
+            <h2 class="section-title">Core Expertise</h2>
+
+            <div class="expertise-grid">
+                <div class="expertise-card">
+                    <div class="expertise-icon">🔬</div>
+                    <h3>Binary Analysis</h3>
+                    <p>Expert-level executable dissection and assembly language analysis across x86/x64, ARM, and MIPS architectures with comprehensive architectural understanding.</p>
+                    <div class="expertise-meta">IDA Pro • Ghidra • Radare2 • x86/x64 • ARM</div>
+                </div>
+
+                <div class="expertise-card">
+                    <div class="expertise-icon">🔍</div>
+                    <h3>Vulnerability Research</h3>
+                    <p>Zero-day discovery, advanced fuzzing techniques, symbolic execution, and development of sophisticated proof-of-concept exploits for security assessments.</p>
+                    <div class="expertise-meta">Fuzzing • Symbolic Execution • Taint Analysis</div>
+                </div>
+
+                <div class="expertise-card">
+                    <div class="expertise-icon">🦠</div>
+                    <h3>Malware Analysis</h3>
+                    <p>Detection, classification, and behavioral analysis of sophisticated malware families, ransomware, and APT campaigns with forensic evidence collection.</p>
+                    <div class="expertise-meta">Dynamic • Static Analysis • Behavioral Analysis</div>
+                </div>
+
+                <div class="expertise-card">
+                    <div class="expertise-icon">🔐</div>
+                    <h3>Exploit Development</h3>
+                    <p>End-to-end exploit chain development, ROP gadget optimization, payload engineering, and kernel exploitation with modern security mechanism bypass.</p>
+                    <div class="expertise-meta">ROP • JOP • Kernel Exploits • Heap Spray</div>
+                </div>
+
+                <div class="expertise-card">
+                    <div class="expertise-icon">📡</div>
+                    <h3>Network Analysis</h3>
+                    <p>Protocol reverse engineering, PCAP analysis, network forensics, and advanced packet-level vulnerability assessment with custom dissector development.</p>
+                    <div class="expertise-meta">Wireshark • Custom Dissectors • PCAP Parsing</div>
+                </div>
+
+                <div class="expertise-card">
+                    <div class="expertise-icon">⚙️</div>
+                    <h3>Code Deobfuscation</h3>
+                    <p>Advanced code deobfuscation, anti-analysis bypass techniques, and control flow recovery for comprehensive code understanding and analysis.</p>
+                    <div class="expertise-meta">CFG Recovery • Control Flow Analysis</div>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- SERVICES SECTION -->
-    <section class="services">
-        <h2 class="section-title">What I Do</h2>
-        <div class="service-list">
-            <div class="service-item">
-                <h3>Security Auditing</h3>
-                <p>Comprehensive security assessments of applications, systems, and infrastructure to identify vulnerabilities before they can be exploited.</p>
-            </div>
-            <div class="service-item">
-                <h3>Vulnerability Research</h3>
-                <p>Advanced research into emerging vulnerabilities, developing proof-of-concept exploits, and responsible disclosure practices.</p>
-            </div>
-            <div class="service-item">
-                <h3>Malware Analysis</h3>
-                <p>In-depth analysis of malicious code to understand behavior, identify indicators of compromise, and develop mitigation strategies.</p>
-            </div>
-            <div class="service-item">
-                <h3>Reverse Engineering</h3>
-                <p>Complex binary analysis and reverse engineering of applications, firmware, and proprietary systems to understand functionality and security mechanisms.</p>
+    <section class="section section-dark">
+        <div class="services-container">
+            <h2 class="section-title">Professional Services</h2>
+
+            <div class="services-grid">
+                <div class="service-card">
+                    <h3>Security Auditing & Assessment</h3>
+                    <p>Comprehensive security assessments of applications, systems, and infrastructure to identify critical vulnerabilities before exploitation.</p>
+                </div>
+
+                <div class="service-card">
+                    <h3>Vulnerability Research & Disclosure</h3>
+                    <p>Advanced research into emerging vulnerabilities, proof-of-concept development, and responsible disclosure coordination with vendors.</p>
+                </div>
+
+                <div class="service-card">
+                    <h3>Malware Analysis & Investigation</h3>
+                    <p>In-depth analysis of malicious code, behavioral assessment, IoC identification, and comprehensive threat intelligence reporting.</p>
+                </div>
+
+                <div class="service-card">
+                    <h3>Reverse Engineering & Analysis</h3>
+                    <p>Complex binary analysis and reverse engineering of applications, firmware, and proprietary systems for security assessment and functionality understanding.</p>
+                </div>
             </div>
         </div>
-    </section>
-
-    <!-- CTA SECTION -->
-    <section class="cta">
-        <h2>Ready to Secure Your Systems?</h2>
-        <p>Let's collaborate on advanced security research and vulnerability assessments. Get in touch to discuss your security challenges.</p>
-        <button class="cta-button">Contact Me</button>
     </section>
 
     <!-- FOOTER -->
@@ -865,63 +809,19 @@
             }
         });
 
-        // Button interactions
-        document.querySelectorAll('.btn, .cta-button, .social-link').forEach(btn => {
+        // Smooth scroll for buttons - NO particle effect
+        document.querySelectorAll('.btn').forEach(btn => {
             btn.addEventListener('click', function(e) {
-                if (this.tagName === 'BUTTON') {
-                    const rect = this.getBoundingClientRect();
-                    for (let i = 0; i < 12; i++) {
-                        createParticle(rect.left + rect.width / 2, rect.top + rect.height / 2);
-                    }
-                }
+                e.preventDefault();
             });
         });
 
-        function createParticle(x, y) {
-            const particle = document.createElement('div');
-            particle.style.position = 'fixed';
-            particle.style.left = x + 'px';
-            particle.style.top = y + 'px';
-            particle.style.width = '10px';
-            particle.style.height = '10px';
-            particle.style.borderRadius = '50%';
-            particle.style.pointerEvents = 'none';
-            particle.style.zIndex = '9999';
-            particle.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim();
-            particle.style.boxShadow = `0 0 10px ${particle.style.backgroundColor}`;
-            
-            const vx = (Math.random() - 0.5) * 10;
-            const vy = (Math.random() - 0.5) * 10 - 5;
-            
-            let posX = x;
-            let posY = y;
-            const duration = 1000;
-            const start = Date.now();
-            
-            document.body.appendChild(particle);
-            
-            const animate = () => {
-                const elapsed = Date.now() - start;
-                const progress = elapsed / duration;
-                
-                posX += vx * (1 - progress * 0.3);
-                posY += vy;
-                vy += 0.15;
-                
-                particle.style.left = posX + 'px';
-                particle.style.top = posY + 'px';
-                particle.style.opacity = 1 - progress;
-                particle.style.transform = `scale(${1 - progress * 0.5}) rotate(${progress * 360}deg)`;
-                
-                if (progress < 1) {
-                    requestAnimationFrame(animate);
-                } else {
-                    particle.remove();
-                }
-            };
-            
-            animate();
-        }
+        // Social link interactions
+        document.querySelectorAll('.social-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                // Just let the link work normally
+            });
+        });
     </script>
 </body>
 </html>
