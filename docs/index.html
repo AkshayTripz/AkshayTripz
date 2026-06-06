@@ -35,73 +35,81 @@
             --success: #00ff88;
         }
 
-        /* ===== AGGRESSIVE ANIMATIONS ===== */
+        /* ===== MODERN AGGRESSIVE ANIMATIONS ===== */
         @keyframes slide-in-down {
             from {
                 opacity: 0;
-                transform: translateY(-50px);
+                transform: translateY(-60px) rotateX(20deg);
+                filter: blur(10px);
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0) rotateX(0);
+                filter: blur(0);
             }
         }
 
         @keyframes slide-in-up {
             from {
                 opacity: 0;
-                transform: translateY(50px);
+                transform: translateY(60px) rotateX(-20deg);
+                filter: blur(10px);
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0) rotateX(0);
+                filter: blur(0);
             }
         }
 
         @keyframes slide-in-left {
             from {
                 opacity: 0;
-                transform: translateX(-50px);
+                transform: translateX(-80px) skewX(10deg);
+                filter: blur(10px);
             }
             to {
                 opacity: 1;
-                transform: translateX(0);
+                transform: translateX(0) skewX(0);
+                filter: blur(0);
             }
         }
 
-        @keyframes scale-bounce {
+        @keyframes scale-burst {
             0% {
                 opacity: 0;
-                transform: scale(0.7);
+                transform: scale(0.3) rotate(-180deg);
             }
-            60% {
-                transform: scale(1.08);
+            70% {
+                transform: scale(1.12) rotate(10deg);
             }
             100% {
                 opacity: 1;
-                transform: scale(1);
+                transform: scale(1) rotate(0);
             }
         }
 
-        @keyframes float-up {
+        @keyframes float-rotate {
             0%, 100% {
-                transform: translateY(0px);
+                transform: translateY(0px) rotateZ(-2deg);
             }
             50% {
-                transform: translateY(-15px);
+                transform: translateY(-20px) rotateZ(2deg);
             }
         }
 
-        @keyframes line-expand {
+        @keyframes line-draw {
             from {
                 width: 0;
+                opacity: 0;
             }
             to {
                 width: 100%;
+                opacity: 1;
             }
         }
 
-        @keyframes rotate-slow {
+        @keyframes rotate-360 {
             from {
                 transform: rotate(0deg);
             }
@@ -110,37 +118,75 @@
             }
         }
 
-        @keyframes bounce-in {
+        @keyframes bounce-elastic {
             0% {
                 opacity: 0;
-                transform: scale(0.3) translateY(50px);
+                transform: scale(0.2) translateY(80px);
             }
             50% {
                 opacity: 1;
+            }
+            70% {
+                transform: scale(1.1);
             }
             100% {
                 transform: scale(1) translateY(0);
             }
         }
 
-        @keyframes glow-border {
+        @keyframes glow-pulse-advanced {
             0%, 100% {
                 border-color: var(--primary);
-                box-shadow: 0 0 15px rgba(0, 217, 255, 0.3);
+                box-shadow: 0 0 20px rgba(0, 217, 255, 0.2), inset 0 0 20px rgba(0, 217, 255, 0.05);
             }
             50% {
                 border-color: var(--secondary);
-                box-shadow: 0 0 30px rgba(183, 0, 255, 0.4);
+                box-shadow: 0 0 40px rgba(183, 0, 255, 0.3), inset 0 0 30px rgba(183, 0, 255, 0.1);
             }
         }
 
-        @keyframes subtle-pulse {
+        @keyframes subtle-glow {
             0%, 100% {
-                text-shadow: 0 0 5px rgba(0, 217, 255, 0.2);
+                text-shadow: 0 0 8px rgba(0, 217, 255, 0.2);
             }
             50% {
-                text-shadow: 0 0 10px rgba(0, 217, 255, 0.3);
+                text-shadow: 0 0 16px rgba(0, 217, 255, 0.4);
             }
+        }
+
+        @keyframes shimmer-fast {
+            0% {
+                background-position: -1000px 0;
+            }
+            100% {
+                background-position: 1000px 0;
+            }
+        }
+
+        @keyframes pulse-ring {
+            0% {
+                box-shadow: 0 0 0 0 rgba(0, 217, 255, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 15px rgba(0, 217, 255, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 217, 255, 0);
+            }
+        }
+
+        @keyframes tilt-parallax {
+            0%, 100% {
+                transform: perspective(1200px) rotateX(0deg) rotateY(-5deg);
+            }
+            50% {
+                transform: perspective(1200px) rotateX(2deg) rotateY(5deg);
+            }
+        }
+
+        @keyframes scanlines {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(10px); }
         }
 
         /* ===== HEADER ===== */
@@ -155,6 +201,7 @@
             background: linear-gradient(135deg, #0f1419 0%, #1a2332 100%);
             border-bottom: 2px solid var(--border-dark);
             overflow: hidden;
+            perspective: 1000px;
         }
 
         header::before {
@@ -165,9 +212,10 @@
             width: 100%;
             height: 100%;
             background: 
-                radial-gradient(circle at 20% 30%, rgba(0, 217, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(183, 0, 255, 0.1) 0%, transparent 50%);
+                radial-gradient(circle at 20% 30%, rgba(0, 217, 255, 0.12) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(183, 0, 255, 0.12) 0%, transparent 50%);
             pointer-events: none;
+            animation: float-rotate 8s ease-in-out infinite;
         }
 
         header::after {
@@ -180,18 +228,13 @@
             background: 
                 repeating-linear-gradient(
                     0deg,
-                    rgba(0, 217, 255, 0.03) 0px,
+                    rgba(0, 217, 255, 0.02) 0px,
                     transparent 1px,
                     transparent 2px,
-                    rgba(0, 217, 255, 0.03) 3px
+                    rgba(0, 217, 255, 0.02) 3px
                 );
             pointer-events: none;
             animation: scanlines 8s linear infinite;
-        }
-
-        @keyframes scanlines {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(10px); }
         }
 
         .hero {
@@ -199,7 +242,8 @@
             z-index: 2;
             text-align: center;
             max-width: 1000px;
-            animation: slide-in-down 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: slide-in-down 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform-style: preserve-3d;
         }
 
         .hero-title {
@@ -209,7 +253,7 @@
             letter-spacing: 2px;
             line-height: 1.1;
             color: var(--primary);
-            animation: slide-in-down 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both, subtle-pulse 3s ease-in-out infinite 1s;
+            animation: slide-in-down 1.1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both, subtle-glow 3.5s ease-in-out infinite 1s;
             text-shadow: 0 0 5px rgba(0, 217, 255, 0.2);
             font-family: 'Space Mono', monospace;
             display: flex;
@@ -223,7 +267,7 @@
             color: var(--primary);
             margin-bottom: 30px;
             letter-spacing: 1.5px;
-            animation: slide-in-up 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+            animation: slide-in-up 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both;
             font-weight: 600;
             text-transform: uppercase;
         }
@@ -234,7 +278,7 @@
             max-width: 800px;
             margin: 0 auto 50px;
             line-height: 1.8;
-            animation: slide-in-up 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both;
+            animation: slide-in-up 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s both;
         }
 
         .cta-buttons {
@@ -242,7 +286,7 @@
             gap: 20px;
             justify-content: center;
             flex-wrap: wrap;
-            animation: slide-in-up 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s both;
+            animation: slide-in-up 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s both;
         }
 
         .btn-primary {
@@ -257,8 +301,9 @@
             transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             position: relative;
             overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0, 217, 255, 0.3);
+            box-shadow: 0 10px 40px rgba(0, 217, 255, 0.3), 0 0 20px rgba(183, 0, 255, 0.2);
             letter-spacing: 0.5px;
+            animation: pulse-ring 2s ease-in-out infinite;
         }
 
         .btn-primary::before {
@@ -273,8 +318,8 @@
         }
 
         .btn-primary:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 60px rgba(0, 217, 255, 0.5);
+            transform: translateY(-8px) scale(1.08);
+            box-shadow: 0 25px 70px rgba(0, 217, 255, 0.5), 0 0 30px rgba(183, 0, 255, 0.3);
         }
 
         .btn-primary:hover::before {
@@ -292,14 +337,14 @@
             cursor: pointer;
             transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             letter-spacing: 0.5px;
-            box-shadow: 0 0 15px rgba(183, 0, 255, 0.2);
+            box-shadow: 0 0 20px rgba(183, 0, 255, 0.2);
         }
 
         .btn-secondary:hover {
             background: var(--secondary);
             color: var(--dark-bg);
-            transform: translateY(-5px);
-            box-shadow: 0 20px 50px rgba(183, 0, 255, 0.4);
+            transform: translateY(-8px) scale(1.08);
+            box-shadow: 0 25px 70px rgba(183, 0, 255, 0.4);
         }
 
         .scroll-indicator {
@@ -307,7 +352,7 @@
             bottom: 40px;
             left: 50%;
             transform: translateX(-50%);
-            animation: float-up 2s ease-in-out infinite;
+            animation: float-rotate 3s ease-in-out infinite;
         }
 
         .scroll-indicator svg {
@@ -339,25 +384,26 @@
             color: var(--text-primary);
             margin-bottom: 20px;
             letter-spacing: -1px;
-            animation: slide-in-left 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: slide-in-left 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .section-header::after {
             content: '';
             display: block;
-            width: 100px;
-            height: 5px;
+            width: 120px;
+            height: 6px;
             background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
             margin-top: 20px;
             border-radius: 3px;
-            animation: line-expand 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+            animation: line-draw 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both;
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
         }
 
         .section-subtitle {
             font-size: 1.1rem;
             color: var(--text-secondary);
             margin-bottom: 50px;
-            animation: slide-in-left 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+            animation: slide-in-left 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
         }
 
         /* ===== STATS GRID ===== */
@@ -370,12 +416,12 @@
 
         .stat-card {
             padding: 40px 30px;
-            background: linear-gradient(135deg, rgba(0, 217, 255, 0.05) 0%, rgba(183, 0, 255, 0.05) 100%);
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.08) 0%, rgba(183, 0, 255, 0.08) 100%);
             border: 1px solid var(--border-dark);
             border-radius: 12px;
             text-align: center;
             transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            animation: scale-bounce 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            animation: scale-burst 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
             position: relative;
             overflow: hidden;
         }
@@ -393,13 +439,15 @@
             width: 100%;
             height: 4px;
             background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            box-shadow: 0 0 15px var(--primary);
         }
 
         .stat-card:hover {
             border-color: var(--primary);
-            box-shadow: 0 15px 50px rgba(0, 217, 255, 0.25);
-            transform: translateY(-8px);
-            background: linear-gradient(135deg, rgba(0, 217, 255, 0.1) 0%, rgba(183, 0, 255, 0.1) 100%);
+            box-shadow: 0 20px 70px rgba(0, 217, 255, 0.3), inset 0 0 30px rgba(0, 217, 255, 0.1);
+            transform: translateY(-12px) scale(1.05) rotateY(5deg);
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.15) 0%, rgba(183, 0, 255, 0.15) 100%);
+            animation: glow-pulse-advanced 2s ease-in-out infinite;
         }
 
         .stat-number {
@@ -430,11 +478,11 @@
 
         .expertise-card {
             padding: 35px;
-            background: linear-gradient(135deg, rgba(0, 217, 255, 0.03) 0%, rgba(183, 0, 255, 0.03) 100%);
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.05) 0%, rgba(183, 0, 255, 0.05) 100%);
             border: 1px solid var(--border-dark);
             border-radius: 12px;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            animation: bounce-in 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: bounce-elastic 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
             position: relative;
             overflow: hidden;
         }
@@ -459,16 +507,16 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: linear-gradient(45deg, transparent 30%, rgba(0, 217, 255, 0.1), transparent 70%);
+            background: linear-gradient(45deg, transparent 30%, rgba(0, 217, 255, 0.15), transparent 70%);
             transform: rotate(45deg);
-            animation: rotate-slow 8s linear infinite paused;
+            animation: rotate-360 10s linear infinite paused;
         }
 
         .expertise-card:hover {
             border-color: var(--primary);
-            box-shadow: 0 20px 60px rgba(0, 217, 255, 0.2);
-            transform: translateY(-10px);
-            background: linear-gradient(135deg, rgba(0, 217, 255, 0.08) 0%, rgba(183, 0, 255, 0.08) 100%);
+            box-shadow: 0 25px 80px rgba(0, 217, 255, 0.25), inset 0 0 30px rgba(0, 217, 255, 0.08);
+            transform: translateY(-12px) scale(1.05) rotateX(5deg);
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.12) 0%, rgba(183, 0, 255, 0.12) 100%);
         }
 
         .expertise-card:hover::before {
@@ -486,6 +534,7 @@
             justify-content: center;
             margin-bottom: 20px;
             font-size: 24px;
+            box-shadow: 0 0 15px rgba(0, 217, 255, 0.2);
         }
 
         .expertise-title {
@@ -507,99 +556,7 @@
             color: var(--primary);
             font-weight: 600;
             letter-spacing: 0.5px;
-        }
-
-        /* ===== SVG SHOWCASE ===== */
-        .svg-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 25px;
-            margin-top: 50px;
-        }
-
-        .svg-card {
-            aspect-ratio: 1;
-            background: linear-gradient(135deg, rgba(0, 217, 255, 0.03) 0%, rgba(183, 0, 255, 0.03) 100%);
-            border: 1px solid var(--border-dark);
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            animation: scale-bounce 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .svg-card:nth-child(1) { animation-delay: 0.1s; }
-        .svg-card:nth-child(2) { animation-delay: 0.15s; }
-        .svg-card:nth-child(3) { animation-delay: 0.2s; }
-        .svg-card:nth-child(4) { animation-delay: 0.25s; }
-        .svg-card:nth-child(5) { animation-delay: 0.3s; }
-        .svg-card:nth-child(6) { animation-delay: 0.35s; }
-        .svg-card:nth-child(7) { animation-delay: 0.4s; }
-        .svg-card:nth-child(8) { animation-delay: 0.45s; }
-        .svg-card:nth-child(9) { animation-delay: 0.5s; }
-        .svg-card:nth-child(10) { animation-delay: 0.55s; }
-        .svg-card:nth-child(11) { animation-delay: 0.6s; }
-        .svg-card:nth-child(12) { animation-delay: 0.65s; }
-
-        .svg-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(0, 217, 255, 0) 0%, rgba(0, 217, 255, 0.1) 100%);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .svg-card:hover {
-            border-color: var(--primary);
-            box-shadow: 0 20px 60px rgba(0, 217, 255, 0.3);
-            transform: translateY(-10px) scale(1.05);
-            animation: glow-border 2s ease-in-out infinite;
-        }
-
-        .svg-card:hover::before {
-            opacity: 1;
-        }
-
-        .svg-image {
-            width: 85%;
-            height: 85%;
-            object-fit: contain;
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            filter: drop-shadow(0 0 15px rgba(0, 217, 255, 0.2));
-        }
-
-        .svg-card:hover .svg-image {
-            transform: scale(1.15) rotate(5deg);
-            filter: drop-shadow(0 0 25px rgba(0, 217, 255, 0.4));
-        }
-
-        .svg-label {
-            position: absolute;
-            bottom: 15px;
-            left: 15px;
-            right: 15px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--primary);
-            text-align: center;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: all 0.3s ease;
-        }
-
-        .svg-card:hover .svg-label {
-            opacity: 1;
-            transform: translateY(0);
+            opacity: 0.8;
         }
 
         /* ===== FOOTER ===== */
@@ -636,6 +593,7 @@
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             position: relative;
             overflow: hidden;
+            box-shadow: 0 0 15px rgba(0, 217, 255, 0.1);
         }
 
         .social-link::before {
@@ -652,8 +610,8 @@
 
         .social-link:hover {
             color: var(--dark-bg);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(0, 217, 255, 0.3);
+            transform: translateY(-4px) scale(1.08);
+            box-shadow: 0 15px 40px rgba(0, 217, 255, 0.4);
         }
 
         .social-link:hover::before {
@@ -678,10 +636,6 @@
                 grid-template-columns: 1fr;
             }
 
-            .svg-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
             .cta-buttons {
                 flex-direction: column;
             }
@@ -699,10 +653,6 @@
             .section-header {
                 font-size: 1.5rem;
             }
-
-            .svg-grid {
-                grid-template-columns: 1fr;
-            }
         }
     </style>
 </head>
@@ -711,7 +661,7 @@
     <header>
         <div class="hero">
             <h1 class="hero-title">AKSHAY TRIPZ</h1>
-            <p class="hero-subtitle">Binary Archaeologist & Malware Analysts</p>
+            <p class="hero-subtitle">Security Research & Reverse Engineering Specialist</p>
             <p class="hero-description">
                 Expert in binary analysis, vulnerability research, malware dissection, and advanced exploitation techniques. Delivering cutting-edge security solutions through deep system understanding and advanced reverse engineering methodologies.
             </p>
@@ -833,62 +783,6 @@
                 </div>
             </div>
         </section>
-
-        <!-- SVG SHOWCASE SECTION -->
-        <section>
-            <h2 class="section-header">Analysis & Research</h2>
-            <p class="section-subtitle">Advanced visualization of security research methodologies</p>
-            <div class="svg-grid">
-                <div class="svg-card">
-                    <img src="1.%20binary-analysis-cyb.svg" alt="Binary Analysis" class="svg-image">
-                    <div class="svg-label">Binary Analysis</div>
-                </div>
-                <div class="svg-card">
-                    <img src="2.%20vulnerability-exploit.svg" alt="Vulnerability" class="svg-image">
-                    <div class="svg-label">Vulnerability Research</div>
-                </div>
-                <div class="svg-card">
-                    <img src="3.%20malware-hunter.svg" alt="Malware" class="svg-image">
-                    <div class="svg-label">Malware Analysis</div>
-                </div>
-                <div class="svg-card">
-                    <img src="4.%20deobfuscation-cyb.svg" alt="Deobfuscation" class="svg-image">
-                    <div class="svg-label">Deobfuscation</div>
-                </div>
-                <div class="svg-card">
-                    <img src="5.%20architecture-cyb.svg" alt="Architecture" class="svg-image">
-                    <div class="svg-label">Architecture Study</div>
-                </div>
-                <div class="svg-card">
-                    <img src="6.%20memory-forensics-cyb.svg" alt="Memory" class="svg-image">
-                    <div class="svg-label">Memory Forensics</div>
-                </div>
-                <div class="svg-card">
-                    <img src="7.%20debugging-cyb.svg" alt="Debugging" class="svg-image">
-                    <div class="svg-label">Dynamic Debugging</div>
-                </div>
-                <div class="svg-card">
-                    <img src="8.%20network-breach.svg" alt="Network" class="svg-image">
-                    <div class="svg-label">Network Analysis</div>
-                </div>
-                <div class="svg-card">
-                    <img src="9.%20code-dissect.svg" alt="Code" class="svg-image">
-                    <div class="svg-label">Code Analysis</div>
-                </div>
-                <div class="svg-card">
-                    <img src="10.%20exploit-chain-cyb.svg" alt="Exploits" class="svg-image">
-                    <div class="svg-label">Exploit Development</div>
-                </div>
-                <div class="svg-card">
-                    <img src="11.%20packet-sniff.svg" alt="Packets" class="svg-image">
-                    <div class="svg-label">Packet Analysis</div>
-                </div>
-                <div class="svg-card">
-                    <img src="12.%20system-breach.svg" alt="System" class="svg-image">
-                    <div class="svg-label">System Security</div>
-                </div>
-            </div>
-        </section>
     </div>
 
     <!-- FOOTER -->
@@ -908,7 +802,7 @@
         document.querySelectorAll('.btn-primary, .btn-secondary').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 const rect = this.getBoundingClientRect();
-                for (let i = 0; i < 12; i++) {
+                for (let i = 0; i < 15; i++) {
                     createParticle(rect.left + rect.width / 2, rect.top + rect.height / 2);
                 }
             });
@@ -919,20 +813,21 @@
             particle.style.position = 'fixed';
             particle.style.left = x + 'px';
             particle.style.top = y + 'px';
-            particle.style.width = '8px';
-            particle.style.height = '8px';
-            particle.style.background = 'var(--primary)';
+            particle.style.width = '10px';
+            particle.style.height = '10px';
+            particle.style.background = `hsl(${Math.random() * 60 + 180}, 100%, 50%)`;
             particle.style.borderRadius = '50%';
             particle.style.pointerEvents = 'none';
             particle.style.zIndex = '9999';
             particle.style.opacity = '1';
+            particle.style.boxShadow = `0 0 10px ${particle.style.background}`;
             
-            const vx = (Math.random() - 0.5) * 8;
-            const vy = (Math.random() - 0.5) * 8 - 3;
+            const vx = (Math.random() - 0.5) * 10;
+            const vy = (Math.random() - 0.5) * 10 - 5;
             
             let posX = x;
             let posY = y;
-            const duration = 800;
+            const duration = 1000;
             const start = Date.now();
             
             document.body.appendChild(particle);
@@ -941,13 +836,14 @@
                 const elapsed = Date.now() - start;
                 const progress = elapsed / duration;
                 
-                posX += vx;
+                posX += vx * (1 - progress * 0.3);
                 posY += vy;
-                vy += 0.1;
+                vy += 0.15;
                 
                 particle.style.left = posX + 'px';
                 particle.style.top = posY + 'px';
                 particle.style.opacity = 1 - progress;
+                particle.style.transform = `scale(${1 - progress * 0.5}) rotate(${progress * 360}deg)`;
                 
                 if (progress < 1) {
                     requestAnimationFrame(animate);
@@ -959,7 +855,7 @@
             animate();
         }
 
-        // Scroll animations
+        // Scroll animations with intersection observer
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -968,7 +864,7 @@
             });
         }, { threshold: 0.1 });
 
-        document.querySelectorAll('.stat-card, .expertise-card, .svg-card').forEach(el => {
+        document.querySelectorAll('.stat-card, .expertise-card').forEach(el => {
             observer.observe(el);
         });
     </script>
