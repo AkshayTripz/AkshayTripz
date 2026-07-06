@@ -51,7 +51,146 @@
             color: var(--text-primary);
         }
 
-        /* ===== AGGRESSIVE ANIMATIONS ===== */
+        /* ===== CURSOR TRACKING ===== */
+        .cursor-tracker {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            display: none;
+            box-shadow: 0 0 15px var(--primary), inset 0 0 10px rgba(0, 217, 255, 0.3);
+            animation: cursorPulse 2s ease-in-out infinite;
+        }
+
+        .cursor-tracker.active {
+            display: block;
+        }
+
+        .cursor-tracker-dot {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            box-shadow: 0 0 8px var(--primary);
+        }
+
+        @keyframes cursorPulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 15px var(--primary), inset 0 0 10px rgba(0, 217, 255, 0.3);
+            }
+            50% {
+                transform: scale(1.2);
+                box-shadow: 0 0 30px var(--primary), inset 0 0 15px rgba(0, 217, 255, 0.5);
+            }
+        }
+
+        /* ===== 3D CAMERA & TRANSFORMS ===== */
+        .perspective-container {
+            perspective: 1200px;
+            transform-style: preserve-3d;
+        }
+
+        @keyframes rotateX3D {
+            0%, 100% {
+                transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+            }
+            25% {
+                transform: rotateX(5deg) rotateY(-8deg) rotateZ(2deg);
+            }
+            50% {
+                transform: rotateX(-5deg) rotateY(8deg) rotateZ(-2deg);
+            }
+            75% {
+                transform: rotateX(3deg) rotateY(-5deg) rotateZ(1deg);
+            }
+        }
+
+        @keyframes float3D {
+            0%, 100% {
+                transform: translateZ(0px) translateY(0px);
+            }
+            50% {
+                transform: translateZ(50px) translateY(-20px);
+            }
+        }
+
+        @keyframes textRotate3D {
+            0% {
+                transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
+            }
+            25% {
+                transform: rotateX(15deg) rotateY(20deg) rotateZ(-10deg) scale(1.05);
+            }
+            50% {
+                transform: rotateX(-10deg) rotateY(-25deg) rotateZ(5deg) scale(0.98);
+            }
+            75% {
+                transform: rotateX(8deg) rotateY(15deg) rotateZ(-8deg) scale(1.02);
+            }
+            100% {
+                transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
+            }
+        }
+
+        /* ===== VFX ANIMATIONS ===== */
+        @keyframes lightningStrike {
+            0%, 100% {
+                filter: brightness(1) drop-shadow(0 0 0px rgba(0, 217, 255, 0));
+            }
+            10% {
+                filter: brightness(1.8) drop-shadow(0 0 20px rgba(0, 217, 255, 0.8));
+            }
+            15% {
+                filter: brightness(0.9) drop-shadow(0 0 5px rgba(0, 217, 255, 0.3));
+            }
+            20% {
+                filter: brightness(1.9) drop-shadow(0 0 30px rgba(0, 217, 255, 0.9));
+            }
+            25% {
+                filter: brightness(1) drop-shadow(0 0 0px rgba(0, 217, 255, 0));
+            }
+        }
+
+        @keyframes neonGlow {
+            0%, 100% {
+                text-shadow: 0 0 10px var(--primary), 0 0 20px var(--primary);
+                filter: brightness(1);
+            }
+            50% {
+                text-shadow: 0 0 20px var(--primary), 0 0 40px var(--secondary), 0 0 60px var(--accent);
+                filter: brightness(1.3);
+            }
+        }
+
+        @keyframes particleExplosion {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+                filter: brightness(1.5);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx, 0px), var(--ty, 0px)) scale(0);
+                filter: brightness(0.5);
+            }
+        }
+
+        @keyframes chromatic {
+            0%, 100% {
+                filter: drop-shadow(-1px 0 0 rgba(0, 217, 255, 0)) drop-shadow(1px 0 0 rgba(183, 0, 255, 0));
+            }
+            50% {
+                filter: drop-shadow(-2px 0 0 rgba(0, 217, 255, 0.8)) drop-shadow(2px 0 0 rgba(183, 0, 255, 0.8));
+            }
+        }
+
         @keyframes glitchText {
             0% { text-shadow: -2px 0 var(--primary), 2px 0 var(--secondary); }
             20% { text-shadow: 2px 0 var(--primary), -2px 0 var(--secondary); }
@@ -361,27 +500,31 @@
             max-width: 1000px;
             position: relative;
             z-index: 2;
+            animation: float3D 4s ease-in-out infinite;
         }
 
         .name-container {
             margin-bottom: 40px;
             position: relative;
+            perspective: 1000px;
         }
 
         .hero-name {
             font-size: 6.5rem;
             font-weight: 900;
-            animation: nameExplosion 1.5s cubic-bezier(0.34, 1.56, 0.64, 1), glitchText 4s ease-in-out infinite 1.5s;
+            animation: nameExplosion 1.5s cubic-bezier(0.34, 1.56, 0.64, 1), glitchText 4s ease-in-out infinite 1.5s, textRotate3D 8s ease-in-out infinite 2.5s, neonGlow 4s ease-in-out infinite;
             margin-bottom: 15px;
             line-height: 1.1;
             color: var(--primary);
             letter-spacing: 3px;
             font-family: 'Space Grotesk', sans-serif;
+            transform-style: preserve-3d;
         }
 
         .char {
             display: inline-block;
             animation: charShockwave 2.5s ease-in-out infinite;
+            transform-style: preserve-3d;
         }
 
         .char:nth-child(1) { animation-delay: 0.1s; }
@@ -402,7 +545,7 @@
             background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent), var(--primary));
             background-size: 200% 100%;
             margin: 0 auto;
-            animation: borderSweep 3s linear infinite;
+            animation: borderSweep 3s linear infinite, lightningStrike 4s ease-in-out infinite;
             width: 100%;
             max-width: 500px;
             border-radius: 0;
@@ -416,7 +559,7 @@
             letter-spacing: 3px;
             font-weight: 700;
             text-transform: uppercase;
-            animation: dataFlow 0.8s ease-out 0.3s both;
+            animation: dataFlow 0.8s ease-out 0.3s both, textRotate3D 10s ease-in-out infinite 1s;
             text-shadow: 0 0 10px rgba(255, 0, 110, 0.5);
         }
 
@@ -425,7 +568,7 @@
             color: var(--secondary);
             margin-top: 15px;
             letter-spacing: 2px;
-            animation: dataFlow 0.8s ease-out 0.5s both;
+            animation: dataFlow 0.8s ease-out 0.5s both, chromatic 3s ease-in-out infinite;
             font-weight: 600;
         }
 
@@ -441,16 +584,16 @@
             color: var(--text-secondary);
             margin-bottom: 25px;
             line-height: 1.9;
-            animation: dataFlow 0.8s ease-out both;
+            animation: dataFlow 0.8s ease-out both, rotateX3D 6s ease-in-out infinite;
             border-left: 3px solid var(--primary);
             padding-left: 20px;
         }
 
-        .hero-description p:nth-child(1) { animation-delay: 0.6s; }
-        .hero-description p:nth-child(2) { animation-delay: 0.7s; }
-        .hero-description p:nth-child(3) { animation-delay: 0.8s; }
-        .hero-description p:nth-child(4) { animation-delay: 0.9s; }
-        .hero-description p:nth-child(5) { animation-delay: 1s; }
+        .hero-description p:nth-child(1) { animation-delay: 0.6s, 0.1s; }
+        .hero-description p:nth-child(2) { animation-delay: 0.7s, 0.3s; }
+        .hero-description p:nth-child(3) { animation-delay: 0.8s, 0.5s; }
+        .hero-description p:nth-child(4) { animation-delay: 0.9s, 0.7s; }
+        .hero-description p:nth-child(5) { animation-delay: 1s, 0.9s; }
 
         .highlight-text {
             color: var(--primary);
@@ -852,6 +995,10 @@
     </style>
 </head>
 <body>
+    <!-- CURSOR TRACKER -->
+    <div class="cursor-tracker" id="cursorTracker"></div>
+    <div class="cursor-tracker-dot" id="cursorDot"></div>
+
     <!-- THEME TOGGLE -->
     <div class="theme-toggle" onclick="toggleTheme()">
         <span class="theme-label">Theme</span>
@@ -872,13 +1019,13 @@
             <p class="hero-subtitle">// Reverse Engineering | Binary Analysis | Vulnerability Research //</p>
             
             <div class="hero-description">
-                <p>With over a decade of experience in <span class="highlight-text">advanced security research</span>, I specialize in uncovering critical vulnerabilities and developing sophisticated exploitation techniques.</p>
+                <p>With over a decade of experience in <span class="highlight-text">advanced security research</span>, I specialize in uncovering critical vulnerabilities and developing sophisticated exploitation methodologies across diverse platforms and architectures.</p>
                 
-                <p>My expertise spans <span class="highlight-text accent">binary analysis, exploit development, and malware dissection</span>, delivering comprehensive security assessments for complex systems and applications.</p>
+                <p>My expertise spans <span class="highlight-text accent">binary analysis, exploit development, and malware dissection</span>, delivering comprehensive security assessments for critical infrastructure and enterprise environments.</p>
                 
-                <p>I conduct in-depth <span class="highlight-text">reverse engineering</span> on proprietary software, firmware, and embedded systems to uncover hidden vulnerabilities, security flaws, and design weaknesses.</p>
+                <p>I conduct in-depth <span class="highlight-text">reverse engineering</span> on proprietary software, firmware, and embedded systems to uncover hidden vulnerabilities, security flaws, and architectural weaknesses.</p>
 
-                <p>Specialized in <span class="highlight-text accent">IDA Pro, Ghidra, and Radare2</span> for advanced disassembly and decompilation, x86/x64/ARM architecture analysis, and sophisticated control flow manipulation.</p>
+                <p>Specialized in <span class="highlight-text accent">IDA Pro, Ghidra, and Radare2</span> for advanced disassembly and decompilation, x86/x64/ARM architecture analysis, and sophisticated exploit chain development.</p>
 
                 <p>I am committed to advancing the cybersecurity field through rigorous research, responsible disclosure, and continuous innovation in threat detection and mitigation strategies.</p>
             </div>
@@ -917,13 +1064,13 @@
             <div class="about-grid">
                 <div class="about-text">
                     <h3>Deep Technical Expertise</h3>
-                    <p><strong>Extensive Experience</strong> in advanced security research with proven track record in identifying zero-day vulnerabilities and developing sophisticated exploitation frameworks.</p>
+                    <p><strong>Extensive Experience</strong> in advanced security research with proven track record in identifying zero-day vulnerabilities and developing sophisticated exploitation techniques across multiple platforms.</p>
                     
                     <h3>Reverse Engineering Mastery</h3>
-                    <p><strong>Binary Analysis</strong> across multiple platforms including x86/x64, ARM, MIPS, and exotic architectures. I specialize in deobfuscation, control flow analysis, and anti-analysis bypass techniques.</p>
+                    <p><strong>Binary Analysis</strong> across multiple platforms including x86/x64, ARM, MIPS, and exotic architectures. I specialize in deobfuscation, control flow analysis, and architectural reverse engineering.</p>
 
                     <h3>Research Focus</h3>
-                    <p><strong>Emerging Threats</strong> on emerging threats, advanced persistent threats (APT), and development of novel detection and mitigation methodologies for critical infrastructure.</p>
+                    <p><strong>Emerging Threats</strong> on emerging threats, advanced persistent threats (APT), and development of novel detection and mitigation methodologies for critical infrastructure and enterprise systems.</p>
                 </div>
 
                 <div class="about-highlights">
@@ -1002,105 +1149,109 @@
     <!-- FOOTER -->
     <footer>
         <div class="social-links">
-            <a href="https://github.com/AkshayTripz" class="social-link" target="_blank">GitHub</a>
-            <a href="https://twitter.com" class="social-link" target="_blank">Twitter</a>
-            <a href="https://linkedin.com" class="social-link" target="_blank">LinkedIn</a>
-            <a href="mailto:contact@akshay.dev" class="social-link" target="_blank">Email</a>
+            <a href="https://github.com" class="social-link">GitHub</a>
+            <a href="https://linkedin.com" class="social-link">LinkedIn</a>
+            <a href="https://twitter.com" class="social-link">Twitter</a>
+            <a href="mailto:contact@example.com" class="social-link">Email</a>
         </div>
-        <p>© 2026 Akshay Tripz. Advanced Security Research & Reverse Engineering.</p>
+        <p>&copy; 2024 Akshay Tripz - Advanced Security Research. All rights reserved.</p>
     </footer>
 
     <script>
-        // Generate character-based hero name
-        const nameText = 'AKSHAY TRIPZ';
-        const heroNameElement = document.getElementById('heroName');
-        
-        nameText.split('').forEach((char) => {
-            const charSpan = document.createElement('span');
-            charSpan.className = 'char';
-            charSpan.textContent = char;
-            heroNameElement.appendChild(charSpan);
-        });
-
-        // Particle System
-        const particleTexts = {
-            binary: [
-                '01010101', '10101010', '11001100', '10011001', 
-                '11110000', '00001111', '11111111', '00000000',
-                '10110110', '01101101', '11010110', '01010110',
-                '01111010', '10001111', '11010101', '00111100'
-            ],
-            hex: [
-                '0xDEADBEEF', '0xCAFEBABE', '0xFEEDC0DE', '0xBEEFCAFE',
-                '0xDEADC0DE', '0xABADCAFE', '0xFACECAFE', '0x8BADF00D',
-                '0xC0FFEE', '0xDECAFBAD', '0xFEEDFACE', '0xDEEDDEED',
-                '0x1337DEAD', '0xDEADCAFE', '0xFEEDC0FFE'
-            ],
-            text: [
-                'ReverseEng', 'Exploit', 'Vulnerability', 'Binary',
-                'Malware', 'Payload', 'Assembly', 'Debug',
-                'Disassemble', 'Patch', 'Inject', 'Hook',
-                'Obfuscate', 'Decompile', 'Analyze', 'Breach',
-                'Shellcode', 'Gadget', 'CFG', 'IDA', 'Ghidra'
-            ]
-        };
-
-        function createParticle() {
-            const particleContainer = document.getElementById('particleBackground');
-            if (!particleContainer) return;
-
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-
-            const types = ['binary', 'hex', 'text'];
-            const randomType = types[Math.floor(Math.random() * types.length)];
-            const textArray = particleTexts[randomType];
-            const randomText = textArray[Math.floor(Math.random() * textArray.length)];
-
-            particle.textContent = randomText;
-            particle.classList.add(randomType);
-
-            const randomLeft = Math.random() * 100;
-            particle.style.left = randomLeft + '%';
-            particle.style.bottom = '-50px';
-
-            const duration = 8 + Math.random() * 7;
-            particle.style.setProperty('--duration', duration + 's');
-            particle.style.animation = `particleFloat ${duration}s linear forwards`;
-
-            const drift = (Math.random() - 0.5) * 150;
-            particle.style.setProperty('--tx', drift + 'px');
-
-            particleContainer.appendChild(particle);
-
-            setTimeout(() => {
-                particle.remove();
-            }, duration * 1000);
+        // ===== NAME ANIMATION =====
+        function animateName() {
+            const name = "AKSHAY TRIPZ";
+            const heroName = document.getElementById("heroName");
+            heroName.innerHTML = name.split("").map(char => 
+                `<span class="char">${char === " " ? "&nbsp;" : char}</span>`
+            ).join("");
         }
 
-        setInterval(createParticle, 300);
+        // ===== PARTICLE BACKGROUND =====
+        function createParticles() {
+            const container = document.getElementById("particleBackground");
+            const particles = 15;
+            const types = ["binary", "hex", "text"];
+            const binaryChars = ["0", "1"];
+            const hexChars = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
+            const textChars = ["{", "}", "[", "]", "<", ">", "/", "\\"];
 
-        for (let i = 0; i < 10; i++) {
-            setTimeout(createParticle, i * 80);
+            for (let i = 0; i < particles; i++) {
+                const particle = document.createElement("div");
+                const type = types[Math.floor(Math.random() * types.length)];
+                let content = "";
+                
+                if (type === "binary") {
+                    content = Array.from({length: 8}, () => binaryChars[Math.floor(Math.random() * 2)]).join("");
+                } else if (type === "hex") {
+                    content = "0x" + Array.from({length: 6}, () => hexChars[Math.floor(Math.random() * 16)]).join("");
+                } else {
+                    content = Array.from({length: 4}, () => textChars[Math.floor(Math.random() * textChars.length)]).join("");
+                }
+
+                particle.className = `particle ${type}`;
+                particle.textContent = content;
+                particle.style.left = Math.random() * 100 + "%";
+                particle.style.top = Math.random() * 100 + "%";
+                particle.style.setProperty("--tx", (Math.random() - 0.5) * 200 + "px");
+                particle.style.animationDuration = (Math.random() * 8 + 10) + "s";
+                particle.style.animationDelay = Math.random() * 2 + "s";
+                
+                container.appendChild(particle);
+            }
         }
 
-        // Theme Toggle
+        // ===== CURSOR TRACKING =====
+        function initCursorTracking() {
+            const tracker = document.getElementById("cursorTracker");
+            const dot = document.getElementById("cursorDot");
+            let mouseX = 0, mouseY = 0;
+            let trackerX = 0, trackerY = 0;
+
+            document.addEventListener("mousemove", (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+
+                // Activate on movement
+                tracker.classList.add("active");
+                dot.style.display = "block";
+
+                // Update dot position
+                dot.style.left = (mouseX - 4) + "px";
+                dot.style.top = (mouseY - 4) + "px";
+
+                // Smooth tracker movement with lag effect
+                trackerX += (mouseX - trackerX) * 0.1;
+                trackerY += (mouseY - trackerY) * 0.1;
+                tracker.style.left = (trackerX - 15) + "px";
+                tracker.style.top = (trackerY - 15) + "px";
+            });
+
+            document.addEventListener("mouseleave", () => {
+                tracker.classList.remove("active");
+                dot.style.display = "none";
+            });
+        }
+
+        // ===== THEME TOGGLE =====
         function toggleTheme() {
-            document.body.classList.toggle('red-yellow-theme');
-            localStorage.setItem('theme', document.body.classList.contains('red-yellow-theme') ? 'red-yellow' : 'default');
+            document.body.classList.toggle("red-yellow-theme");
+            localStorage.setItem("theme", document.body.classList.contains("red-yellow-theme") ? "red-yellow" : "default");
         }
 
-        window.addEventListener('load', () => {
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'red-yellow') {
-                document.body.classList.add('red-yellow-theme');
+        // Load saved theme
+        window.addEventListener("DOMContentLoaded", () => {
+            const savedTheme = localStorage.getItem("theme");
+            if (savedTheme === "red-yellow") {
+                document.body.classList.add("red-yellow-theme");
             }
         });
 
-        document.querySelectorAll('.btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-            });
+        // ===== INITIALIZATION =====
+        document.addEventListener("DOMContentLoaded", () => {
+            animateName();
+            createParticles();
+            initCursorTracking();
         });
     </script>
 </body>
