@@ -1,247 +1,195 @@
 // ============================================================
-// EAGLE — particles.js
-// Background particle field: depth particles + binary text sprites
+// EAGLE V2 — particles.js
+// Three systems:
+//   1. InstancedMesh field — depth particles, single draw call
+//   2. Binary/hex sprite layer — drifting chars
+//   3. RE mode hex streams — canvas-based columns
 // ============================================================
 
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+import * as THREE from 'three';
+import { Perf }   from './performance.js';
 
-export class Particles {
-  constructor(scene, isMobile) {
-    this.scene    = scene;
-    this.isMobile = isMobile;
-    this.clock    = new THREE.Clock();
+export class ParticleSystem {
+  constructor(scene, Q) {
+    this.scene = scene;
+    this.Q     = Q;
     this._disposables = [];
+    this._sprites     = [];
+    this._streamEls   = [];
 
-    this._buildFieldParticles();
-    this._buildBinarySprites();
-    this._buildGridLines();
+    if (Q.fieldParticles > 0) this._buildField();
+    if (Q.hexSprites     > 0) this._buildHexSprites();
   }
 
-  // ── DEPTH FIELD PARTICLES ─────────────────────────────────
-  _buildFieldParticles() {
-    const count = this.isMobile ? 600 : 2200;
-    const geo   = new THREE.BufferGeometry();
+  // ── 1. INSTANCED FIELD PARTICLES ─────────────────────────
+  _buildField() {
+    const N    = this.Q.fieldParticles;
+    const geo  = new THREE.SphereGeometry(0.04, 4, 4);
+    const mat  = new THREE.MeshBasicMaterial({ color: 0x00e5ff, transparent: true, opacity: 0.6 });
+    this._field = new THREE.InstancedMesh(geo, mat, N);
+    this._field.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+    this._disposables.push(geo, mat);
 
-    const positions = new Float32Array(count * 3);
-    const sizes     = new Float32Array(count);
-    const colors    = new Float32Array(count * 3);
-    const speeds    = new Float32Array(count);
-
-    // Cyan/teal color range
-    const palette = [
-      new THREE.Color(0x0ae4c8),
-      new THREE.Color(0x22d3ee),
-      new THREE.Color(0x0891b2),
+    // Per-instance data
+    this._fPos   = new Float32Array(N * 3);
+    this._fSpeed = new Float32Array(N);
+    this._fCol   = new Float32Array(N * 3);
+    const dummy  = new THREE.Object3D();
+    const colors = [
+      new THREE.Color(0x00e5ff),
+      new THREE.Color(0x0af5c8),
+      new THREE.Color(0x4488ff),
       new THREE.Color(0x0e7490),
-      new THREE.Color(0x2dd4bf),
     ];
 
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < N; i++) {
       const i3 = i * 3;
-      // Spread in a wide volume
-      positions[i3]     = (Math.random() - 0.5) * 80;
-      positions[i3 + 1] = (Math.random() - 0.5) * 50;
-      positions[i3 + 2] = (Math.random() - 0.5) * 40 - 5;
+      this._fPos[i3]   = (Math.random() - 0.5) * 90;
+      this._fPos[i3+1] = (Math.random() - 0.5) * 55;
+      this._fPos[i3+2] = (Math.random() - 0.5) * 50 - 8;
+      this._fSpeed[i]  = 0.15 + Math.random() * 0.55;
 
-      sizes[i]  = 0.5 + Math.random() * 2.5;
-      speeds[i] = 0.2 + Math.random() * 0.8;
+      const c = colors[i % colors.length];
+      const b = 0.2 + Math.random() * 0.6;
+      this._fCol[i3]   = c.r * b;
+      this._fCol[i3+1] = c.g * b;
+      this._fCol[i3+2] = c.b * b;
 
-      const c = palette[Math.floor(Math.random() * palette.length)];
-      const brightness = 0.2 + Math.random() * 0.6;
-      colors[i3]     = c.r * brightness;
-      colors[i3 + 1] = c.g * brightness;
-      colors[i3 + 2] = c.b * brightness;
+      dummy.position.set(this._fPos[i3], this._fPos[i3+1], this._fPos[i3+2]);
+      dummy.updateMatrix();
+      this._field.setMatrixAt(i, dummy.matrix);
+      this._field.setColorAt(i, c.multiplyScalar(b));
     }
+    this._field.instanceMatrix.needsUpdate = true;
+    if (this._field.instanceColor) this._field.instanceColor.needsUpdate = true;
 
-    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geo.setAttribute('aSize',    new THREE.BufferAttribute(sizes, 1));
-    geo.setAttribute('color',    new THREE.BufferAttribute(colors, 3));
-
-    // Store for animation
-    this._particlePositions = positions;
-    this._particleSpeeds    = speeds;
-    this._particleCount     = count;
-
-    const mat = new THREE.ShaderMaterial({
-      uniforms: { uTime: { value: 0 } },
-      vertexShader: `
-        attribute float aSize;
-        attribute vec3 color;
-        varying vec3 vColor;
-        varying float vAlpha;
-        uniform float uTime;
-
-        void main() {
-          vColor = color;
-          vec4 mvPos = modelViewMatrix * vec4(position, 1.0);
-          // Depth-based fade
-          float depth = clamp((-mvPos.z - 5.0) / 35.0, 0.0, 1.0);
-          vAlpha = 1.0 - depth * 0.85;
-          gl_PointSize  = aSize * (300.0 / -mvPos.z);
-          gl_Position   = projectionMatrix * mvPos;
-        }
-      `,
-      fragmentShader: `
-        varying vec3 vColor;
-        varying float vAlpha;
-
-        void main() {
-          vec2 uv = gl_PointCoord - 0.5;
-          float d = length(uv);
-          if (d > 0.5) discard;
-          float alpha = smoothstep(0.5, 0.1, d) * vAlpha;
-          gl_FragColor = vec4(vColor, alpha);
-        }
-      `,
-      transparent: true,
-      depthWrite: false,
-      vertexColors: true,
-    });
-
-    this._particleMesh = new THREE.Points(geo, mat);
-    this.scene.add(this._particleMesh);
-    this._disposables.push(geo, mat);
+    this.scene.add(this._field);
+    this._dummy = dummy;
   }
 
-  // ── BINARY TEXT SPRITES ───────────────────────────────────
-  _buildBinarySprites() {
-    if (this.isMobile) return;
+  // ── 2. HEX/BINARY SPRITE LAYER ───────────────────────────
+  _buildHexSprites() {
+    const chars  = '0 1 A B C D E F 4D 5A 90 00 E8 FF 25 C3 48 89 CC 0F'.split(' ');
+    const canvas = document.createElement('canvas');
+    canvas.width = 32; canvas.height = 32;
+    const ctx    = canvas.getContext('2d');
 
-    const chars   = '01ABCDEFabcdef4E7F89';
-    const spriteCount = 60;
-    this._binarySprites = [];
-
-    const canvas  = document.createElement('canvas');
-    canvas.width  = 32;
-    canvas.height = 32;
-    const ctx = canvas.getContext('2d');
-
-    const makeTexture = char => {
+    // Build a texture pool
+    const pool = chars.map(ch => {
       ctx.clearRect(0, 0, 32, 32);
-      ctx.fillStyle = 'rgba(10, 228, 200, 0.85)';
-      ctx.font = '18px "JetBrains Mono", monospace';
+      ctx.fillStyle = '#00e5ff';
+      ctx.font      = `500 ${ch.length > 1 ? 13 : 16}px "JetBrains Mono", monospace`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(char, 16, 16);
+      ctx.fillText(ch, 16, 16);
       const tex = new THREE.CanvasTexture(canvas);
-      tex.needsUpdate = true;
       this._disposables.push(tex);
       return tex;
-    };
+    });
 
-    // Pre-build a small texture pool
-    const texPool = Array.from({ length: 12 }, () =>
-      makeTexture(chars[Math.floor(Math.random() * chars.length)])
-    );
-
-    for (let i = 0; i < spriteCount; i++) {
+    for (let i = 0; i < this.Q.hexSprites; i++) {
       const mat = new THREE.SpriteMaterial({
-        map: texPool[i % texPool.length],
+        map:         pool[i % pool.length],
         transparent: true,
-        opacity: 0.06 + Math.random() * 0.14,
-        depthWrite: false,
+        opacity:     0.04 + Math.random() * 0.12,
+        depthWrite:  false,
       });
       const sprite = new THREE.Sprite(mat);
-
-      const x = (Math.random() - 0.5) * 70;
-      const y = (Math.random() - 0.5) * 45;
-      const z = -5 - Math.random() * 20;
+      const x = (Math.random() - 0.5) * 80;
+      const y = (Math.random() - 0.5) * 50;
+      const z = -10 - Math.random() * 25;
       sprite.position.set(x, y, z);
-
-      const scale = 0.4 + Math.random() * 0.5;
-      sprite.scale.set(scale, scale, 1);
+      const s = 0.35 + Math.random() * 0.55;
+      sprite.scale.set(s, s, 1);
 
       this.scene.add(sprite);
-      this._binarySprites.push({
-        sprite,
-        mat,
-        driftX: (Math.random() - 0.5) * 0.008,
-        driftY: (Math.random() - 0.5) * 0.012,
-        pulseFreq: 0.3 + Math.random() * 0.7,
-        pulseOffset: Math.random() * Math.PI * 2,
-        baseOpacity: 0.06 + Math.random() * 0.14,
+      this._sprites.push({
+        sprite, mat,
+        dx:    (Math.random() - 0.5) * 0.006,
+        dy:    (Math.random() - 0.5) * 0.010,
+        pFreq: 0.25 + Math.random() * 0.65,
+        pOff:  Math.random() * Math.PI * 2,
+        base:  mat.opacity,
       });
       this._disposables.push(mat);
     }
   }
 
-  // ── BACKGROUND GRID ───────────────────────────────────────
-  _buildGridLines() {
-    if (this.isMobile) return;
+  // ── 3. RE MODE STREAMS (DOM canvas columns) ───────────────
+  buildREStreams() {
+    const N     = this.Q.streamColumns;
+    const chars = '0123456789ABCDEFabcdef';
+    if (N === 0) return;
 
-    const mat = new THREE.LineBasicMaterial({
-      color: 0x0e2a30,
-      transparent: true,
-      opacity: 0.3,
-    });
+    const overlay = document.getElementById('re-overlay');
+    if (!overlay) return;
 
-    const size  = 80;
-    const divs  = 20;
-    const step  = size / divs;
-    const half  = size / 2;
-    const pts   = [];
+    // Clear any existing
+    this._streamEls.forEach(el => el.remove());
+    this._streamEls = [];
 
-    for (let i = 0; i <= divs; i++) {
-      const x = -half + i * step;
-      pts.push(x, -half, -18,  x, half, -18);
-      pts.push(-half, x, -18,  half, x, -18);
+    for (let i = 0; i < N; i++) {
+      const el = document.createElement('div');
+      el.className = 're-stream';
+      const col  = Math.random() * 100;
+      const dur  = 6 + Math.random() * 8;
+      const delay = Math.random() * dur;
+      el.style.left = col + 'vw';
+      el.style.animationDuration  = dur + 's';
+      el.style.animationDelay     = `-${delay}s`;
+      el.style.fontSize = (0.45 + Math.random() * 0.2) + 'rem';
+
+      // Fill with random hex chars
+      let str = '';
+      const len = 20 + Math.floor(Math.random() * 30);
+      for (let j = 0; j < len; j++) str += chars[Math.floor(Math.random() * chars.length)] + ' ';
+      el.textContent = str;
+
+      overlay.appendChild(el);
+      this._streamEls.push(el);
     }
+  }
 
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(pts), 3));
-
-    const grid = new THREE.LineSegments(geo, mat);
-    this.scene.add(grid);
-    this._grid = grid;
-    this._disposables.push(geo, mat);
+  removeREStreams() {
+    this._streamEls.forEach(el => el.remove());
+    this._streamEls = [];
   }
 
   // ── TICK ──────────────────────────────────────────────────
-  tick(scrollY = 0) {
-    const t = this.clock.getElapsedTime();
+  tick(elapsed, delta, scrollY = 0) {
+    const t = elapsed;
 
-    // Animate particle field — slow upward drift
-    if (this._particleMesh) {
-      const pos = this._particlePositions;
-      const spd = this._particleSpeeds;
-      const n   = this._particleCount;
-      for (let i = 0; i < n; i++) {
+    // Field particles — upward drift, wrap
+    if (this._field && this._fPos) {
+      const N = this.Q.fieldParticles;
+      for (let i = 0; i < N; i++) {
         const i3 = i * 3;
-        pos[i3 + 1] += spd[i] * 0.01;
-        // Wrap top → bottom
-        if (pos[i3 + 1] > 25) pos[i3 + 1] = -25;
+        this._fPos[i3+1] += this._fSpeed[i] * 0.008;
+        if (this._fPos[i3+1] > 28) this._fPos[i3+1] = -28;
+
+        this._dummy.position.set(this._fPos[i3], this._fPos[i3+1], this._fPos[i3+2]);
+        this._dummy.updateMatrix();
+        this._field.setMatrixAt(i, this._dummy.matrix);
       }
-      this._particleMesh.geometry.attributes.position.needsUpdate = true;
-      this._particleMesh.material.uniforms.uTime.value = t;
-
-      // Subtle parallax shift with scroll
-      this._particleMesh.position.y = -scrollY * 0.002;
+      this._field.instanceMatrix.needsUpdate = true;
+      // Subtle scroll parallax
+      this._field.position.y = -scrollY * 0.0015;
     }
 
-    // Binary sprites drift + pulse
-    if (this._binarySprites) {
-      this._binarySprites.forEach(s => {
-        s.sprite.position.x += s.driftX;
-        s.sprite.position.y += s.driftY;
-
-        // Wrap bounds
-        if (Math.abs(s.sprite.position.x) > 36) s.driftX *= -1;
-        if (Math.abs(s.sprite.position.y) > 23) s.driftY *= -1;
-
-        s.mat.opacity = s.baseOpacity * (0.4 + 0.6 * Math.abs(Math.sin(t * s.pulseFreq + s.pulseOffset)));
-      });
-    }
-
-    // Grid parallax
-    if (this._grid) {
-      this._grid.position.y = -scrollY * 0.0008;
-    }
+    // Hex sprites — drift + pulse opacity
+    this._sprites.forEach(s => {
+      s.sprite.position.x += s.dx;
+      s.sprite.position.y += s.dy;
+      if (Math.abs(s.sprite.position.x) > 42) s.dx *= -1;
+      if (Math.abs(s.sprite.position.y) > 26) s.dy *= -1;
+      s.mat.opacity = s.base * (0.35 + 0.65 * Math.abs(Math.sin(t * s.pFreq + s.pOff)));
+    });
   }
 
   dispose() {
-    this._disposables.forEach(d => d.dispose());
-    if (this._binarySprites) {
-      this._binarySprites.forEach(s => this.scene.remove(s.sprite));
-    }
+    this._disposables.forEach(d => d.dispose?.());
+    this._sprites.forEach(s => this.scene.remove(s.sprite));
+    if (this._field) this.scene.remove(this._field);
+    this._streamEls.forEach(el => el.remove());
   }
 }
