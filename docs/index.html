@@ -3,805 +3,423 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="EAGLE — Software Reverse Engineer. Binary analysis, Windows internals, malware analysis, protocol reverse engineering." />
+  <meta name="description" content="EAGLE — Software Reverse Engineer. Binary analysis, Windows internals, malware research. Understanding software from the inside out." />
+  <meta property="og:title" content="EAGLE — Software Reverse Engineer" />
+  <meta property="og:description" content="Understanding software from the inside out." />
   <title>EAGLE — Software Reverse Engineer</title>
 
-  <!-- Preconnect fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-
-  <!-- Styles -->
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/responsive.css" />
+
+  <!-- Inline pulse ring keyframe (needs to be reachable from JS-spawned elements) -->
+  <style>
+    @keyframes pulseRing {
+      from { transform: translate(-50%,-50%) scale(1); opacity:.8; width:4px; height:4px; }
+      to   { transform: translate(-50%,-50%) scale(8); opacity:0;  width:4px; height:4px; }
+    }
+    /* Scroll spacer — tall enough for all 7 sections */
+    #scroll-spacer { height: 600vh; pointer-events: none; }
+
+    /* Skip link */
+    .skip-link {
+      position:absolute; top:-60px; left:1rem;
+      padding:.4rem 1rem; background:var(--cyan); color:var(--black);
+      font-family:var(--font-mono); font-size:.75rem; font-weight:700;
+      border-radius:2px; z-index:10000; transition:top .2s;
+    }
+    .skip-link:focus { top:1rem; outline:2px solid var(--cyan); }
+  </style>
 </head>
 <body>
 
-  <!-- Skip link for keyboard users -->
-  <a href="#about" class="skip-link">Skip to main content</a>
-
-  <!-- ═══════════════════════════════════════════════════════
-       CURSOR
-  ════════════════════════════════════════════════════════ -->
-  <div id="cursor-outer" aria-hidden="true"></div>
-  <div id="cursor-inner" aria-hidden="true"></div>
-
-  <!-- ═══════════════════════════════════════════════════════
-       THREE.JS CANVAS — fixed background
-  ════════════════════════════════════════════════════════ -->
-  <canvas id="three-canvas" aria-hidden="true"></canvas>
-
-  <!-- ═══════════════════════════════════════════════════════
-       NAVIGATION
-  ════════════════════════════════════════════════════════ -->
-  <nav id="nav" role="navigation" aria-label="Main navigation">
-    <div class="nav-inner">
-      <a href="#hero" class="nav-logo" aria-label="EAGLE — home">
-        <span class="nav-logo-bracket">[</span>
-        EAGLE
-        <span class="nav-logo-bracket">]</span>
-      </a>
-
-      <ul class="nav-links" role="list">
-        <li><a href="#hero"            class="nav-link" data-section="hero">Home</a></li>
-        <li><a href="#about"           class="nav-link" data-section="about">About</a></li>
-        <li><a href="#expertise"       class="nav-link" data-section="expertise">Expertise</a></li>
-        <li><a href="#tools"           class="nav-link" data-section="tools">Tools</a></li>
-        <li><a href="#projects"        class="nav-link" data-section="projects">Projects</a></li>
-        <li><a href="#contact"         class="nav-link" data-section="contact">Contact</a></li>
-      </ul>
-
-      <button class="nav-menu-btn" aria-label="Toggle menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </nav>
-
-  <!-- ═══════════════════════════════════════════════════════
-       MAIN CONTENT
-  ════════════════════════════════════════════════════════ -->
-  <main>
-
-    <!-- ───────────────────────────────────────────────────
-         HERO
-    ─────────────────────────────────────────────────── -->
-    <section id="hero" aria-label="Introduction">
-      <div class="hero-content">
-        <div class="hero-eyebrow" aria-hidden="true">
-          <span class="hero-eyebrow-line"></span>
-          <span>Software Reverse Engineer</span>
-          <span class="hero-eyebrow-line"></span>
-        </div>
-
-        <h1 class="hero-title">
-          EAGLE
-          <div class="hero-title-glow" aria-hidden="true"></div>
-        </h1>
-
-        <p class="hero-subtitle">Binary Analysis &nbsp;·&nbsp; Windows Internals &nbsp;·&nbsp; Malware Research</p>
-
-        <p class="hero-tagline">"Understanding software from the inside out."</p>
-
-        <div class="hero-cta">
-          <a href="#projects" class="btn btn-primary">View Projects</a>
-          <a href="#contact"  class="btn btn-ghost">Get in Touch</a>
-        </div>
-      </div>
-
-      <!-- Status indicators -->
-      <div class="hero-status" aria-hidden="true">
-        <div class="status-item">
-          <span class="status-dot"></span>
-          <span class="mono-label">SYSTEM ONLINE</span>
-        </div>
-        <div class="status-item">
-          <span class="status-dot" style="background:var(--teal);animation-delay:.4s"></span>
-          <span class="mono-label">x86_64 · PE32+</span>
-        </div>
-        <div class="status-item">
-          <span class="status-dot" style="background:var(--cyan-400);animation-delay:.8s"></span>
-          <span class="mono-label">IDA PRO · GHIDRA</span>
-        </div>
-      </div>
-
-      <div class="hero-coords" aria-hidden="true">
-        <div class="mono-label">ADDR&nbsp;&nbsp;0x00400000</div>
-        <div class="mono-label">EP&nbsp;&nbsp;&nbsp;0x00401A30</div>
-        <div class="mono-label">ARCH&nbsp;&nbsp;AMD64</div>
-      </div>
-
-      <div class="hero-scroll-hint" aria-hidden="true">
-        <span>SCROLL</span>
-        <div class="scroll-line"></div>
-      </div>
-    </section>
-
-    <!-- ───────────────────────────────────────────────────
-         ABOUT
-    ─────────────────────────────────────────────────── -->
-    <section id="about" class="section">
-      <div class="section-inner">
-        <div class="about-grid">
-
-          <!-- Profile card -->
-          <div class="reveal">
-            <div class="profile-card glass" style="position:relative">
-              <!-- HUD corners -->
-              <div class="hud-corner hud-corner--tl"></div>
-              <div class="hud-corner hud-corner--tr"></div>
-              <div class="hud-corner hud-corner--bl"></div>
-              <div class="hud-corner hud-corner--br"></div>
-
-              <div class="profile-card-inner">
-                <div class="profile-avatar">
-                  <div class="avatar-ring" aria-hidden="true"></div>
-                  <div class="avatar-hex">E</div>
-                </div>
-
-                <div>
-                  <div class="profile-name">EAGLE</div>
-                  <div class="profile-role" style="margin-top:.25rem">Software Reverse Engineer</div>
-                </div>
-
-                <div class="profile-tags" role="list" aria-label="Specializations">
-                  <span class="profile-tag" role="listitem">Binary Analysis</span>
-                  <span class="profile-tag" role="listitem">Reverse Engineering</span>
-                  <span class="profile-tag" role="listitem">Windows Internals</span>
-                  <span class="profile-tag" role="listitem">Malware Analysis</span>
-                  <span class="profile-tag" role="listitem">Debugging</span>
-                  <span class="profile-tag" role="listitem">Protocol Analysis</span>
-                  <span class="profile-tag" role="listitem">Software Security</span>
-                </div>
-
-                <div class="profile-stats">
-                  <div class="stat-item">
-                    <div class="stat-value">RE</div>
-                    <div class="stat-label">Specialty</div>
-                  </div>
-                  <div class="stat-item">
-                    <div class="stat-value">x64</div>
-                    <div class="stat-label">Architecture</div>
-                  </div>
-                  <div class="stat-item">
-                    <div class="stat-value">PE</div>
-                    <div class="stat-label">Format</div>
-                  </div>
-                  <div class="stat-item">
-                    <div class="stat-value">ASM</div>
-                    <div class="stat-label">Native</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- About text + terminal -->
-          <div class="about-content">
-            <div class="reveal">
-              <p class="section-eyebrow">About</p>
-              <h2 class="section-title">Inside every binary<br/>is a story.</h2>
-              <p class="about-text">
-                I'm a software reverse engineer with a focus on <strong>Windows internals</strong>,
-                <strong>binary analysis</strong>, and <strong>malware research</strong>.
-                My work lives at the intersection of low-level systems and security research — reading
-                what compilers produce, understanding what loaders initialize, and mapping what
-                executables actually do versus what they claim to do.
-              </p>
-              <p class="about-text" style="margin-top:1rem">
-                I work primarily with PE32+ targets, tracing execution flow from entry point
-                to deep runtime behavior. Whether it's a crackme challenge, a protocol dissection,
-                or a Windows driver, the approach is the same: <strong>read the binary, not the documentation.</strong>
-              </p>
-            </div>
-
-            <div class="reveal reveal-delay-2">
-              <div class="terminal-block">
-                <div class="terminal-header">
-                  <div class="terminal-dot terminal-dot-r"></div>
-                  <div class="terminal-dot terminal-dot-y"></div>
-                  <div class="terminal-dot terminal-dot-g"></div>
-                  <span class="terminal-title">eagle@workstation ~ analysis</span>
-                </div>
-                <div class="terminal-body">
-                  <div class="terminal-line" data-type="file target.exe">
-                    <span class="terminal-prompt">❯</span>
-                    <span class="terminal-cmd"></span>
-                  </div>
-                  <div class="terminal-out">target.exe: PE32+ executable (GUI) x86-64, for MS Windows</div>
-                  <div class="terminal-line" data-type="objdump -d target.exe | head -20">
-                    <span class="terminal-prompt">❯</span>
-                    <span class="terminal-cmd"></span>
-                  </div>
-                  <div class="terminal-out">0000000140001a30 &lt;.text&gt;:</div>
-                  <div class="terminal-out" style="color:var(--accent);opacity:.7">  140001a30: 48 89 5c 24 08  mov  QWORD PTR [rsp+0x8],rbx</div>
-                  <div class="terminal-out" style="color:var(--accent);opacity:.7">  140001a35: 48 89 6c 24 10  mov  QWORD PTR [rsp+0x10],rbp</div>
-                  <div class="terminal-line" data-type="strings target.exe | grep -i license">
-                    <span class="terminal-prompt">❯</span>
-                    <span class="terminal-cmd"></span>
-                  </div>
-                  <div class="terminal-comment"># Tracing license validation logic...</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ───────────────────────────────────────────────────
-         EXPERTISE
-    ─────────────────────────────────────────────────── -->
-    <section id="expertise" class="section">
-      <div class="section-inner">
-        <div class="reveal">
-          <p class="section-eyebrow">Expertise</p>
-          <h2 class="section-title">Core disciplines.</h2>
-        </div>
-
-        <div class="expertise-grid">
-
-          <div class="expertise-card reveal reveal-delay-1">
-            <div class="expertise-card-bg" aria-hidden="true"></div>
-            <div class="expertise-icon">01 / RE</div>
-            <h3 class="expertise-title">Reverse Engineering</h3>
-            <p class="expertise-desc">
-              Static and dynamic analysis of compiled binaries. Reconstructing logic from disassembly,
-              mapping control flow, identifying obfuscation and anti-analysis techniques.
-            </p>
-            <div class="expertise-tags">
-              <span class="expertise-tag">IDA Pro</span>
-              <span class="expertise-tag">Ghidra</span>
-              <span class="expertise-tag">x64dbg</span>
-              <span class="expertise-tag">CFG analysis</span>
-            </div>
-          </div>
-
-          <div class="expertise-card reveal reveal-delay-2">
-            <div class="expertise-card-bg" aria-hidden="true"></div>
-            <div class="expertise-icon">02 / BA</div>
-            <h3 class="expertise-title">Binary Analysis</h3>
-            <p class="expertise-desc">
-              Deep PE/ELF structure inspection — headers, sections, imports, exports, relocations.
-              Patching, instrumentation, and behavioral fingerprinting at the binary level.
-            </p>
-            <div class="expertise-tags">
-              <span class="expertise-tag">PE32+</span>
-              <span class="expertise-tag">pefile</span>
-              <span class="expertise-tag">Python</span>
-              <span class="expertise-tag">CFF Explorer</span>
-            </div>
-          </div>
-
-          <div class="expertise-card reveal reveal-delay-3">
-            <div class="expertise-card-bg" aria-hidden="true"></div>
-            <div class="expertise-icon">03 / WIN</div>
-            <h3 class="expertise-title">Windows Internals</h3>
-            <p class="expertise-desc">
-              NT kernel structures, process/thread internals, loader mechanics, syscall layer,
-              Win32 subsystem, and driver architecture from ring 3 to ring 0.
-            </p>
-            <div class="expertise-tags">
-              <span class="expertise-tag">WinDbg</span>
-              <span class="expertise-tag">PEB/TEB</span>
-              <span class="expertise-tag">SSDT</span>
-              <span class="expertise-tag">Kernel debugging</span>
-            </div>
-          </div>
-
-          <div class="expertise-card reveal reveal-delay-1">
-            <div class="expertise-card-bg" aria-hidden="true"></div>
-            <div class="expertise-icon">04 / DBG</div>
-            <h3 class="expertise-title">Debugging</h3>
-            <p class="expertise-desc">
-              Hardware and software breakpoints, conditional tracing, memory watchpoints.
-              Navigating anti-debug, timing checks, and obfuscated exception handlers.
-            </p>
-            <div class="expertise-tags">
-              <span class="expertise-tag">x64dbg</span>
-              <span class="expertise-tag">WinDbg</span>
-              <span class="expertise-tag">ScyllaHide</span>
-              <span class="expertise-tag">TitanEngine</span>
-            </div>
-          </div>
-
-          <div class="expertise-card reveal reveal-delay-2">
-            <div class="expertise-card-bg" aria-hidden="true"></div>
-            <div class="expertise-icon">05 / PROTO</div>
-            <h3 class="expertise-title">Protocol Analysis</h3>
-            <p class="expertise-desc">
-              Network protocol reverse engineering from packet captures. Reconstructing
-              proprietary protocols, identifying encryption schemes, mapping command structures.
-            </p>
-            <div class="expertise-tags">
-              <span class="expertise-tag">Wireshark</span>
-              <span class="expertise-tag">Scapy</span>
-              <span class="expertise-tag">Frida</span>
-              <span class="expertise-tag">mitmproxy</span>
-            </div>
-          </div>
-
-          <div class="expertise-card reveal reveal-delay-3">
-            <div class="expertise-card-bg" aria-hidden="true"></div>
-            <div class="expertise-icon">06 / SEC</div>
-            <h3 class="expertise-title">Software Security</h3>
-            <p class="expertise-desc">
-              Vulnerability research, exploit primitives, patch diffing, and security
-              mechanism analysis. Understanding protections from both implementation and bypass perspectives.
-            </p>
-            <div class="expertise-tags">
-              <span class="expertise-tag">CVE research</span>
-              <span class="expertise-tag">BinDiff</span>
-              <span class="expertise-tag">ASLR/DEP</span>
-              <span class="expertise-tag">CFG</span>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ───────────────────────────────────────────────────
-         TOOLS
-    ─────────────────────────────────────────────────── -->
-    <section id="tools" class="section" style="background:var(--surface-0)">
-      <div class="section-inner">
-        <div class="tools-header">
-          <div class="reveal">
-            <p class="section-eyebrow">Toolchain</p>
-            <h2 class="section-title">The workstation.</h2>
-          </div>
-          <p class="mono-label reveal" style="align-self:flex-end;padding-bottom:.5rem">
-            8 PRIMARY TOOLS
-          </p>
-        </div>
-
-        <div class="tools-grid">
-
-          <div class="tool-card reveal reveal-delay-1">
-            <div class="tool-icon-wrap">IDA</div>
-            <div class="tool-name">IDA Pro</div>
-            <div class="tool-type">Disassembler / Decompiler</div>
-          </div>
-
-          <div class="tool-card reveal reveal-delay-1">
-            <div class="tool-icon-wrap">GHD</div>
-            <div class="tool-name">Ghidra</div>
-            <div class="tool-type">SRE Framework</div>
-          </div>
-
-          <div class="tool-card reveal reveal-delay-2">
-            <div class="tool-icon-wrap">x64</div>
-            <div class="tool-name">x64dbg</div>
-            <div class="tool-type">Dynamic Debugger</div>
-          </div>
-
-          <div class="tool-card reveal reveal-delay-2">
-            <div class="tool-icon-wrap">WDB</div>
-            <div class="tool-name">WinDbg</div>
-            <div class="tool-type">Kernel Debugger</div>
-          </div>
-
-          <div class="tool-card reveal reveal-delay-3">
-            <div class="tool-icon-wrap">BN</div>
-            <div class="tool-name">Binary Ninja</div>
-            <div class="tool-type">Binary Analysis</div>
-          </div>
-
-          <div class="tool-card reveal reveal-delay-3">
-            <div class="tool-icon-wrap">VS</div>
-            <div class="tool-name">Visual Studio</div>
-            <div class="tool-type">IDE / Compiler</div>
-          </div>
-
-          <div class="tool-card reveal reveal-delay-4">
-            <div class="tool-icon-wrap">PY</div>
-            <div class="tool-name">Python</div>
-            <div class="tool-type">Scripting / Automation</div>
-          </div>
-
-          <div class="tool-card reveal reveal-delay-4">
-            <div class="tool-icon-wrap">C++</div>
-            <div class="tool-name">C / C++</div>
-            <div class="tool-type">Systems Programming</div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ───────────────────────────────────────────────────
-         PROJECTS
-    ─────────────────────────────────────────────────── -->
-    <section id="projects" class="section">
-      <div class="section-inner">
-        <div class="reveal">
-          <p class="section-eyebrow">Projects</p>
-          <h2 class="section-title">Built. Shipped. Documented.</h2>
-        </div>
-
-        <div class="projects-grid">
-
-          <!-- Project 1 -->
-          <div class="project-card reveal reveal-delay-1">
-            <div class="hud-corner hud-corner--tl"></div>
-            <div class="hud-corner hud-corner--br"></div>
-
-            <div class="project-preview">
-              <canvas class="project-preview-canvas"></canvas>
-              <div class="project-preview-overlay"></div>
-              <span class="project-status status-active">Active</span>
-            </div>
-
-            <h3 class="project-title">Advance Pixel Grid Mapper</h3>
-            <p class="project-desc">
-              High-resolution pixel-accurate grid mapping tool for display analysis.
-              Captures, annotates, and exports structured coordinate data with
-              sub-pixel precision targeting.
-            </p>
-            <div class="project-tech">
-              <span class="tech-tag">C++</span>
-              <span class="tech-tag">Win32 API</span>
-              <span class="tech-tag">GDI+</span>
-              <span class="tech-tag">DirectX</span>
-            </div>
-            <div class="project-actions">
-              <a href="https://github.com/S90x123" target="_blank" rel="noopener" class="btn btn-primary">GitHub</a>
-              <a href="#" class="btn btn-ghost">Details</a>
-            </div>
-          </div>
-
-          <!-- Project 2 -->
-          <div class="project-card reveal reveal-delay-2">
-            <div class="hud-corner hud-corner--tl"></div>
-            <div class="hud-corner hud-corner--br"></div>
-
-            <div class="project-preview">
-              <canvas class="project-preview-canvas"></canvas>
-              <div class="project-preview-overlay"></div>
-              <span class="project-status status-active">Active</span>
-            </div>
-
-            <h3 class="project-title">Pulse</h3>
-            <p class="project-desc">
-              Real-time process and system telemetry monitor. Surfaces kernel events,
-              memory pressure indicators, and I/O anomalies with configurable alert
-              thresholds and structured logging.
-            </p>
-            <div class="project-tech">
-              <span class="tech-tag">C</span>
-              <span class="tech-tag">ETW</span>
-              <span class="tech-tag">WMI</span>
-              <span class="tech-tag">Python</span>
-            </div>
-            <div class="project-actions">
-              <a href="https://github.com/S90x123" target="_blank" rel="noopener" class="btn btn-primary">GitHub</a>
-              <a href="#" class="btn btn-ghost">Details</a>
-            </div>
-          </div>
-
-          <!-- Project 3 -->
-          <div class="project-card reveal reveal-delay-1">
-            <div class="hud-corner hud-corner--tl"></div>
-            <div class="hud-corner hud-corner--br"></div>
-
-            <div class="project-preview">
-              <canvas class="project-preview-canvas"></canvas>
-              <div class="project-preview-overlay"></div>
-              <span class="project-status status-wip">In Progress</span>
-            </div>
-
-            <h3 class="project-title">StageFlow</h3>
-            <p class="project-desc">
-              Multi-stage execution pipeline visualizer. Traces data flow across
-              processing stages, surfaces bottlenecks, and generates annotated
-              execution graphs for structured analysis.
-            </p>
-            <div class="project-tech">
-              <span class="tech-tag">Python</span>
-              <span class="tech-tag">Graphviz</span>
-              <span class="tech-tag">C extension</span>
-            </div>
-            <div class="project-actions">
-              <a href="https://github.com/S90x123" target="_blank" rel="noopener" class="btn btn-primary">GitHub</a>
-              <a href="#" class="btn btn-ghost">Details</a>
-            </div>
-          </div>
-
-          <!-- Project 4 -->
-          <div class="project-card reveal reveal-delay-2">
-            <div class="hud-corner hud-corner--tl"></div>
-            <div class="hud-corner hud-corner--br"></div>
-
-            <div class="project-preview">
-              <canvas class="project-preview-canvas"></canvas>
-              <div class="project-preview-overlay"></div>
-              <span class="project-status status-complete">Complete</span>
-            </div>
-
-            <h3 class="project-title">Chaser</h3>
-            <p class="project-desc">
-              Windows executable analysis harness. Static PE inspection, import resolution,
-              Authenticode verification, and behavioral profiling in a single
-              command-line workflow.
-            </p>
-            <div class="project-tech">
-              <span class="tech-tag">C++</span>
-              <span class="tech-tag">pefile</span>
-              <span class="tech-tag">Win32</span>
-              <span class="tech-tag">Python</span>
-            </div>
-            <div class="project-actions">
-              <a href="https://github.com/S90x123" target="_blank" rel="noopener" class="btn btn-primary">GitHub</a>
-              <a href="#" class="btn btn-ghost">Details</a>
-            </div>
-          </div>
-
-          <!-- Project 5 — full width -->
-          <div class="project-card reveal" style="grid-column: 1 / -1;">
-            <div class="hud-corner hud-corner--tl"></div>
-            <div class="hud-corner hud-corner--br"></div>
-
-            <div style="display:grid; grid-template-columns:1fr 1.5fr; gap:2rem; align-items:start;">
-              <div class="project-preview" style="height:180px; margin-bottom:0">
-                <canvas class="project-preview-canvas"></canvas>
-                <div class="project-preview-overlay"></div>
-                <span class="project-status status-active">Active</span>
-              </div>
-
-              <div>
-                <h3 class="project-title">PixelPerfectPro</h3>
-                <p class="project-desc">
-                  Precision visual overlay and measurement tool for UI analysis and display verification.
-                  Overlays pixel-accurate rulers, crosshairs, and measurement annotations directly
-                  on-screen with configurable snap points and export to structured measurement reports.
-                  Built for reverse engineering UI behavior and display output validation.
-                </p>
-                <div class="project-tech">
-                  <span class="tech-tag">C++</span>
-                  <span class="tech-tag">Win32 Layered Windows</span>
-                  <span class="tech-tag">GDI+</span>
-                  <span class="tech-tag">Direct2D</span>
-                  <span class="tech-tag">COM</span>
-                </div>
-                <div class="project-actions" style="margin-top:1.5rem">
-                  <a href="https://github.com/S90x123" target="_blank" rel="noopener" class="btn btn-primary">GitHub</a>
-                  <a href="#" class="btn btn-ghost">Details</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ───────────────────────────────────────────────────
-         BINARY EXPLORER — Interactive 3D section
-    ─────────────────────────────────────────────────── -->
-    <section id="binary-explorer" class="section">
-      <div class="section-inner">
-        <div class="reveal">
-          <p class="section-eyebrow">Interactive</p>
-          <h2 class="section-title">Dissect a binary.</h2>
-          <p style="color:var(--text-secondary);margin-bottom:2rem;font-size:.9rem">
-            Click the PE sections to expand their contents. This is what every analysis starts with.
-          </p>
-        </div>
-
-        <div class="explorer-container glass reveal">
-          <div class="explorer-header">
-            <div class="explorer-title-bar">
-              <div class="terminal-dot terminal-dot-r"></div>
-              <div class="terminal-dot terminal-dot-y"></div>
-              <div class="terminal-dot terminal-dot-g"></div>
-              <span class="explorer-title" style="margin-left:.5rem">PE Structure View — target.exe</span>
-            </div>
-            <div class="explorer-controls">
-              <span class="mono-label">PE32+ · x86-64 · 0x7800 bytes</span>
-            </div>
-          </div>
-
-          <div class="explorer-body">
-            <div id="explorer-canvas-wrap">
-              <canvas id="explorer-canvas"></canvas>
-              <div class="explorer-hint" aria-hidden="true">↑ Hover sections · Click to expand</div>
-            </div>
-
-            <div class="explorer-panels">
-
-              <div class="explorer-section" data-section="text">
-                <div class="explorer-section-header">
-                  <div class="explorer-section-name">
-                    <span>.text</span>
-                    &nbsp;— Executable code
-                  </div>
-                  <div class="explorer-section-size">0x4800</div>
-                </div>
-                <div class="explorer-section-body">
-                  <div class="hex-dump">
-                    <div><span class="hex-offset">001000</span>&nbsp; <span class="hex-byte">48 89 5C 24 08 48 89 6C</span> &nbsp;<span class="hex-ascii">H.\$.H.l</span></div>
-                    <div><span class="hex-offset">001008</span>&nbsp; <span class="hex-byte">24 10 48 89 74 24 18 57</span> &nbsp;<span class="hex-ascii">$.H.t$.W</span></div>
-                    <div><span class="hex-offset">001010</span>&nbsp; <span class="hex-byte">41 56 41 57 48 83 EC 60</span> &nbsp;<span class="hex-ascii">AVAWH..`</span></div>
-                    <div><span class="hex-offset">001018</span>&nbsp; <span class="hex-byte">4C 8B F1 33 FF 4C 8B FA</span> &nbsp;<span class="hex-ascii">L..3.L..</span></div>
-                    <div><span class="hex-offset">001020</span>&nbsp; <span class="hex-byte">49 8B D8 85 C9 0F 84 C2</span> &nbsp;<span class="hex-ascii">I......Â</span></div>
-                  </div>
-                  <p style="font-family:var(--font-mono);font-size:.65rem;color:var(--text-tertiary);margin-top:.75rem">
-                    Entry: 0x00401A30 · Characteristics: CNT_CODE | MEM_EXECUTE | MEM_READ
-                  </p>
-                </div>
-              </div>
-
-              <div class="explorer-section" data-section="data">
-                <div class="explorer-section-header">
-                  <div class="explorer-section-name">
-                    <span>.data</span>
-                    &nbsp;— Initialized data
-                  </div>
-                  <div class="explorer-section-size">0x0A00</div>
-                </div>
-                <div class="explorer-section-body">
-                  <div class="hex-dump">
-                    <div><span class="hex-offset">005800</span>&nbsp; <span class="hex-byte">00 00 00 00 00 00 00 00</span> &nbsp;<span class="hex-ascii">........</span></div>
-                    <div><span class="hex-offset">005808</span>&nbsp; <span class="hex-byte">01 00 00 00 00 00 00 00</span> &nbsp;<span class="hex-ascii">........</span></div>
-                    <div><span class="hex-offset">005810</span>&nbsp; <span class="hex-byte">A0 1A 40 00 00 00 00 00</span> &nbsp;<span class="hex-ascii">..@.....</span></div>
-                  </div>
-                  <p style="font-family:var(--font-mono);font-size:.65rem;color:var(--text-tertiary);margin-top:.75rem">
-                    Characteristics: CNT_INITIALIZED_DATA | MEM_READ | MEM_WRITE
-                  </p>
-                </div>
-              </div>
-
-              <div class="explorer-section" data-section="rdata">
-                <div class="explorer-section-header">
-                  <div class="explorer-section-name">
-                    <span>.rdata</span>
-                    &nbsp;— Read-only / imports
-                  </div>
-                  <div class="explorer-section-size">0x0C00</div>
-                </div>
-                <div class="explorer-section-body">
-                  <div class="hex-dump">
-                    <div><span class="hex-offset">006800</span>&nbsp; <span class="hex-byte">4B 45 52 4E 45 4C 33 32</span> &nbsp;<span class="hex-ascii">KERNEL32</span></div>
-                    <div><span class="hex-offset">006808</span>&nbsp; <span class="hex-byte">2E 44 4C 4C 00 00 00 00</span> &nbsp;<span class="hex-ascii">.DLL....</span></div>
-                    <div><span class="hex-offset">006810</span>&nbsp; <span class="hex-byte">56 69 72 74 75 61 6C 41</span> &nbsp;<span class="hex-ascii">VirtualA</span></div>
-                    <div><span class="hex-offset">006818</span>&nbsp; <span class="hex-byte">6C 6C 6F 63 00 00 00 00</span> &nbsp;<span class="hex-ascii">lloc....</span></div>
-                  </div>
-                  <p style="font-family:var(--font-mono);font-size:.65rem;color:var(--text-tertiary);margin-top:.75rem">
-                    Imports: KERNEL32.dll, ntdll.dll, USER32.dll · 14 functions
-                  </p>
-                </div>
-              </div>
-
-              <div class="explorer-section" data-section="rsrc">
-                <div class="explorer-section-header">
-                  <div class="explorer-section-name">
-                    <span>.rsrc</span>
-                    &nbsp;— Resources
-                  </div>
-                  <div class="explorer-section-size">0x0200</div>
-                </div>
-                <div class="explorer-section-body">
-                  <div class="hex-dump">
-                    <div><span class="hex-offset">007A00</span>&nbsp; <span class="hex-byte">00 00 00 00 00 00 00 00</span> &nbsp;<span class="hex-ascii">........</span></div>
-                    <div><span class="hex-offset">007A08</span>&nbsp; <span class="hex-byte">01 00 00 00 18 00 00 00</span> &nbsp;<span class="hex-ascii">........</span></div>
-                  </div>
-                  <p style="font-family:var(--font-mono);font-size:.65rem;color:var(--text-tertiary);margin-top:.75rem">
-                    RT_MANIFEST · Version info · 1 icon resource
-                  </p>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ───────────────────────────────────────────────────
-         CONTACT
-    ─────────────────────────────────────────────────── -->
-    <section id="contact" class="section">
-      <div class="section-inner">
-        <div class="reveal">
-          <p class="section-eyebrow">Contact</p>
-          <h2 class="section-title">Start a conversation.</h2>
-        </div>
-
-        <div class="contact-grid">
-          <div class="contact-info reveal">
-            <p class="contact-desc">
-              Open to research collaborations, CTF team invitations, security consulting,
-              and interesting reverse engineering challenges. If you have a binary that
-              needs to be understood, reach out.
-            </p>
-
-            <div class="contact-links">
-              <a href="https://github.com/S90x123" target="_blank" rel="noopener" class="contact-link">
-                <div class="contact-link-icon">GH</div>
-                <span>github.com/S90x123</span>
-              </a>
-              <a href="mailto:eagle@example.com" class="contact-link">
-                <div class="contact-link-icon">@</div>
-                <span>eagle@example.com</span>
-              </a>
-              <a href="https://crackmes.one" target="_blank" rel="noopener" class="contact-link">
-                <div class="contact-link-icon">RE</div>
-                <span>crackmes.one profile</span>
-              </a>
-            </div>
-
-            <div class="terminal-block" style="margin-top:1rem">
-              <div class="terminal-header">
-                <div class="terminal-dot terminal-dot-r"></div>
-                <div class="terminal-dot terminal-dot-y"></div>
-                <div class="terminal-dot terminal-dot-g"></div>
-                <span class="terminal-title">availability</span>
-              </div>
-              <div class="terminal-body" style="padding:1rem 1.5rem">
-                <div class="terminal-line">
-                  <span class="terminal-prompt">❯</span>
-                  <span class="terminal-cmd">status --current</span>
-                </div>
-                <div class="terminal-out" style="color:var(--accent)">
-                  ● Available for select engagements
-                </div>
-                <div class="terminal-out">  → Security research collaboration</div>
-                <div class="terminal-out">  → Malware analysis consulting</div>
-                <div class="terminal-out">  → CTF team / challenge writeups</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="contact-form-area reveal reveal-delay-2">
-            <div class="form-group">
-              <label class="form-label" for="contact-name">Name</label>
-              <input class="form-input" id="contact-name" type="text" placeholder="Your name" autocomplete="name" />
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="contact-email">Email</label>
-              <input class="form-input" id="contact-email" type="email" placeholder="you@domain.com" autocomplete="email" />
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="contact-subject">Subject</label>
-              <input class="form-input" id="contact-subject" type="text" placeholder="Research proposal · CTF invite · Consulting" />
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="contact-message">Message</label>
-              <textarea class="form-textarea" id="contact-message" rows="4" placeholder="Describe the challenge or project..."></textarea>
-            </div>
-            <button class="btn btn-primary" style="width:100%;justify-content:center;padding:1rem"
-              onclick="this.textContent='Sent.';this.disabled=true;this.style.opacity='.6'">
-              Send Message
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ═══════════════════════════════════════════════════════
-       FOOTER
-  ════════════════════════════════════════════════════════ -->
-  <footer>
-    <div class="footer-inner">
-      <span class="footer-text">© 2025 EAGLE · Built with precision, not templates.</span>
-      <div class="footer-links">
-        <a href="https://github.com/S90x123" target="_blank" rel="noopener" class="footer-link">GitHub</a>
-        <a href="#hero" class="footer-link">Back to top</a>
+<!-- ── ACCESSIBILITY ── -->
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!-- ── CURSOR ── -->
+<div id="cursor-ring"  aria-hidden="true"></div>
+<div id="cursor-dot"   aria-hidden="true"></div>
+<div id="cursor-label" aria-hidden="true">INSPECT</div>
+
+<!-- ── SCANLINES ── -->
+<div id="scanlines" aria-hidden="true"></div>
+
+<!-- ── THREE.JS CANVAS ── -->
+<canvas id="three-canvas" aria-hidden="true"></canvas>
+
+<!-- ── RE MODE OVERLAY ── -->
+<div id="re-overlay" aria-hidden="true"></div>
+
+<!-- ════════════════════════════════════════════════════════
+     INTRO SCREEN
+════════════════════════════════════════════════════════ -->
+<div id="intro" role="dialog" aria-label="System initialization" aria-modal="true">
+
+  <div class="intro-terminal" aria-live="polite">
+    <div class="intro-line"><span class="ok">▸</span> INITIALIZING EAGLE CORE...</div>
+    <div class="intro-line"><span class="ok">▸</span> SYSTEM CHECK .............. <span class="ok">OK</span></div>
+    <div class="intro-line"><span class="ok">▸</span> MEMORY ANALYSIS ........... <span class="ok">OK</span></div>
+    <div class="intro-line"><span class="ok">▸</span> BINARY ENGINE ............. <span class="ok">OK</span></div>
+    <div class="intro-line"><span class="ok">▸</span> DEBUGGER .................. <span class="ok">ONLINE</span></div>
+    <div class="intro-line"><span class="ok">▸</span> DISASSEMBLER .............. <span class="ok">ONLINE</span></div>
+    <div class="intro-line"><span class="warn">▸</span> ANTI-ANALYSIS BYPASS ...... <span class="warn">PATCHED</span></div>
+    <div class="intro-line"><span class="ok">▸</span> REVERSE ENGINE ............ <span class="ok">ONLINE</span></div>
+  </div>
+
+  <div class="intro-logo" aria-label="EAGLE">EAGLE</div>
+  <div class="intro-sub">SOFTWARE REVERSE ENGINEER</div>
+
+  <button class="intro-enter" aria-label="Enter system">
+    <span class="btn-pulse" aria-hidden="true"></span>
+    ENTER SYSTEM
+  </button>
+
+</div>
+
+<button class="intro-skip" aria-label="Skip intro">SKIP INTRO</button>
+
+<!-- ════════════════════════════════════════════════════════
+     NAVIGATION
+════════════════════════════════════════════════════════ -->
+<nav id="nav" role="navigation" aria-label="Main navigation">
+  <a href="#" class="nav-logo" aria-label="EAGLE home">
+    <span>[</span>EAGLE<span>]</span>
+  </a>
+
+  <ul class="nav-links" role="list">
+    <li><a href="#hero"     class="nav-link" data-section="hero">Core</a></li>
+    <li><a href="#sections" class="nav-link" data-section="sections">Sections</a></li>
+    <li><a href="#imports"  class="nav-link" data-section="imports">Imports</a></li>
+    <li><a href="#cfg"      class="nav-link" data-section="cfg">CFG</a></li>
+    <li><a href="#contact"  class="nav-link" data-section="contact">Contact</a></li>
+  </ul>
+
+  <div class="nav-controls">
+    <button id="btn-remode" class="nav-btn" aria-pressed="false">RE MODE</button>
+    <button id="btn-sound"  class="nav-btn" aria-pressed="false">SOUND OFF</button>
+  </div>
+
+  <button id="nav-hamburger" aria-label="Toggle menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ════════════════════════════════════════════════════════
+     MAIN — scroll-driven 3D experience
+     The visible content is FIXED overlays + HUDs.
+     This spacer div provides the scroll height.
+════════════════════════════════════════════════════════ -->
+<main id="main-content">
+  <div id="scroll-spacer" aria-hidden="true"></div>
+</main>
+
+<!-- ════════════════════════════════════════════════════════
+     SECTION OVERLAYS — fixed, activated by scroll.js
+════════════════════════════════════════════════════════ -->
+
+<!-- HERO -->
+<div class="section-overlay" id="overlay-hero" aria-label="Hero section">
+  <div class="section-label" aria-hidden="true">
+    <span>0x00400000</span>
+    TARGET BINARY LOADED
+    <span>PE32+</span>
+  </div>
+  <h1 class="section-title">EAGLE</h1>
+  <p class="section-desc">"Understanding software from the inside out."</p>
+</div>
+
+<!-- HEADERS -->
+<div class="section-overlay" id="overlay-headers" aria-label="PE Headers section">
+  <div class="section-label" aria-hidden="true">SECTION 01</div>
+  <h2 class="section-title">PE HEADERS</h2>
+  <p class="section-desc">DOS stub → NT signature → COFF header → Optional header. The skeleton of every Windows executable.</p>
+</div>
+
+<!-- SECTIONS -->
+<div class="section-overlay" id="overlay-sections" aria-label="PE Sections">
+  <div class="section-label" aria-hidden="true">SECTION 02</div>
+  <h2 class="section-title">SECTION TABLE</h2>
+  <p class="section-desc">.text · .data · .rdata · .bss · .rsrc — five regions, five purposes. Each a mapped view into the binary's intent.</p>
+</div>
+
+<!-- MEMORY -->
+<div class="section-overlay" id="overlay-memory" aria-label="Memory Map">
+  <div class="section-label" aria-hidden="true">SECTION 03</div>
+  <h2 class="section-title">MEMORY MAP</h2>
+  <p class="section-desc">Sections expand into virtual memory. Permissions harden. The loader maps RWX regions.</p>
+</div>
+
+<!-- IMPORTS -->
+<div class="section-overlay" id="overlay-imports" aria-label="Import Table">
+  <div class="section-label" aria-hidden="true">SECTION 04</div>
+  <h2 class="section-title">IMPORT TABLE</h2>
+  <p class="section-desc">KERNEL32 · ntdll · USER32 · ADVAPI32. Click any node to inspect resolved functions.</p>
+</div>
+
+<!-- CFG -->
+<div class="section-overlay" id="overlay-cfg" aria-label="Control Flow Graph">
+  <div class="section-label" aria-hidden="true">SECTION 05</div>
+  <h2 class="section-title">CONTROL FLOW</h2>
+  <p class="section-desc">main → Initialize → LoadModule → Decrypt → Execute. Click any function to view disassembly.</p>
+</div>
+
+<!-- CONTACT -->
+<div class="section-overlay" id="overlay-contact" aria-label="Contact">
+  <div class="section-label" aria-hidden="true">EXFILTRATE</div>
+  <h2 class="section-title">Contact</h2>
+  <p class="section-desc" style="margin-bottom:2rem">
+    Open to research collaborations, CTF invitations, and interesting binaries.
+  </p>
+  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+    <a href="https://github.com/S90x123" target="_blank" rel="noopener"
+       style="font-family:var(--font-mono);font-size:.72rem;letter-spacing:.1em;
+              padding:.5rem 1.5rem;border:1px solid var(--glass-border);
+              border-radius:2px;color:var(--text-2);transition:all .2s"
+       onmouseenter="this.style.borderColor='var(--cyan)';this.style.color='var(--cyan)'"
+       onmouseleave="this.style.borderColor='';this.style.color=''">
+      github.com/S90x123
+    </a>
+    <a href="mailto:eagle@example.com"
+       style="font-family:var(--font-mono);font-size:.72rem;letter-spacing:.1em;
+              padding:.5rem 1.5rem;border:1px solid var(--glass-border);
+              border-radius:2px;color:var(--text-2);transition:all .2s"
+       onmouseenter="this.style.borderColor='var(--cyan)';this.style.color='var(--cyan)'"
+       onmouseleave="this.style.borderColor='';this.style.color=''">
+      eagle@example.com
+    </a>
+  </div>
+
+  <!-- About card embedded in contact overlay -->
+  <div style="margin-top:3rem;display:flex;gap:2rem;flex-wrap:wrap;justify-content:center;
+              max-width:800px;pointer-events:all">
+
+    <div style="background:var(--glass);border:1px solid var(--glass-border);
+                border-radius:4px;padding:1.5rem;min-width:200px;backdrop-filter:blur(12px)">
+      <div style="font-family:var(--font-mono);font-size:.55rem;color:var(--cyan);
+                  letter-spacing:.14em;margin-bottom:.75rem">// IDENTITY</div>
+      <div style="font-family:var(--font-mono);font-size:1.1rem;font-weight:700;color:var(--text-1)">EAGLE</div>
+      <div style="font-family:var(--font-mono);font-size:.65rem;color:var(--text-2);margin-top:.25rem">Software Reverse Engineer</div>
+      <div style="margin-top:1rem;display:flex;flex-wrap:wrap;gap:.35rem">
+        <span style="font-family:var(--font-mono);font-size:.58rem;padding:.2rem .5rem;
+                     background:var(--cyan-dim);border:1px solid rgba(0,229,255,.2);
+                     border-radius:2px;color:var(--cyan)">Binary Analysis</span>
+        <span style="font-family:var(--font-mono);font-size:.58rem;padding:.2rem .5rem;
+                     background:var(--cyan-dim);border:1px solid rgba(0,229,255,.2);
+                     border-radius:2px;color:var(--cyan)">Windows Internals</span>
+        <span style="font-family:var(--font-mono);font-size:.58rem;padding:.2rem .5rem;
+                     background:var(--cyan-dim);border:1px solid rgba(0,229,255,.2);
+                     border-radius:2px;color:var(--cyan)">Malware Analysis</span>
+        <span style="font-family:var(--font-mono);font-size:.58rem;padding:.2rem .5rem;
+                     background:var(--cyan-dim);border:1px solid rgba(0,229,255,.2);
+                     border-radius:2px;color:var(--cyan)">Protocol Analysis</span>
+        <span style="font-family:var(--font-mono);font-size:.58rem;padding:.2rem .5rem;
+                     background:var(--cyan-dim);border:1px solid rgba(0,229,255,.2);
+                     border-radius:2px;color:var(--cyan)">x86-64 ASM</span>
       </div>
     </div>
-  </footer>
 
-  <!-- ── Three.js ESM ── -->
-  <script type="importmap">
-    {
-      "imports": {
-        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
-      }
-    }
-  </script>
-  <script type="module" src="js/main.js"></script>
+    <div style="background:var(--glass);border:1px solid var(--glass-border);
+                border-radius:4px;padding:1.5rem;min-width:200px;backdrop-filter:blur(12px)">
+      <div style="font-family:var(--font-mono);font-size:.55rem;color:var(--cyan);
+                  letter-spacing:.14em;margin-bottom:.75rem">// TOOLCHAIN</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem">
+        <span style="font-family:var(--font-mono);font-size:.65rem;color:var(--text-2)">IDA Pro</span>
+        <span style="font-family:var(--font-mono);font-size:.65rem;color:var(--text-2)">Ghidra</span>
+        <span style="font-family:var(--font-mono);font-size:.65rem;color:var(--text-2)">x64dbg</span>
+        <span style="font-family:var(--font-mono);font-size:.65rem;color:var(--text-2)">WinDbg</span>
+        <span style="font-family:var(--font-mono);font-size:.65rem;color:var(--text-2)">Binary Ninja</span>
+        <span style="font-family:var(--font-mono);font-size:.65rem;color:var(--text-2)">Frida</span>
+        <span style="font-family:var(--font-mono);font-size:.65rem;color:var(--text-2)">Python</span>
+        <span style="font-family:var(--font-mono);font-size:.65rem;color:var(--text-2)">C / C++</span>
+      </div>
+    </div>
+
+    <div style="background:var(--glass);border:1px solid var(--glass-border);
+                border-radius:4px;padding:1.5rem;min-width:200px;backdrop-filter:blur(12px)">
+      <div style="font-family:var(--font-mono);font-size:.55rem;color:var(--cyan);
+                  letter-spacing:.14em;margin-bottom:.75rem">// PROJECTS</div>
+      <div style="display:flex;flex-direction:column;gap:.5rem">
+        <div style="font-family:var(--font-mono);font-size:.65rem;color:var(--text-2)">
+          <span style="color:var(--green)">●</span> Advance Pixel Grid Mapper
+        </div>
+        <div style="font-family:var(--font-mono);font-size:.65rem;color:var(--text-2)">
+          <span style="color:var(--green)">●</span> Pulse
+        </div>
+        <div style="font-family:var(--font-mono);font-size:.65rem;color:var(--text-2)">
+          <span style="color:var(--amber)">●</span> StageFlow
+        </div>
+        <div style="font-family:var(--font-mono);font-size:.65rem;color:var(--text-2)">
+          <span style="color:var(--cyan)">●</span> Chaser
+        </div>
+        <div style="font-family:var(--font-mono);font-size:.65rem;color:var(--text-2)">
+          <span style="color:var(--green)">●</span> PixelPerfectPro
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     FIXED HUD ELEMENTS
+════════════════════════════════════════════════════════ -->
+
+<!-- Depth progress bar (left edge) -->
+<div id="depth-bar" aria-hidden="true">
+  <div id="depth-fill"></div>
+</div>
+
+<!-- Section dots (right edge) -->
+<div id="section-progress" aria-label="Section progress">
+  <div class="prog-dot active" title="Core"></div>
+  <div class="prog-dot" title="Headers"></div>
+  <div class="prog-dot" title="Sections"></div>
+  <div class="prog-dot" title="Memory"></div>
+  <div class="prog-dot" title="Imports"></div>
+  <div class="prog-dot" title="CFG"></div>
+  <div class="prog-dot" title="Contact"></div>
+</div>
+
+<!-- System stats HUD (left) -->
+<div class="hud-panel" id="hud-stats" aria-label="System statistics">
+  <div class="hud-title">SYS MONITOR</div>
+  <!-- rows injected by main.js -->
+</div>
+
+<!-- Hover info HUD (follows cursor) -->
+<div id="hud-hover" role="tooltip" aria-live="polite">
+  <div class="hover-type">OBJECT</div>
+  <div class="hover-address">0x00000000</div>
+  <div class="hover-rows"></div>
+</div>
+
+<!-- ANALYZE button -->
+<button id="analyze-btn" aria-label="Analyze binary">
+  <span class="btn-pulse" aria-hidden="true"></span>
+  ANALYZE BINARY
+</button>
+
+<!-- Analysis progress modal -->
+<div id="analysis-progress" role="dialog" aria-label="Analysis progress" aria-modal="true">
+  <div class="analysis-title">// BINARY ANALYSIS IN PROGRESS</div>
+  <div class="analysis-steps">
+    <div class="analysis-step">
+      <div class="step-icon">○</div>
+      LOADING PE IMAGE
+    </div>
+    <div class="analysis-step">
+      <div class="step-icon">○</div>
+      PARSING HEADERS
+    </div>
+    <div class="analysis-step">
+      <div class="step-icon">○</div>
+      ANALYZING SECTIONS
+    </div>
+    <div class="analysis-step">
+      <div class="step-icon">○</div>
+      RESOLVING IMPORTS
+    </div>
+    <div class="analysis-step">
+      <div class="step-icon">○</div>
+      BUILDING CFG
+    </div>
+    <div class="analysis-step">
+      <div class="step-icon">○</div>
+      ANALYSIS COMPLETE
+    </div>
+  </div>
+  <div class="analysis-bar">
+    <div class="analysis-bar-fill"></div>
+  </div>
+</div>
+
+<!-- Info panel (right, on 3D click) -->
+<div id="info-panel" aria-label="Object details">
+  <div class="info-panel-inner">
+    <div class="info-panel-header">
+      <span class="info-panel-type">OBJECT</span>
+      <button class="info-panel-close" aria-label="Close panel">[×]</button>
+    </div>
+    <div class="info-panel-body">
+      <div class="info-name">—</div>
+      <div class="info-desc"></div>
+      <div class="info-rows"></div>
+      <div class="disasm-view" style="display:none"></div>
+      <div class="info-actions">
+        <button class="info-btn primary"
+          onclick="navigator.clipboard?.writeText(document.querySelector('.info-desc')?.textContent||'')">
+          COPY ADDR
+        </button>
+        <button class="info-btn"
+          onclick="document.getElementById('info-panel').classList.remove('visible')">
+          DISMISS
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Scroll indicator -->
+<div id="scroll-indicator" aria-hidden="true">
+  <span class="scroll-ind-text">SCROLL TO DISSECT</span>
+  <div class="scroll-ind-line"></div>
+</div>
+
+<!-- Notifications container -->
+<div id="notifications" aria-live="polite" aria-atomic="false"></div>
+
+<!-- ════════════════════════════════════════════════════════
+     FLOATING TERMINAL
+════════════════════════════════════════════════════════ -->
+<div id="terminal-panel" aria-label="Analysis terminal">
+  <div class="terminal-bar">
+    <div class="term-dot term-dot-r" aria-hidden="true"></div>
+    <div class="term-dot term-dot-y" aria-hidden="true"></div>
+    <div class="term-dot term-dot-g" aria-hidden="true"></div>
+    <span class="term-title">eagle_analyzer — bash</span>
+    <button class="term-minimize" aria-label="Minimize terminal">[−]</button>
+  </div>
+  <div class="terminal-body" aria-label="Terminal output">
+    <div id="terminal-output" aria-live="polite">
+      <span class="term-cursor" aria-hidden="true"></span>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     COMMAND CONSOLE  (/ key)
+════════════════════════════════════════════════════════ -->
+<div id="cmd-console" role="dialog" aria-label="EAGLE command console" aria-modal="true">
+  <div class="cmd-header">
+    <span class="cmd-header-label">// EAGLE CONSOLE — Press Escape to close</span>
+  </div>
+  <div class="cmd-input-wrap">
+    <span class="cmd-prompt">❯</span>
+    <input id="cmd-input" type="text" placeholder="type a command..."
+           autocomplete="off" autocorrect="off" autocapitalize="off"
+           spellcheck="false" aria-label="Console input" />
+  </div>
+  <div class="cmd-output" aria-live="polite"></div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     SCRIPTS — Three.js + GSAP via CDN, then ES modules
+════════════════════════════════════════════════════════ -->
+
+<!-- Three.js — importmap so ES modules can import 'three' -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+  }
+}
+</script>
+
+<!-- GSAP (UMD, exposes window.gsap) -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+
+<!-- App entry point -->
+<script type="module" src="js/main.js"></script>
 
 </body>
 </html>
