@@ -1,288 +1,220 @@
 // ============================================================
-// EAGLE V2 — main.js
-// Boot sequence, module wiring, HUD stats, global event bus.
+// EAGLE V3 — main.js
+// Boot: intro → modules → RAF.
+// Event bus wires all inter-module communication.
 // ============================================================
 
-import { Perf }           from './performance.js';
-import { SceneManager }   from './scene.js';
-import { EagleCore }      from './core.js';
-import { ParticleSystem } from './particles.js';
-import { FunctionGraph }  from './functionGraph.js';
-import { Terminal }       from './terminal.js';
-import { Interaction }    from './interaction.js';
+import { Perf }         from './performance.js';
+import { Engine }       from './engine.js';
+import { Particles }    from './particles.js';
+import { Core }         from './core.js';
+import { Network }      from './network.js';
+import { HUD }          from './hud.js';
+import { Terminal }     from './terminal.js';
+import { Interaction }  from './interaction.js';
 import { ScrollController } from './scroll.js';
-import { AudioEngine }    from './audio.js';
 
-// GSAP loaded via CDN — available on window
 const gsap = window.gsap;
 
-// ─────────────────────────────────────────────────────────────
 class EagleApp {
   constructor() {
     this.Q = Perf.Q;
     this._booted = false;
 
-    if (!this.Q.webglOk) {
-      this._showFallback();
-      return;
-    }
+    if (!this.Q.webglOk) { this._fallback(); return; }
 
-    this._runIntro();
+    this._initIntro();
   }
 
-  // ── INTRO SEQUENCE ─────────────────────────────────────────
-  _runIntro() {
-    const intro     = document.getElementById('intro');
-    const lines     = intro?.querySelectorAll('.intro-line');
-    const logo      = intro?.querySelector('.intro-logo');
-    const sub       = intro?.querySelector('.intro-sub');
-    const enterBtn  = intro?.querySelector('.intro-enter');
-    const skipBtn   = document.querySelector('.intro-skip');
+  // ── INTRO ────────────────────────────────────────────────
+  _initIntro() {
+    const intro    = document.getElementById('intro');
+    const lines    = intro?.querySelectorAll('.intro-line');
+    const logo     = intro?.querySelector('.intro-logo');
+    const sub      = intro?.querySelector('.intro-sub');
+    const enterBtn = intro?.querySelector('.intro-enter');
+    const skipBtn  = document.querySelector('.intro-skip');
 
-    // Skip for returning visitors
-    const hasVisited = sessionStorage.getItem('eagle_visited');
-    skipBtn?.addEventListener('click', () => this._enterSystem());
+    const skip = () => {
+      sessionStorage.setItem('eagle_v3','1');
+      gsap.to(intro, { opacity:0, duration:0.8, ease:'power2.inOut',
+        onComplete:() => { intro.style.display='none'; this._boot(); }
+      });
+    };
 
-    if (hasVisited) {
-      // Fast skip
-      gsap.set([logo, sub, enterBtn], { opacity: 1 });
-      if (lines) gsap.set(lines, { opacity: 1 });
+    skipBtn?.addEventListener('click', skip);
+    enterBtn?.addEventListener('click', skip);
+
+    if (sessionStorage.getItem('eagle_v3')) {
+      gsap.set([logo, sub, enterBtn], { opacity:1 });
+      lines && gsap.set(lines, { opacity:1 });
     } else {
-      // Stagger terminal boot lines
-      if (lines) {
-        gsap.to(lines, {
-          opacity: 1, duration: 0,
-          stagger: { each: 0.18, ease: 'none' },
-          delay: 0.4,
-        });
-      }
-      // Logo + sub fade in
-      gsap.to(logo, { opacity: 1, duration: 0.8, delay: lines ? lines.length * 0.18 + 0.6 : 1.2 });
-      gsap.to(sub,  { opacity: 1, duration: 0.6, delay: lines ? lines.length * 0.18 + 1.0 : 1.6 });
-      gsap.to(enterBtn, { opacity: 1, duration: 0.5, delay: lines ? lines.length * 0.18 + 1.5 : 2.0 });
+      const n = lines?.length || 0;
+      if (lines) gsap.to(lines, { opacity:1, duration:0, stagger:{ each:0.16, ease:'none' }, delay:0.3 });
+      gsap.to(logo,     { opacity:1, duration:0.7, delay: n*0.16 + 0.5 });
+      gsap.to(sub,      { opacity:1, duration:0.5, delay: n*0.16 + 0.9 });
+      gsap.to(enterBtn, { opacity:1, duration:0.5, delay: n*0.16 + 1.3 });
     }
-
-    enterBtn?.addEventListener('click', () => {
-      sessionStorage.setItem('eagle_visited', '1');
-      this._enterSystem();
-    });
   }
 
-  // ── ENTER SYSTEM ───────────────────────────────────────────
-  _enterSystem() {
-    const intro = document.getElementById('intro');
-
-    gsap.to(intro, {
-      opacity: 0, duration: 0.9, ease: 'power2.inOut',
-      onComplete: () => {
-        intro.style.display = 'none';
-        this._boot();
-      }
-    });
-  }
-
-  // ── BOOT ALL MODULES ───────────────────────────────────────
+  // ── BOOT ─────────────────────────────────────────────────
   _boot() {
     if (this._booted) return;
     this._booted = true;
 
+    try { this._bootModules(); }
+    catch(e) { console.error('[EAGLE] Boot error:', e); this._fallback(); }
+  }
+
+  _bootModules() {
     const canvas = document.getElementById('three-canvas');
 
-    // ── Scene ──
-    this.SM = new SceneManager(canvas);
+    // 1. Engine (renderer + RAF loop)
+    this.engine = new Engine(canvas);
 
-    // ── EAGLE Core ──
-    this.core = new EagleCore(this.SM.scene, this.Q);
-    this.SM.register(this.core);
+    // 2. Core 3D object
+    this.core = new Core(this.engine, gsap);
 
-    // ── Particles ──
-    this.particles = new ParticleSystem(this.SM.scene, this.Q);
-    this.SM.register(this.particles);
+    // 3. Particles (massive GPU field)
+    this.particles = new Particles(this.engine);
 
-    // ── Function Graph ──
-    this.graph = new FunctionGraph(this.SM.scene, this.Q);
-    this.SM.register(this.graph);
+    // 4. Network graph
+    this.network = new Network(this.engine);
 
-    // ── Terminal ──
-    this.terminal = new Terminal();
+    // 5. HUD (metrics, events, scan overlay, float labels)
+    this.hud = new HUD(this.engine);
 
-    // ── Audio ──
-    this.audio = new AudioEngine();
+    // 6. Terminal
+    this.terminal = new Terminal(this.hud);
 
-    // ── Interaction ──
-    this.interaction = new Interaction(
-      this.SM.camera,
-      this.SM.renderer,
-      this.core,
-      this.graph,
-      this.terminal,
-      (msg, type) => {
-        this.terminal.notify(msg, type);
-        this.audio.playNotify(type);
-      }
-    );
-    // Merge all raycasting targets
+    // 7. Interaction (raycaster, cursor, touch, easter eggs)
+    this.interaction = new Interaction(this.engine, this.core, this.network, this.hud);
     this.interaction.setTargets([
       ...this.core.rayTargets,
-      ...this.graph.rayTargets,
+      ...this.network.rayTargets,
     ]);
-    this.SM.register(this.interaction);
+    this.engine.register('interaction', (t,dt,E) => this.interaction.tick(t,dt,E));
 
-    // ── Scroll ──
-    this.scroll = new ScrollController(
-      this.SM, this.core, this.graph, this.terminal, gsap
-    );
-    this.SM.register(this.scroll);
+    // 8. Scroll controller
+    this.scroll = new ScrollController(this.engine, this.core, this.network, gsap);
 
-    // ── UI visibility ──
+    // 9. UI
     this._showUI();
-
-    // ── HUD stats ──
-    this._startHUDStats();
-
-    // ── System events ──
-    this.terminal.startSystemEvents();
-
-    // ── Global event bus ──
     this._wireEvents();
 
-    // ── Start RAF ──
-    this.SM.start();
-  }
+    // 10. Watchdogs — restart subsystems if they freeze
+    Perf.watchdog('core',        () => this.engine.register('core',        (t,dt)=>this.core.tick?.(t,dt)));
+    Perf.watchdog('particles',   () => this.engine.register('particles',   (t,dt)=>this.particles?.tick?.(t,dt)));
+    Perf.watchdog('hud',         () => this.engine.register('hud',         (t,dt)=>this.hud?.tick?.(t,dt)));
+    Perf.watchdog('interaction', () => this.engine.register('interaction', (t,dt,E)=>this.interaction?.tick?.(t,dt,E)));
 
-  // ── SHOW UI ELEMENTS ───────────────────────────────────────
+    // 11. Start RAF
+    this.engine.start();
+  }  // end _bootModules
+
+  // ── UI ───────────────────────────────────────────────────
   _showUI() {
-    const nav = document.getElementById('nav');
-    nav?.classList.add('visible');
-
-    document.getElementById('hud-stats')?.classList.add('visible');
+    document.getElementById('nav')?.classList.add('visible');
+    document.getElementById('hud-metrics')?.parentElement?.classList.add('visible');
     document.getElementById('section-progress')?.classList.add('visible');
-    document.getElementById('depth-bar');    // always visible
     document.getElementById('scroll-indicator')?.classList.add('visible');
 
-    // Show terminal after short delay
-    setTimeout(() => {
-      this.terminal.show();
-    }, 1200);
-
-    // Show analyze button (section 0)
-    setTimeout(() => {
-      document.getElementById('analyze-btn')?.classList.add('visible');
-    }, 800);
+    setTimeout(() => { this.terminal.show(); }, 1200);
+    setTimeout(() => { document.getElementById('analyze-btn')?.classList.add('visible'); }, 900);
   }
 
-  // ── HUD STATS ──────────────────────────────────────────────
-  _startHUDStats() {
-    const stats = {
-      CPU:       { el: null, bar: null, val: 47, drift: 8 },
-      MEM:       { el: null, bar: null, val: 62, drift: 5 },
-      THREADS:   { el: null, bar: null, val: 18, drift: 0 },
-      MODULES:   { el: null, bar: null, val: 34, drift: 0 },
-      FUNCTIONS: { el: null, bar: null, val: 1482, drift: 0 },
-      IMPORTS:   { el: null, bar: null, val: 237, drift: 0 },
-    };
-
-    const container = document.getElementById('hud-stats');
-    if (!container) return;
-
-    // Build rows
-    Object.entries(stats).forEach(([key, s]) => {
-      const row = document.createElement('div');
-      row.className = 'stat-row';
-      row.innerHTML = `
-        <span class="stat-key">${key}</span>
-        <span class="stat-val" id="stat-${key}">${s.val}${s.drift ? '%' : ''}</span>`;
-      container.appendChild(row);
-
-      if (s.drift) {
-        const barWrap = document.createElement('div');
-        barWrap.className = 'stat-bar';
-        const fill = document.createElement('div');
-        fill.className  = 'stat-bar-fill';
-        fill.style.width = s.val + '%';
-        fill.id = `bar-${key}`;
-        barWrap.appendChild(fill);
-        container.appendChild(barWrap);
-        s.bar = fill;
-      }
-      s.el = document.getElementById(`stat-${key}`);
+  // ── EVENT BUS ────────────────────────────────────────────
+  _wireEvents() {
+    // Click → burst + red pulse
+    window.addEventListener('eagle:redpulse', () => {
+      this.engine.setLight('red', 10);
+      setTimeout(() => this.engine.setLight('red', 3.5), 500);
     });
 
-    // Animate
-    setInterval(() => {
-      Object.entries(stats).forEach(([key, s]) => {
-        if (!s.drift) return;
-        s.val = Math.max(15, Math.min(95, s.val + (Math.random() - 0.5) * s.drift));
-        if (s.el)  s.el.textContent = s.val.toFixed(0) + '%';
-        if (s.bar) s.bar.style.width = s.val + '%';
-      });
-    }, 1600);
-  }
+    // Analyze sequence
+    window.addEventListener('eagle:analyze', () => this._runAnalysis());
+    document.getElementById('analyze-btn')?.addEventListener('click', () => {
+      window.dispatchEvent(new CustomEvent('eagle:analyze'));
+    });
 
-  // ── EVENT BUS ──────────────────────────────────────────────
-  _wireEvents() {
-    // Red light pulse on click
-    window.addEventListener('eagle:redpulse', () => {
-      this.audio.playClick();
-      this.SM.setRedLight(3);
-      setTimeout(() => this.SM.setRedLight(0), 600);
+    // Analysis complete → jump to sections
+    window.addEventListener('eagle:analysiscomplete', () => {
+      this.core.transitionTo('SECTIONS');
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      window.scrollTo({ top: max * 0.28, behavior:'smooth' });
     });
 
     // Overdrive
     window.addEventListener('eagle:overdrive', () => {
-      this.audio.playOverdrive();
-      // Temporarily boost particle opacity
-      if (this.particles._field) {
-        const mat = this.particles._field.material;
-        const orig = mat.opacity;
-        mat.opacity = 1.0;
-        setTimeout(() => { mat.opacity = orig; }, 5000);
-      }
+      document.body.classList.add('overdrive');
+      setTimeout(() => document.body.classList.remove('overdrive'), 6000);
     });
 
     // RE mode streams
-    window.addEventListener('eagle:restreams', e => {
-      if (e.detail) {
-        this.particles.buildREStreams();
-      } else {
-        this.particles.removeREStreams();
-      }
+    window.addEventListener('eagle:remode', () => {
+      const overlay = document.getElementById('re-overlay');
+      overlay?.classList.toggle('active');
     });
 
-    // Analysis complete → jump to sections state
-    window.addEventListener('eagle:analysiscomplete', () => {
-      this.core.transitionTo('SECTIONS', gsap);
-      // Scroll down programmatically
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-      window.scrollTo({ top: maxScroll * 0.26, behavior: 'smooth' });
+    // Nav hamburger
+    document.getElementById('nav-hamburger')?.addEventListener('click', () => {
+      document.querySelector('.nav-links')?.classList.toggle('open');
     });
 
-    // Mobile nav hamburger
-    const hamburger = document.getElementById('nav-hamburger');
-    hamburger?.addEventListener('click', () => {
-      const links = document.querySelector('.nav-links');
-      links?.classList.toggle('open');
+    // Sound toggle stub
+    document.getElementById('btn-sound')?.addEventListener('click', function() {
+      this.textContent = this.textContent.includes('OFF') ? 'SOUND ON' : 'SOUND OFF';
     });
 
-    // Debug easter egg
-    window.addEventListener('eagle:debug', () => {
-      this.SM.setRedLight(8);
-      setTimeout(() => this.SM.setRedLight(0), 800);
+    // Tab visibility — clock already handles pause in engine.js
+    // but we can dim the interface too
+    document.addEventListener('visibilitychange', () => {
+      // nothing extra needed — engine handles it
     });
   }
 
-  // ── NO-WEBGL FALLBACK ──────────────────────────────────────
-  _showFallback() {
-    document.getElementById('three-canvas')?.remove();
-    const fb = document.createElement('div');
-    Object.assign(fb.style, {
-      position: 'fixed', inset: '0',
-      background: 'radial-gradient(ellipse at 50% 30%, #041a1f 0%, #03040a 60%)',
-      zIndex: '0',
-    });
-    document.body.prepend(fb);
+  // ── ANALYSIS SEQUENCE ────────────────────────────────────
+  _runAnalysis() {
+    const prog  = document.getElementById('analysis-progress');
+    const btn   = document.getElementById('analyze-btn');
+    if (!prog) return;
 
-    // Still run DOM-only intro
+    prog.classList.add('visible');
+    btn?.classList.remove('visible');
+
+    const steps  = Array.from(prog.querySelectorAll('.analysis-step'));
+    const bar    = prog.querySelector('.analysis-bar-fill');
+    const delays = [0, 550, 1100, 1750, 2450, 3100];
+
+    steps.forEach((step, i) => {
+      setTimeout(() => {
+        if (i > 0) steps[i-1].classList.replace('active','done');
+        step.classList.add('active');
+        if (bar) bar.style.width = ((i+1)/steps.length*100) + '%';
+      }, delays[i]);
+    });
+
+    setTimeout(() => {
+      steps[steps.length-1].classList.replace('active','done');
+      if (bar) bar.style.width = '100%';
+      this.hud.notify('⬡ ANALYSIS COMPLETE', 'ok');
+      setTimeout(() => {
+        prog.classList.remove('visible');
+        window.dispatchEvent(new CustomEvent('eagle:analysiscomplete'));
+      }, 800);
+    }, delays[delays.length-1] + 600);
+  }
+
+  // ── FALLBACK (no WebGL) ──────────────────────────────────
+  _fallback() {
+    document.getElementById('three-canvas')?.remove();
+    const bg = document.createElement('div');
+    Object.assign(bg.style, {
+      position:'fixed', inset:'0',
+      background:'radial-gradient(ellipse at 50% 25%, #0a1a10 0%, #020308 60%)',
+      zIndex:'0',
+    });
+    document.body.prepend(bg);
     document.getElementById('intro')?.querySelector('.intro-enter')
       ?.addEventListener('click', () => {
         document.getElementById('intro').style.display = 'none';
@@ -291,7 +223,4 @@ class EagleApp {
   }
 }
 
-// ─────────────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
-  window.__eagle = new EagleApp();
-});
+document.addEventListener('DOMContentLoaded', () => { window.__eagle = new EagleApp(); });

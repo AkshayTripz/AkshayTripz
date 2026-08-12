@@ -1,220 +1,131 @@
 // ============================================================
-// EAGLE V2 — scroll.js
-// Maps window.scrollY → camera positions → core state machine.
-// One continuous journey through the dissection.
+// EAGLE V3 — scroll.js
+// Maps scrollY → camera position → core state machine.
+// Delta-time independent. Never stops anything.
 // ============================================================
 
 export class ScrollController {
-  constructor(sceneManager, core, graph, terminal, gsap) {
-    this.SM       = sceneManager;
-    this.core     = core;
-    this.graph    = graph;
-    this.terminal = terminal;
-    this.gsap     = gsap;
+  constructor(engine, core, network, gsap) {
+    this.E       = engine;
+    this.core    = core;
+    this.network = network;
+    this.gsap    = gsap;
 
-    this._scrollY    = 0;
-    this._progress   = 0;
-    this._ticking    = false;
-    this._lastSection = -1;
+    this._scrollY   = 0;
+    this._progress  = 0;
+    this._lastIdx   = -1;
+    this._ticking   = false;
 
-    // Sections: each has a scroll range and camera choreography
-    this.SECTIONS = [
-      {
-        id:    'hero',
-        label: 'EAGLE CORE',
-        start: 0,    end: 0.12,
-        cam:   { rig: {x:0, y:0, z:0}, camZ: 22 },
-        state: 'SEALED',
-        showAnalyze: true,
-      },
-      {
-        id:    'headers',
-        label: 'PE HEADERS',
-        start: 0.12,  end: 0.24,
-        cam:   { rig: {x:0, y:0, z:-2}, camZ: 18 },
-        state: 'HEADERS',
-        showAnalyze: false,
-      },
-      {
-        id:    'sections',
-        label: 'SECTION TABLE',
-        start: 0.24,  end: 0.38,
-        cam:   { rig: {x:0, y:0, z:-4}, camZ: 14 },
-        state: 'SECTIONS',
-        showAnalyze: false,
-      },
-      {
-        id:    'memory',
-        label: 'MEMORY MAP',
-        start: 0.38,  end: 0.52,
-        cam:   { rig: {x:0, y:1, z:-6}, camZ: 12 },
-        state: 'MEMORY',
-        showAnalyze: false,
-      },
-      {
-        id:    'imports',
-        label: 'IMPORT TABLE',
-        start: 0.52,  end: 0.66,
-        cam:   { rig: {x:0, y:0, z:-8}, camZ: 16 },
-        state: 'IMPORTS',
-        showAnalyze: false,
-      },
-      {
-        id:    'cfg',
-        label: 'CONTROL FLOW GRAPH',
-        start: 0.66,  end: 0.80,
-        cam:   { rig: {x:0, y:0, z:-10}, camZ: 18 },
-        state: 'CFG',
-        showAnalyze: false,
-      },
-      {
-        id:    'contact',
-        label: 'EXFILTRATE',
-        start: 0.80,  end: 1.0,
-        cam:   { rig: {x:0, y:-3, z:-6}, camZ: 28 },
-        state: 'SEALED',
-        showAnalyze: false,
-      },
+    // Camera stops along the scroll journey
+    this.STOPS = [
+      { id:'hero',     label:'EAGLE CORE',    frac:0.00, cam:{ rigPos:{x:0,y:0,z:0}, camZ:22 }, state:'SEALED',   showAnalyze:true  },
+      { id:'headers',  label:'PE HEADERS',    frac:0.13, cam:{ rigPos:{x:0,y:0,z:-2}, camZ:18 }, state:'HEADERS',  showAnalyze:false },
+      { id:'sections', label:'SECTION TABLE', frac:0.26, cam:{ rigPos:{x:0,y:0,z:-4}, camZ:14 }, state:'SECTIONS', showAnalyze:false },
+      { id:'memory',   label:'MEMORY MAP',    frac:0.40, cam:{ rigPos:{x:0,y:1,z:-5}, camZ:12 }, state:'MEMORY',   showAnalyze:false },
+      { id:'imports',  label:'IMPORT TABLE',  frac:0.54, cam:{ rigPos:{x:0,y:0,z:-7}, camZ:16 }, state:'IMPORTS',  showAnalyze:false },
+      { id:'cfg',      label:'CTRL FLOW',     frac:0.68, cam:{ rigPos:{x:0,y:0,z:-9}, camZ:18 }, state:'CFG',      showAnalyze:false },
+      { id:'contact',  label:'EXFILTRATE',    frac:0.84, cam:{ rigPos:{x:0,y:-3,z:-6}, camZ:26 }, state:'SEALED',  showAnalyze:false },
     ];
 
-    this._navLinks = Array.from(document.querySelectorAll('.nav-link[data-section]'));
-    this._progDots = Array.from(document.querySelectorAll('.prog-dot'));
-    this._depthFill = document.getElementById('depth-fill');
+    this._depthFill  = document.getElementById('depth-fill');
     this._analyzeBtn = document.getElementById('analyze-btn');
-    this._scrollInd = document.getElementById('scroll-indicator');
+    this._progDots   = Array.from(document.querySelectorAll('.prog-dot'));
+    this._navLinks   = Array.from(document.querySelectorAll('.nav-link[data-section]'));
+    this._scrollInd  = document.getElementById('scroll-indicator');
 
-    this._initListeners();
-    this._updateNav();
+    this._bind();
+    this._onScroll(); // prime
   }
 
-  _initListeners() {
+  _bind() {
     const nav = document.getElementById('nav');
-
     window.addEventListener('scroll', () => {
       if (!this._ticking) {
-        requestAnimationFrame(() => {
-          this._onScroll(nav);
-          this._ticking = false;
-        });
+        requestAnimationFrame(() => { this._onScroll(nav); this._ticking=false; });
         this._ticking = true;
       }
-    }, { passive: true });
+    }, { passive:true });
 
-    // Smooth anchor links
+    // Smooth anchor scrolls
     document.querySelectorAll('a[href^="#"]').forEach(a => {
       a.addEventListener('click', e => {
-        const id = a.getAttribute('href').slice(1);
-        const el = document.getElementById(id);
-        if (!el) return;
+        const id  = a.getAttribute('href').slice(1);
+        const idx = this.STOPS.findIndex(s => s.id === id);
+        if (idx < 0) return;
         e.preventDefault();
-
-        // Close mobile nav
-        const navLinks = document.querySelector('.nav-links');
-        navLinks?.classList.remove('open');
-
-        // Scroll to the virtual position
-        const sectionIdx = this.SECTIONS.findIndex(s => s.id === id);
-        if (sectionIdx >= 0) {
-          const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-          const target    = this.SECTIONS[sectionIdx].start * maxScroll;
-          window.scrollTo({ top: target, behavior: 'smooth' });
-        } else {
-          el.scrollIntoView({ behavior: 'smooth' });
-        }
+        document.querySelector('.nav-links')?.classList.remove('open');
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        window.scrollTo({ top: this.STOPS[idx].frac * max, behavior:'smooth' });
       });
     });
   }
 
   _onScroll(nav) {
     this._scrollY  = window.scrollY;
-    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-    this._progress  = maxScroll > 0 ? Math.min(this._scrollY / maxScroll, 1) : 0;
+    const max      = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    this._progress = Math.min(this._scrollY / max, 1);
 
-    // Nav scrolled state
-    nav?.classList.toggle('scrolled', this._scrollY > 80);
+    nav?.classList.toggle('scrolled', this._scrollY > 60);
 
     // Depth fill bar
-    if (this._depthFill) {
-      this._depthFill.style.height = (this._progress * 100) + '%';
+    if (this._depthFill) this._depthFill.style.height = (this._progress*100) + '%';
+
+    // Find current stop
+    let idx = 0;
+    for (let i=0; i<this.STOPS.length; i++) {
+      if (this._progress >= this.STOPS[i].frac) idx = i;
     }
+    const stop = this.STOPS[idx];
 
-    // Determine current section
-    const p = this._progress;
-    let currentIdx = 0;
-    for (let i = 0; i < this.SECTIONS.length; i++) {
-      if (p >= this.SECTIONS[i].start) currentIdx = i;
-    }
+    // Camera
+    this.E.setCameraTarget(stop.cam);
 
-    const section = this.SECTIONS[currentIdx];
+    // Section dots + nav
+    this._progDots.forEach((d,i) => d.classList.toggle('active', i===idx));
+    this._navLinks.forEach(l => l.classList.toggle('active', l.dataset.section===stop.id));
 
-    // Camera choreography
-    this.SM.moveCameraTo(section.cam);
+    // Section overlay
+    document.querySelectorAll('.section-overlay').forEach(o => o.classList.remove('active'));
+    document.getElementById(`overlay-${stop.id}`)?.classList.add('active');
 
-    // Progress dots
-    this._progDots.forEach((dot, i) => dot.classList.toggle('active', i === currentIdx));
+    // Analyze button
+    this._analyzeBtn?.classList.toggle('visible', !!stop.showAnalyze);
 
-    // Nav active
-    this._updateNav(section.id);
+    // Scroll indicator hides after first scroll
+    if (this._scrollY > 80 && this._scrollInd) this._scrollInd.classList.remove('visible');
 
-    // State machine — only trigger on change
-    if (currentIdx !== this._lastSection) {
-      this._onSectionChange(section, currentIdx);
-      this._lastSection = currentIdx;
-    }
-
-    // Scroll indicator — hide after first scroll
-    if (this._scrollY > 50 && this._scrollInd) {
-      this._scrollInd.classList.remove('visible');
+    // State machine — only on change
+    if (idx !== this._lastIdx) {
+      this._lastIdx = idx;
+      this._onStopChange(stop, idx);
     }
   }
 
-  _onSectionChange(section, idx) {
-    // CORE state machine
-    if (section.state !== 'CFG') {
-      if (this.graph?.group?.visible && section.state === 'SEALED') {
-        this.graph.hide(this.gsap);
-      }
-      this.core.transitionTo(section.state, this.gsap);
+  _onStopChange(stop, idx) {
+    // Core state
+    if (stop.state !== 'CFG') {
+      this.core.transitionTo(stop.state);
     }
 
-    // CFG: show the function graph instead of PE sections
-    if (section.state === 'CFG') {
-      this.graph.show(this.gsap);
-    } else {
-      if (this.graph?.group?.visible && section.state !== 'CFG') {
-        this.graph.hide(this.gsap);
-      }
+    // Network graph — show at CFG stop
+    if (stop.state === 'CFG') {
+      this.network.show(this.gsap);
+    } else if (this.network.group.visible) {
+      this.network.hide(this.gsap);
     }
 
-    // Analyze button visibility
-    if (this._analyzeBtn) {
-      this._analyzeBtn.classList.toggle('visible', !!section.showAnalyze);
-    }
-
-    // Red light on dangerous sections
-    const redIntensity = section.state === 'MEMORY' ? 1.5
-      : section.state === 'IMPORTS' ? 0.8 : 0;
-    this.SM.setRedLight(redIntensity);
-
-    // Section label overlay
-    this._updateSectionOverlay(section);
+    // Light color emphasis per section
+    const lightMap = {
+      'HEADERS':  { red:5, blue:2, green:1 },
+      'SECTIONS': { red:4, blue:3, green:2 },
+      'MEMORY':   { red:2, blue:6, green:2 },
+      'IMPORTS':  { red:2, blue:4, green:4 },
+      'CFG':      { red:3, blue:2, green:5 },
+      'SEALED':   { red:3.5, blue:2.8, green:2.0 },
+    };
+    const lm = lightMap[stop.state] || lightMap['SEALED'];
+    Object.entries(lm).forEach(([name, val]) => this.E.setLight(name, val));
   }
 
-  _updateSectionOverlay(section) {
-    const overlays = document.querySelectorAll('.section-overlay');
-    overlays.forEach(o => o.classList.remove('active'));
-    const target = document.getElementById(`overlay-${section.id}`);
-    target?.classList.add('active');
-  }
-
-  _updateNav(activeId) {
-    this._navLinks.forEach(link => {
-      link.classList.toggle('active', link.dataset.section === activeId);
-    });
-  }
-
-  getScrollY()   { return this._scrollY; }
-  getProgress()  { return this._progress; }
-
-  tick(elapsed) { /* scroll events drive updates, no per-frame work */ }
+  tick() { /* scroll events drive this, no per-frame work */ }
 }

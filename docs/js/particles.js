@@ -1,195 +1,379 @@
 // ============================================================
-// EAGLE V2 — particles.js
-// Three systems:
-//   1. InstancedMesh field — depth particles, single draw call
-//   2. Binary/hex sprite layer — drifting chars
-//   3. RE mode hex streams — canvas-based columns
+// EAGLE V3 — particles.js
+// All particles in ONE Points mesh per layer (GPU instancing).
+// Layers: field · data · hexRain · network · click burst.
+// Mouse repulsion, delta-time motion, click shockwave.
 // ============================================================
 
 import * as THREE from 'three';
-import { Perf }   from './performance.js';
 
-export class ParticleSystem {
-  constructor(scene, Q) {
-    this.scene = scene;
-    this.Q     = Q;
-    this._disposables = [];
-    this._sprites     = [];
-    this._streamEls   = [];
+// Colour palette (R,G,B float)
+const COL = {
+  red:   [1.00, 0.09, 0.27],
+  blue:  [0.08, 0.53, 1.00],
+  green: [0.00, 1.00, 0.53],
+  cyan:  [0.00, 0.90, 1.00],
+  dim:   [0.05, 0.10, 0.18],
+};
 
-    if (Q.fieldParticles > 0) this._buildField();
-    if (Q.hexSprites     > 0) this._buildHexSprites();
+function rnd(a, b) { return a + Math.random() * (b - a); }
+
+export class Particles {
+  constructor(engine) {
+    this.E    = engine;
+    this.Q    = engine.Q;
+    this.scene = engine.scene;
+    this._d   = [];   // disposables
+
+    this._field     = this._buildField();
+    this._data      = this._buildData();
+    this._rain      = this._buildHexRain();
+    this._bursts    = [];   // click explosions
+    this._burstPool = [];
+
+    engine.register('particles', (t, dt, E) => this._tick(t, dt, E));
+    engine.canvas.addEventListener('click', e => this._onCLick(e));
+    engine.canvas.addEventListener('touchend', e => {
+      if (e.changedTouches[0]) this._onCLick(e.changedTouches[0]);
+    }, { passive: true });
   }
 
-  // ── 1. INSTANCED FIELD PARTICLES ─────────────────────────
+  // ── FIELD PARTICLES ──────────────────────────────────────
+  // Large background cloud — slow drift + mouse repulsion
   _buildField() {
-    const N    = this.Q.fieldParticles;
-    const geo  = new THREE.SphereGeometry(0.04, 4, 4);
-    const mat  = new THREE.MeshBasicMaterial({ color: 0x00e5ff, transparent: true, opacity: 0.6 });
-    this._field = new THREE.InstancedMesh(geo, mat, N);
-    this._field.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
-    this._disposables.push(geo, mat);
+    const N = this.Q.fieldParticles;
+    if (!N) return null;
 
-    // Per-instance data
-    this._fPos   = new Float32Array(N * 3);
-    this._fSpeed = new Float32Array(N);
-    this._fCol   = new Float32Array(N * 3);
-    const dummy  = new THREE.Object3D();
-    const colors = [
-      new THREE.Color(0x00e5ff),
-      new THREE.Color(0x0af5c8),
-      new THREE.Color(0x4488ff),
-      new THREE.Color(0x0e7490),
-    ];
+    const pos   = new Float32Array(N * 3);
+    const col   = new Float32Array(N * 3);
+    const vel   = new Float32Array(N * 3);  // stored in userData
+    const sizes = new Float32Array(N);
+
+    const palette = [COL.red, COL.blue, COL.green, COL.cyan, COL.dim, COL.dim, COL.dim];
 
     for (let i = 0; i < N; i++) {
       const i3 = i * 3;
-      this._fPos[i3]   = (Math.random() - 0.5) * 90;
-      this._fPos[i3+1] = (Math.random() - 0.5) * 55;
-      this._fPos[i3+2] = (Math.random() - 0.5) * 50 - 8;
-      this._fSpeed[i]  = 0.15 + Math.random() * 0.55;
+      pos[i3]   = rnd(-70, 70);
+      pos[i3+1] = rnd(-45, 45);
+      pos[i3+2] = rnd(-50, 10);
 
-      const c = colors[i % colors.length];
-      const b = 0.2 + Math.random() * 0.6;
-      this._fCol[i3]   = c.r * b;
-      this._fCol[i3+1] = c.g * b;
-      this._fCol[i3+2] = c.b * b;
+      vel[i3]   = rnd(-0.3, 0.3);
+      vel[i3+1] = rnd(0.05, 0.5);   // upward bias
+      vel[i3+2] = rnd(-0.1, 0.1);
 
-      dummy.position.set(this._fPos[i3], this._fPos[i3+1], this._fPos[i3+2]);
-      dummy.updateMatrix();
-      this._field.setMatrixAt(i, dummy.matrix);
-      this._field.setColorAt(i, c.multiplyScalar(b));
+      const c = palette[Math.floor(Math.random() * palette.length)];
+      const b = rnd(0.15, 0.6);
+      col[i3]   = c[0] * b;
+      col[i3+1] = c[1] * b;
+      col[i3+2] = c[2] * b;
+      sizes[i]  = rnd(0.8, 3.5);
     }
-    this._field.instanceMatrix.needsUpdate = true;
-    if (this._field.instanceColor) this._field.instanceColor.needsUpdate = true;
 
-    this.scene.add(this._field);
-    this._dummy = dummy;
-  }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(pos,   3));
+    geo.setAttribute('color',    new THREE.BufferAttribute(col,   3));
+    geo.setAttribute('size',     new THREE.BufferAttribute(sizes, 1));
 
-  // ── 2. HEX/BINARY SPRITE LAYER ───────────────────────────
-  _buildHexSprites() {
-    const chars  = '0 1 A B C D E F 4D 5A 90 00 E8 FF 25 C3 48 89 CC 0F'.split(' ');
-    const canvas = document.createElement('canvas');
-    canvas.width = 32; canvas.height = 32;
-    const ctx    = canvas.getContext('2d');
+    const mat = new THREE.ShaderMaterial({
+      uniforms: {
+        uTime:   { value: 0 },
+        uMouse:  { value: new THREE.Vector3() },
+      },
+      vertexShader: `
+        attribute float size;
+        attribute vec3  color;
+        varying   vec3  vColor;
+        varying   float vAlpha;
+        uniform   float uTime;
+        uniform   vec3  uMouse;
 
-    // Build a texture pool
-    const pool = chars.map(ch => {
-      ctx.clearRect(0, 0, 32, 32);
-      ctx.fillStyle = '#00e5ff';
-      ctx.font      = `500 ${ch.length > 1 ? 13 : 16}px "JetBrains Mono", monospace`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(ch, 16, 16);
-      const tex = new THREE.CanvasTexture(canvas);
-      this._disposables.push(tex);
-      return tex;
+        void main() {
+          vColor = color;
+          vec4 mv = modelViewMatrix * vec4(position, 1.0);
+          float depth = clamp((-mv.z - 5.0) / 45.0, 0.0, 1.0);
+          vAlpha = (1.0 - depth * 0.9) * (0.5 + 0.5 * sin(uTime * 0.8 + position.x));
+          gl_PointSize = size * (350.0 / -mv.z);
+          gl_Position  = projectionMatrix * mv;
+        }`,
+      fragmentShader: `
+        varying vec3  vColor;
+        varying float vAlpha;
+        void main() {
+          vec2  uv = gl_PointCoord - 0.5;
+          float d  = length(uv);
+          if (d > 0.5) discard;
+          float a = smoothstep(0.5, 0.08, d) * vAlpha;
+          gl_FragColor = vec4(vColor, a);
+        }`,
+      transparent: true, depthWrite: false, vertexColors: true,
     });
 
-    for (let i = 0; i < this.Q.hexSprites; i++) {
+    const mesh = new THREE.Points(geo, mat);
+    this.scene.add(mesh);
+    this._d.push(geo, mat);
+
+    return {
+      mesh, geo, mat,
+      pos, vel,
+      N,
+    };
+  }
+
+  // ── DATA STREAM PARTICLES ────────────────────────────────
+  // Move along random curved paths — RED/BLUE/GREEN
+  _buildData() {
+    const N = this.Q.dataParticles;
+    if (!N) return null;
+
+    const pos   = new Float32Array(N * 3);
+    const col   = new Float32Array(N * 3);
+    const phase = new Float32Array(N);
+    const speed = new Float32Array(N);
+    const cols  = [COL.red, COL.blue, COL.green];
+
+    for (let i = 0; i < N; i++) {
+      const i3 = i * 3;
+      pos[i3]   = rnd(-40, 40);
+      pos[i3+1] = rnd(-25, 25);
+      pos[i3+2] = rnd(-30, 5);
+      phase[i]  = Math.random() * Math.PI * 2;
+      speed[i]  = rnd(1.5, 5.0);
+      const c   = cols[i % 3];
+      const b   = rnd(0.4, 0.9);
+      col[i3]   = c[0] * b;
+      col[i3+1] = c[1] * b;
+      col[i3+2] = c[2] * b;
+    }
+
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    geo.setAttribute('color',    new THREE.BufferAttribute(col, 3));
+
+    const mat = new THREE.PointsMaterial({
+      size: 2.5, vertexColors: true, transparent: true,
+      opacity: 0.75, depthWrite: false, sizeAttenuation: true,
+    });
+
+    const mesh = new THREE.Points(geo, mat);
+    this.scene.add(mesh);
+    this._d.push(geo, mat);
+
+    return { mesh, geo, pos, phase, speed, N };
+  }
+
+  // ── HEX RAIN ─────────────────────────────────────────────
+  // Vertical columns of hex characters as sprites
+  _buildHexRain() {
+    const N = this.Q.hexRain;
+    if (!N) return null;
+
+    const HEX   = '0123456789ABCDEF';
+    const drops = [];
+
+    // Build char texture pool — each on its own canvas so they're independent
+    const texPool = [];
+    const COLORS  = ['#ff1744','#147eff','#00ff88'];
+    for (let i = 0; i < 16; i++) {
+      const c2  = document.createElement('canvas');
+      c2.width  = 32; c2.height = 32;
+      const cx2 = c2.getContext('2d');
+      cx2.fillStyle = COLORS[i % 3];
+      cx2.font = '600 20px "JetBrains Mono", monospace';
+      cx2.textAlign = 'center';
+      cx2.textBaseline = 'middle';
+      cx2.fillText(HEX[i], 16, 16);
+      const tex = new THREE.CanvasTexture(c2);
+      texPool.push(tex);
+      this._d.push(tex);
+    }
+
+    for (let i = 0; i < N; i++) {
       const mat = new THREE.SpriteMaterial({
-        map:         pool[i % pool.length],
+        map: texPool[Math.floor(Math.random() * texPool.length)],
         transparent: true,
-        opacity:     0.04 + Math.random() * 0.12,
-        depthWrite:  false,
+        opacity: rnd(0.05, 0.25),
+        depthWrite: false,
       });
       const sprite = new THREE.Sprite(mat);
-      const x = (Math.random() - 0.5) * 80;
-      const y = (Math.random() - 0.5) * 50;
-      const z = -10 - Math.random() * 25;
-      sprite.position.set(x, y, z);
-      const s = 0.35 + Math.random() * 0.55;
+      sprite.position.set(rnd(-60, 60), rnd(-30, 30), rnd(-40, 0));
+      const s = rnd(0.3, 0.7);
       sprite.scale.set(s, s, 1);
 
       this.scene.add(sprite);
-      this._sprites.push({
+      drops.push({
         sprite, mat,
-        dx:    (Math.random() - 0.5) * 0.006,
-        dy:    (Math.random() - 0.5) * 0.010,
-        pFreq: 0.25 + Math.random() * 0.65,
+        vy:   -rnd(0.5, 3.5),
+        dx:   rnd(-0.1, 0.1),
+        pFreq: rnd(0.3, 1.2),
         pOff:  Math.random() * Math.PI * 2,
         base:  mat.opacity,
+        tex:   texPool,
+        swapT: 0,
+        swapInterval: rnd(0.4, 2.0),
       });
-      this._disposables.push(mat);
+      this._d.push(mat);
     }
+
+    return { drops };
   }
 
-  // ── 3. RE MODE STREAMS (DOM canvas columns) ───────────────
-  buildREStreams() {
-    const N     = this.Q.streamColumns;
-    const chars = '0123456789ABCDEFabcdef';
-    if (N === 0) return;
+  // ── CLICK BURST ──────────────────────────────────────────
+  _onCLick(e) {
+    const x = (e.clientX / window.innerWidth)  * 2 - 1;
+    const y = -(e.clientY / window.innerHeight) * 2 + 1;
 
-    const overlay = document.getElementById('re-overlay');
-    if (!overlay) return;
+    // Unproject to world space at z=0
+    const ray = new THREE.Raycaster();
+    ray.setFromCamera(new THREE.Vector2(x, y), this.E.camera);
+    const t    = new THREE.Vector3();
+    const dir  = ray.ray.direction.clone().normalize();
+    const dist = -ray.ray.origin.z / dir.z;
+    t.copy(ray.ray.origin).addScaledVector(dir, dist);
 
-    // Clear any existing
-    this._streamEls.forEach(el => el.remove());
-    this._streamEls = [];
+    this._spawnBurst(t);
+  }
 
-    for (let i = 0; i < N; i++) {
-      const el = document.createElement('div');
-      el.className = 're-stream';
-      const col  = Math.random() * 100;
-      const dur  = 6 + Math.random() * 8;
-      const delay = Math.random() * dur;
-      el.style.left = col + 'vw';
-      el.style.animationDuration  = dur + 's';
-      el.style.animationDelay     = `-${delay}s`;
-      el.style.fontSize = (0.45 + Math.random() * 0.2) + 'rem';
+  _spawnBurst(origin) {
+    const COUNT = Math.min(200, 50 + this.Q.tier * 50);
+    const pos   = new Float32Array(COUNT * 3);
+    const vel   = [];
 
-      // Fill with random hex chars
-      let str = '';
-      const len = 20 + Math.floor(Math.random() * 30);
-      for (let j = 0; j < len; j++) str += chars[Math.floor(Math.random() * chars.length)] + ' ';
-      el.textContent = str;
-
-      overlay.appendChild(el);
-      this._streamEls.push(el);
+    for (let i = 0; i < COUNT; i++) {
+      const i3 = i * 3;
+      pos[i3]   = origin.x;
+      pos[i3+1] = origin.y;
+      pos[i3+2] = origin.z;
+      const theta = Math.random() * Math.PI * 2;
+      const phi   = Math.acos(2 * Math.random() - 1);
+      const spd   = rnd(2, 12);
+      vel.push(
+        Math.sin(phi) * Math.cos(theta) * spd,
+        Math.sin(phi) * Math.sin(theta) * spd,
+        Math.cos(phi) * spd * 0.3,
+      );
     }
+
+    const geo  = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    const c   = [COL.red, COL.blue, COL.green][Math.floor(Math.random() * 3)];
+    const mat = new THREE.PointsMaterial({
+      color: new THREE.Color(c[0], c[1], c[2]),
+      size: 2, transparent: true, opacity: 0.9, depthWrite: false,
+    });
+    const mesh = new THREE.Points(geo, mat);
+    this.scene.add(mesh);
+
+    this._bursts.push({ mesh, geo, mat, pos, vel, life: 1.0, COUNT });
   }
 
-  removeREStreams() {
-    this._streamEls.forEach(el => el.remove());
-    this._streamEls = [];
-  }
+  // ── TICK ─────────────────────────────────────────────────
+  _tick(t, dt, E) {
+    const mx = E.pointerN.x * 20;
+    const my = E.pointerN.y * 14;
 
-  // ── TICK ──────────────────────────────────────────────────
-  tick(elapsed, delta, scrollY = 0) {
-    const t = elapsed;
+    // Field particles
+    if (this._field) {
+      const { pos, vel, N, mat } = this._field;
+      mat.uniforms.uTime.value = t;
+      mat.uniforms.uMouse.value.set(mx, my, 0);
 
-    // Field particles — upward drift, wrap
-    if (this._field && this._fPos) {
-      const N = this.Q.fieldParticles;
       for (let i = 0; i < N; i++) {
         const i3 = i * 3;
-        this._fPos[i3+1] += this._fSpeed[i] * 0.008;
-        if (this._fPos[i3+1] > 28) this._fPos[i3+1] = -28;
+        // Mouse repulsion
+        const dx = pos[i3]   - mx;
+        const dy = pos[i3+1] - my;
+        const d2 = dx*dx + dy*dy;
+        if (d2 < 80) {
+          const inv = (80 - d2) / 80 * dt * 4;
+          vel[i3]   += dx * inv;
+          vel[i3+1] += dy * inv;
+        }
+        // Damping
+        vel[i3]   *= 1 - dt * 0.8;
+        vel[i3+1] *= 1 - dt * 0.8;
+        vel[i3+2] *= 1 - dt * 0.5;
 
-        this._dummy.position.set(this._fPos[i3], this._fPos[i3+1], this._fPos[i3+2]);
-        this._dummy.updateMatrix();
-        this._field.setMatrixAt(i, this._dummy.matrix);
+        pos[i3]   += vel[i3]   * dt;
+        pos[i3+1] += vel[i3+1] * dt;
+        pos[i3+2] += vel[i3+2] * dt;
+
+        // Wrap
+        if (pos[i3+1] > 47)  pos[i3+1] = -47;
+        if (pos[i3]   >  72) pos[i3]   = -72;
+        if (pos[i3]   < -72) pos[i3]   =  72;
       }
-      this._field.instanceMatrix.needsUpdate = true;
-      // Subtle scroll parallax
-      this._field.position.y = -scrollY * 0.0015;
+      this._field.geo.attributes.position.needsUpdate = true;
     }
 
-    // Hex sprites — drift + pulse opacity
-    this._sprites.forEach(s => {
-      s.sprite.position.x += s.dx;
-      s.sprite.position.y += s.dy;
-      if (Math.abs(s.sprite.position.x) > 42) s.dx *= -1;
-      if (Math.abs(s.sprite.position.y) > 26) s.dy *= -1;
-      s.mat.opacity = s.base * (0.35 + 0.65 * Math.abs(Math.sin(t * s.pFreq + s.pOff)));
-    });
+    // Data stream particles — orbit around scene
+    if (this._data) {
+      const { pos, phase, speed, N } = this._data;
+      for (let i = 0; i < N; i++) {
+        const i3 = i * 3;
+        phase[i] += speed[i] * dt * 0.3;
+        const r = 10 + (i % 12) * 3;
+        pos[i3]   = Math.cos(phase[i]) * r;
+        pos[i3+1] = Math.sin(phase[i] * 0.7) * r * 0.5;
+        pos[i3+2] = Math.sin(phase[i] * 0.3) * 8 - 5;
+      }
+      this._data.geo.attributes.position.needsUpdate = true;
+    }
+
+    // Hex rain — fall + swap chars + pulse opacity
+    if (this._rain) {
+      this._rain.drops.forEach(d => {
+        d.sprite.position.y += d.vy * dt;
+        d.sprite.position.x += d.dx * dt;
+        d.swapT += dt;
+
+        if (d.sprite.position.y < -32) {
+          d.sprite.position.y = 32;
+          d.sprite.position.x = rnd(-60, 60);
+        }
+
+        if (d.swapT > d.swapInterval) {
+          d.swapT = 0;
+          const newTex = d.tex[Math.floor(Math.random() * d.tex.length)];
+          if (newTex !== d.mat.map) {
+            d.mat.map = newTex;
+            d.mat.needsUpdate = true;
+          }
+        }
+
+        d.mat.opacity = d.base * (0.3 + 0.7 * Math.abs(Math.sin(t * d.pFreq + d.pOff)));
+      });
+    }
+
+    // Burst particles — shrink life, apply velocity with drag
+    for (let b = this._bursts.length - 1; b >= 0; b--) {
+      const burst = this._bursts[b];
+      burst.life -= dt * 1.2;
+      burst.mat.opacity = Math.max(0, burst.life * 0.9);
+
+      for (let i = 0; i < burst.COUNT; i++) {
+        const i3 = i * 3;
+        burst.vel[i3]   *= 1 - dt * 2.5;
+        burst.vel[i3+1] *= 1 - dt * 2.5;
+        burst.vel[i3+2] *= 1 - dt * 2.5;
+        burst.pos[i3]   += burst.vel[i3]   * dt;
+        burst.pos[i3+1] += burst.vel[i3+1] * dt;
+        burst.pos[i3+2] += burst.vel[i3+2] * dt;
+      }
+      burst.geo.attributes.position.needsUpdate = true;
+
+      if (burst.life <= 0) {
+        this.scene.remove(burst.mesh);
+        burst.geo.dispose();
+        burst.mat.dispose();
+        this._bursts.splice(b, 1);
+      }
+    }
   }
 
   dispose() {
-    this._disposables.forEach(d => d.dispose?.());
-    this._sprites.forEach(s => this.scene.remove(s.sprite));
-    if (this._field) this.scene.remove(this._field);
-    this._streamEls.forEach(el => el.remove());
+    this._d.forEach(d => d.dispose?.());
+    this._rain?.drops.forEach(d => this.scene.remove(d.sprite));
+    if (this._field) this.scene.remove(this._field.mesh);
+    if (this._data)  this.scene.remove(this._data.mesh);
   }
 }
