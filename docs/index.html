@@ -12,25 +12,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/responsive.css" />
-
-  <!-- Inline pulse ring keyframe (needs to be reachable from JS-spawned elements) -->
-  <style>
-    @keyframes pulseRing {
-      from { transform: translate(-50%,-50%) scale(1); opacity:.8; width:4px; height:4px; }
-      to   { transform: translate(-50%,-50%) scale(8); opacity:0;  width:4px; height:4px; }
-    }
-    /* Scroll spacer — tall enough for all 7 sections */
-    #scroll-spacer { height: 600vh; pointer-events: none; }
-
-    /* Skip link */
-    .skip-link {
-      position:absolute; top:-60px; left:1rem;
-      padding:.4rem 1rem; background:var(--cyan); color:var(--black);
-      font-family:var(--font-mono); font-size:.75rem; font-weight:700;
-      border-radius:2px; z-index:10000; transition:top .2s;
-    }
-    .skip-link:focus { top:1rem; outline:2px solid var(--cyan); }
-  </style>
 </head>
 <body>
 
@@ -42,17 +23,19 @@
 <div id="cursor-dot"   aria-hidden="true"></div>
 <div id="cursor-label" aria-hidden="true">INSPECT</div>
 
-<!-- ── SCANLINES ── -->
-<div id="scanlines" aria-hidden="true"></div>
+<!-- ── BACKGROUND LAYERS ── -->
+<canvas id="three-canvas"  aria-hidden="true"></canvas>
+<canvas id="scan-canvas"   aria-hidden="true"></canvas>
+<div    id="scanlines"     aria-hidden="true"></div>
+<div    id="re-overlay"    aria-hidden="true"></div>
 
-<!-- ── THREE.JS CANVAS ── -->
-<canvas id="three-canvas" aria-hidden="true"></canvas>
-
-<!-- ── RE MODE OVERLAY ── -->
-<div id="re-overlay" aria-hidden="true"></div>
+<!-- ── MOMENT OVERLAY ── -->
+<div id="moment-overlay" aria-live="assertive" aria-hidden="true">
+  <div id="moment-text"></div>
+</div>
 
 <!-- ════════════════════════════════════════════════════════
-     INTRO SCREEN
+     INTRO
 ════════════════════════════════════════════════════════ -->
 <div id="intro" role="dialog" aria-label="System initialization" aria-modal="true">
 
@@ -61,9 +44,10 @@
     <div class="intro-line"><span class="ok">▸</span> SYSTEM CHECK .............. <span class="ok">OK</span></div>
     <div class="intro-line"><span class="ok">▸</span> MEMORY ANALYSIS ........... <span class="ok">OK</span></div>
     <div class="intro-line"><span class="ok">▸</span> BINARY ENGINE ............. <span class="ok">OK</span></div>
-    <div class="intro-line"><span class="ok">▸</span> DEBUGGER .................. <span class="ok">ONLINE</span></div>
     <div class="intro-line"><span class="ok">▸</span> DISASSEMBLER .............. <span class="ok">ONLINE</span></div>
+    <div class="intro-line"><span class="ok">▸</span> DEBUGGER .................. <span class="ok">ONLINE</span></div>
     <div class="intro-line"><span class="warn">▸</span> ANTI-ANALYSIS BYPASS ...... <span class="warn">PATCHED</span></div>
+    <div class="intro-line"><span class="err">▸</span> ANOMALOUS REGION DETECTED . <span class="err">FLAGGED</span></div>
     <div class="intro-line"><span class="ok">▸</span> REVERSE ENGINE ............ <span class="ok">ONLINE</span></div>
   </div>
 
@@ -83,7 +67,7 @@
      NAVIGATION
 ════════════════════════════════════════════════════════ -->
 <nav id="nav" role="navigation" aria-label="Main navigation">
-  <a href="#" class="nav-logo" aria-label="EAGLE home">
+  <a href="#" class="nav-logo" aria-label="EAGLE — home">
     <span>[</span>EAGLE<span>]</span>
   </a>
 
@@ -106,171 +90,170 @@
 </nav>
 
 <!-- ════════════════════════════════════════════════════════
-     MAIN — scroll-driven 3D experience
-     The visible content is FIXED overlays + HUDs.
-     This spacer div provides the scroll height.
+     MAIN — scroll spacer drives 3D camera journey
 ════════════════════════════════════════════════════════ -->
 <main id="main-content">
   <div id="scroll-spacer" aria-hidden="true"></div>
 </main>
 
 <!-- ════════════════════════════════════════════════════════
-     SECTION OVERLAYS — fixed, activated by scroll.js
+     SECTION OVERLAYS
 ════════════════════════════════════════════════════════ -->
 
 <!-- HERO -->
-<div class="section-overlay" id="overlay-hero" aria-label="Hero section">
+<div class="section-overlay" id="overlay-hero">
   <div class="section-label" aria-hidden="true">
-    <span>0x00400000</span>
-    TARGET BINARY LOADED
-    <span>PE32+</span>
+    <span>0x00400000</span> TARGET LOADED <span>PE32+</span>
   </div>
   <h1 class="section-title">EAGLE</h1>
   <p class="section-desc">"Understanding software from the inside out."</p>
 </div>
 
 <!-- HEADERS -->
-<div class="section-overlay" id="overlay-headers" aria-label="PE Headers section">
-  <div class="section-label" aria-hidden="true">SECTION 01</div>
+<div class="section-overlay" id="overlay-headers">
+  <div class="section-label" aria-hidden="true">LAYER 01</div>
   <h2 class="section-title">PE HEADERS</h2>
-  <p class="section-desc">DOS stub → NT signature → COFF header → Optional header. The skeleton of every Windows executable.</p>
+  <p class="section-desc">
+    DOS stub → NT signature → COFF header → Optional header.
+    The skeleton of every Windows executable.
+  </p>
 </div>
 
 <!-- SECTIONS -->
-<div class="section-overlay" id="overlay-sections" aria-label="PE Sections">
-  <div class="section-label" aria-hidden="true">SECTION 02</div>
+<div class="section-overlay" id="overlay-sections">
+  <div class="section-label" aria-hidden="true">LAYER 02</div>
   <h2 class="section-title">SECTION TABLE</h2>
-  <p class="section-desc">.text · .data · .rdata · .bss · .rsrc — five regions, five purposes. Each a mapped view into the binary's intent.</p>
+  <p class="section-desc">
+    .text · .data · .rdata · .bss · .rsrc —
+    five regions, five purposes. Each a mapped view into the binary's intent.
+  </p>
 </div>
 
 <!-- MEMORY -->
-<div class="section-overlay" id="overlay-memory" aria-label="Memory Map">
-  <div class="section-label" aria-hidden="true">SECTION 03</div>
+<div class="section-overlay" id="overlay-memory">
+  <div class="section-label" aria-hidden="true">LAYER 03</div>
   <h2 class="section-title">MEMORY MAP</h2>
-  <p class="section-desc">Sections expand into virtual memory. Permissions harden. The loader maps RWX regions.</p>
+  <p class="section-desc">
+    Sections expand into virtual memory. RWX permissions harden.
+    The loader maps, the runtime executes.
+  </p>
 </div>
 
 <!-- IMPORTS -->
-<div class="section-overlay" id="overlay-imports" aria-label="Import Table">
-  <div class="section-label" aria-hidden="true">SECTION 04</div>
+<div class="section-overlay" id="overlay-imports">
+  <div class="section-label" aria-hidden="true">LAYER 04</div>
   <h2 class="section-title">IMPORT TABLE</h2>
-  <p class="section-desc">KERNEL32 · ntdll · USER32 · ADVAPI32. Click any node to inspect resolved functions.</p>
+  <p class="section-desc">
+    KERNEL32 · ntdll · USER32 · ADVAPI32.
+    Click any node to inspect resolved functions and dependencies.
+  </p>
 </div>
 
 <!-- CFG -->
-<div class="section-overlay" id="overlay-cfg" aria-label="Control Flow Graph">
-  <div class="section-label" aria-hidden="true">SECTION 05</div>
+<div class="section-overlay" id="overlay-cfg">
+  <div class="section-label" aria-hidden="true">LAYER 05</div>
   <h2 class="section-title">CONTROL FLOW</h2>
-  <p class="section-desc">main → Initialize → LoadModule → Decrypt → Execute. Click any function to view disassembly.</p>
+  <p class="section-desc">
+    main → Initialize → LoadModule → Decrypt → Execute.
+    Click any function node to view disassembly.
+  </p>
 </div>
 
 <!-- CONTACT -->
-<div class="section-overlay" id="overlay-contact" aria-label="Contact">
+<div class="section-overlay" id="overlay-contact">
   <div class="section-label" aria-hidden="true">EXFILTRATE</div>
   <h2 class="section-title">Contact</h2>
   <p class="section-desc" style="margin-bottom:2rem">
     Open to research collaborations, CTF invitations, and interesting binaries.
   </p>
-  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
-    <a href="https://github.com/S90x123" target="_blank" rel="noopener"
-       style="font-family:var(--font-mono);font-size:.72rem;letter-spacing:.1em;
-              padding:.5rem 1.5rem;border:1px solid var(--glass-border);
-              border-radius:2px;color:var(--text-2);transition:all .2s"
-       onmouseenter="this.style.borderColor='var(--cyan)';this.style.color='var(--cyan)'"
-       onmouseleave="this.style.borderColor='';this.style.color=''">
+
+  <!-- Links -->
+  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:2.5rem">
+    <a href="https://github.com/S90x123" target="_blank" rel="noopener" class="contact-link-btn">
       github.com/S90x123
     </a>
-    <a href="mailto:eagle@example.com"
-       style="font-family:var(--font-mono);font-size:.72rem;letter-spacing:.1em;
-              padding:.5rem 1.5rem;border:1px solid var(--glass-border);
-              border-radius:2px;color:var(--text-2);transition:all .2s"
-       onmouseenter="this.style.borderColor='var(--cyan)';this.style.color='var(--cyan)'"
-       onmouseleave="this.style.borderColor='';this.style.color=''">
+    <a href="mailto:eagle@example.com" class="contact-link-btn">
       eagle@example.com
+    </a>
+    <a href="https://crackmes.one" target="_blank" rel="noopener" class="contact-link-btn">
+      crackmes.one
     </a>
   </div>
 
-  <!-- About card embedded in contact overlay -->
-  <div style="margin-top:3rem;display:flex;gap:2rem;flex-wrap:wrap;justify-content:center;
-              max-width:800px;pointer-events:all">
+  <!-- Info cards -->
+  <div class="contact-flex" style="display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;max-width:860px;pointer-events:all">
 
-    <div style="background:var(--glass);border:1px solid var(--glass-border);
-                border-radius:4px;padding:1.5rem;min-width:200px;backdrop-filter:blur(12px)">
-      <div style="font-family:var(--font-mono);font-size:.55rem;color:var(--cyan);
-                  letter-spacing:.14em;margin-bottom:.75rem">// IDENTITY</div>
-      <div style="font-family:var(--font-mono);font-size:1.1rem;font-weight:700;color:var(--text-1)">EAGLE</div>
-      <div style="font-family:var(--font-mono);font-size:.65rem;color:var(--text-2);margin-top:.25rem">Software Reverse Engineer</div>
-      <div style="margin-top:1rem;display:flex;flex-wrap:wrap;gap:.35rem">
-        <span style="font-family:var(--font-mono);font-size:.58rem;padding:.2rem .5rem;
-                     background:var(--cyan-dim);border:1px solid rgba(0,229,255,.2);
-                     border-radius:2px;color:var(--cyan)">Binary Analysis</span>
-        <span style="font-family:var(--font-mono);font-size:.58rem;padding:.2rem .5rem;
-                     background:var(--cyan-dim);border:1px solid rgba(0,229,255,.2);
-                     border-radius:2px;color:var(--cyan)">Windows Internals</span>
-        <span style="font-family:var(--font-mono);font-size:.58rem;padding:.2rem .5rem;
-                     background:var(--cyan-dim);border:1px solid rgba(0,229,255,.2);
-                     border-radius:2px;color:var(--cyan)">Malware Analysis</span>
-        <span style="font-family:var(--font-mono);font-size:.58rem;padding:.2rem .5rem;
-                     background:var(--cyan-dim);border:1px solid rgba(0,229,255,.2);
-                     border-radius:2px;color:var(--cyan)">Protocol Analysis</span>
-        <span style="font-family:var(--font-mono);font-size:.58rem;padding:.2rem .5rem;
-                     background:var(--cyan-dim);border:1px solid rgba(0,229,255,.2);
-                     border-radius:2px;color:var(--cyan)">x86-64 ASM</span>
+    <!-- Identity -->
+    <div class="contact-card">
+      <div class="contact-card-label">// IDENTITY</div>
+      <div style="font-family:var(--font-m);font-size:1.1rem;font-weight:700;color:var(--text-1)">EAGLE</div>
+      <div style="font-family:var(--font-m);font-size:.63rem;color:var(--text-2);margin-top:.25rem">Software Reverse Engineer</div>
+      <div style="display:flex;flex-wrap:wrap;gap:.35rem;margin-top:1rem">
+        <span class="contact-tag">Binary Analysis</span>
+        <span class="contact-tag">Windows Internals</span>
+        <span class="contact-tag">Malware Analysis</span>
+        <span class="contact-tag">Protocol Analysis</span>
+        <span class="contact-tag">x86-64 ASM</span>
+        <span class="contact-tag">Kernel Debugging</span>
       </div>
     </div>
 
-    <div style="background:var(--glass);border:1px solid var(--glass-border);
-                border-radius:4px;padding:1.5rem;min-width:200px;backdrop-filter:blur(12px)">
-      <div style="font-family:var(--font-mono);font-size:.55rem;color:var(--cyan);
-                  letter-spacing:.14em;margin-bottom:.75rem">// TOOLCHAIN</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem">
-        <span style="font-family:var(--font-mono);font-size:.65rem;color:var(--text-2)">IDA Pro</span>
-        <span style="font-family:var(--font-mono);font-size:.65rem;color:var(--text-2)">Ghidra</span>
-        <span style="font-family:var(--font-mono);font-size:.65rem;color:var(--text-2)">x64dbg</span>
-        <span style="font-family:var(--font-mono);font-size:.65rem;color:var(--text-2)">WinDbg</span>
-        <span style="font-family:var(--font-mono);font-size:.65rem;color:var(--text-2)">Binary Ninja</span>
-        <span style="font-family:var(--font-mono);font-size:.65rem;color:var(--text-2)">Frida</span>
-        <span style="font-family:var(--font-mono);font-size:.65rem;color:var(--text-2)">Python</span>
-        <span style="font-family:var(--font-mono);font-size:.65rem;color:var(--text-2)">C / C++</span>
+    <!-- Toolchain -->
+    <div class="contact-card">
+      <div class="contact-card-label">// TOOLCHAIN</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem .75rem">
+        <span style="font-family:var(--font-m);font-size:.65rem;color:var(--text-2)"><span style="color:var(--red)">▸</span> IDA Pro</span>
+        <span style="font-family:var(--font-m);font-size:.65rem;color:var(--text-2)"><span style="color:var(--red)">▸</span> Ghidra</span>
+        <span style="font-family:var(--font-m);font-size:.65rem;color:var(--text-2)"><span style="color:var(--red)">▸</span> x64dbg</span>
+        <span style="font-family:var(--font-m);font-size:.65rem;color:var(--text-2)"><span style="color:var(--blue)">▸</span> WinDbg</span>
+        <span style="font-family:var(--font-m);font-size:.65rem;color:var(--text-2)"><span style="color:var(--blue)">▸</span> Binary Ninja</span>
+        <span style="font-family:var(--font-m);font-size:.65rem;color:var(--text-2)"><span style="color:var(--green)">▸</span> Frida</span>
+        <span style="font-family:var(--font-m);font-size:.65rem;color:var(--text-2)"><span style="color:var(--green)">▸</span> Python</span>
+        <span style="font-family:var(--font-m);font-size:.65rem;color:var(--text-2)"><span style="color:var(--green)">▸</span> C / C++</span>
       </div>
     </div>
 
-    <div style="background:var(--glass);border:1px solid var(--glass-border);
-                border-radius:4px;padding:1.5rem;min-width:200px;backdrop-filter:blur(12px)">
-      <div style="font-family:var(--font-mono);font-size:.55rem;color:var(--cyan);
-                  letter-spacing:.14em;margin-bottom:.75rem">// PROJECTS</div>
+    <!-- Projects -->
+    <div class="contact-card">
+      <div class="contact-card-label">// PROJECTS</div>
       <div style="display:flex;flex-direction:column;gap:.5rem">
-        <div style="font-family:var(--font-mono);font-size:.65rem;color:var(--text-2)">
+        <div style="font-family:var(--font-m);font-size:.65rem;color:var(--text-2)">
           <span style="color:var(--green)">●</span> Advance Pixel Grid Mapper
+          <span style="color:var(--text-3);font-size:.55rem;display:block;padding-left:1rem;margin-top:.1rem">C++ · Win32 · GDI+ · DirectX</span>
         </div>
-        <div style="font-family:var(--font-mono);font-size:.65rem;color:var(--text-2)">
+        <div style="font-family:var(--font-m);font-size:.65rem;color:var(--text-2)">
           <span style="color:var(--green)">●</span> Pulse
+          <span style="color:var(--text-3);font-size:.55rem;display:block;padding-left:1rem;margin-top:.1rem">C · ETW · WMI · Process telemetry</span>
         </div>
-        <div style="font-family:var(--font-mono);font-size:.65rem;color:var(--text-2)">
+        <div style="font-family:var(--font-m);font-size:.65rem;color:var(--text-2)">
           <span style="color:var(--amber)">●</span> StageFlow
+          <span style="color:var(--text-3);font-size:.55rem;display:block;padding-left:1rem;margin-top:.1rem">Python · Graphviz · Pipeline viz</span>
         </div>
-        <div style="font-family:var(--font-mono);font-size:.65rem;color:var(--text-2)">
-          <span style="color:var(--cyan)">●</span> Chaser
+        <div style="font-family:var(--font-m);font-size:.65rem;color:var(--text-2)">
+          <span style="color:var(--blue)">●</span> Chaser
+          <span style="color:var(--text-3);font-size:.55rem;display:block;padding-left:1rem;margin-top:.1rem">C++ · PE Analysis · Authenticode</span>
         </div>
-        <div style="font-family:var(--font-mono);font-size:.65rem;color:var(--text-2)">
+        <div style="font-family:var(--font-m);font-size:.65rem;color:var(--text-2)">
           <span style="color:var(--green)">●</span> PixelPerfectPro
+          <span style="color:var(--text-3);font-size:.55rem;display:block;padding-left:1rem;margin-top:.1rem">C++ · Direct2D · COM · Overlay</span>
         </div>
       </div>
     </div>
+
   </div>
 </div>
 
 <!-- ════════════════════════════════════════════════════════
-     FIXED HUD ELEMENTS
+     FIXED HUD + CHROME
 ════════════════════════════════════════════════════════ -->
 
-<!-- Depth progress bar (left edge) -->
+<!-- Depth bar -->
 <div id="depth-bar" aria-hidden="true">
   <div id="depth-fill"></div>
 </div>
 
-<!-- Section dots (right edge) -->
-<div id="section-progress" aria-label="Section progress">
+<!-- Section progress dots -->
+<div id="section-progress" aria-label="Section progress" aria-hidden="true">
   <div class="prog-dot active" title="Core"></div>
   <div class="prog-dot" title="Headers"></div>
   <div class="prog-dot" title="Sections"></div>
@@ -280,57 +263,36 @@
   <div class="prog-dot" title="Contact"></div>
 </div>
 
-<!-- System stats HUD (left) -->
-<div class="hud-panel" id="hud-stats" aria-label="System statistics">
-  <div class="hud-title">SYS MONITOR</div>
-  <!-- rows injected by main.js -->
+<!-- Metrics HUD (left) -->
+<div id="hud-wrap">
+  <div id="hud-metrics" aria-label="System metrics"></div>
 </div>
 
-<!-- Hover info HUD (follows cursor) -->
+<!-- Hover HUD (follows cursor) -->
 <div id="hud-hover" role="tooltip" aria-live="polite">
   <div class="hover-type">OBJECT</div>
   <div class="hover-address">0x00000000</div>
   <div class="hover-rows"></div>
 </div>
 
-<!-- ANALYZE button -->
+<!-- Analyze button -->
 <button id="analyze-btn" aria-label="Analyze binary">
   <span class="btn-pulse" aria-hidden="true"></span>
   ANALYZE BINARY
 </button>
 
-<!-- Analysis progress modal -->
-<div id="analysis-progress" role="dialog" aria-label="Analysis progress" aria-modal="true">
+<!-- Analysis progress -->
+<div id="analysis-progress" role="dialog" aria-label="Analysis in progress" aria-modal="true">
   <div class="analysis-title">// BINARY ANALYSIS IN PROGRESS</div>
   <div class="analysis-steps">
-    <div class="analysis-step">
-      <div class="step-icon">○</div>
-      LOADING PE IMAGE
-    </div>
-    <div class="analysis-step">
-      <div class="step-icon">○</div>
-      PARSING HEADERS
-    </div>
-    <div class="analysis-step">
-      <div class="step-icon">○</div>
-      ANALYZING SECTIONS
-    </div>
-    <div class="analysis-step">
-      <div class="step-icon">○</div>
-      RESOLVING IMPORTS
-    </div>
-    <div class="analysis-step">
-      <div class="step-icon">○</div>
-      BUILDING CFG
-    </div>
-    <div class="analysis-step">
-      <div class="step-icon">○</div>
-      ANALYSIS COMPLETE
-    </div>
+    <div class="analysis-step"><div class="step-icon">○</div>LOADING PE IMAGE</div>
+    <div class="analysis-step"><div class="step-icon">○</div>PARSING HEADERS</div>
+    <div class="analysis-step"><div class="step-icon">○</div>ANALYZING SECTIONS</div>
+    <div class="analysis-step"><div class="step-icon">○</div>RESOLVING IMPORTS</div>
+    <div class="analysis-step"><div class="step-icon">○</div>BUILDING CFG</div>
+    <div class="analysis-step"><div class="step-icon">○</div>ANALYSIS COMPLETE</div>
   </div>
-  <div class="analysis-bar">
-    <div class="analysis-bar-fill"></div>
-  </div>
+  <div class="analysis-bar"><div class="analysis-bar-fill"></div></div>
 </div>
 
 <!-- Info panel (right, on 3D click) -->
@@ -347,7 +309,7 @@
       <div class="disasm-view" style="display:none"></div>
       <div class="info-actions">
         <button class="info-btn primary"
-          onclick="navigator.clipboard?.writeText(document.querySelector('.info-desc')?.textContent||'')">
+          onclick="try{navigator.clipboard.writeText(document.querySelector('.info-desc')?.textContent||'')}catch(e){}">
           COPY ADDR
         </button>
         <button class="info-btn"
@@ -359,17 +321,20 @@
   </div>
 </div>
 
+<!-- System events (bottom-centre) -->
+<div id="events-box" aria-live="polite" aria-atomic="false"></div>
+
 <!-- Scroll indicator -->
 <div id="scroll-indicator" aria-hidden="true">
   <span class="scroll-ind-text">SCROLL TO DISSECT</span>
   <div class="scroll-ind-line"></div>
 </div>
 
-<!-- Notifications container -->
+<!-- Notifications -->
 <div id="notifications" aria-live="polite" aria-atomic="false"></div>
 
 <!-- ════════════════════════════════════════════════════════
-     FLOATING TERMINAL
+     TERMINAL
 ════════════════════════════════════════════════════════ -->
 <div id="terminal-panel" aria-label="Analysis terminal">
   <div class="terminal-bar">
@@ -387,11 +352,11 @@
 </div>
 
 <!-- ════════════════════════════════════════════════════════
-     COMMAND CONSOLE  (/ key)
+     COMMAND CONSOLE  ("/" key)
 ════════════════════════════════════════════════════════ -->
 <div id="cmd-console" role="dialog" aria-label="EAGLE command console" aria-modal="true">
   <div class="cmd-header">
-    <span class="cmd-header-label">// EAGLE CONSOLE — Press Escape to close</span>
+    <span class="cmd-header-label">// EAGLE CONSOLE v3 — press Escape or "/" to close</span>
   </div>
   <div class="cmd-input-wrap">
     <span class="cmd-prompt">❯</span>
@@ -403,10 +368,8 @@
 </div>
 
 <!-- ════════════════════════════════════════════════════════
-     SCRIPTS — Three.js + GSAP via CDN, then ES modules
+     SCRIPTS
 ════════════════════════════════════════════════════════ -->
-
-<!-- Three.js — importmap so ES modules can import 'three' -->
 <script type="importmap">
 {
   "imports": {
@@ -415,11 +378,17 @@
 }
 </script>
 
-<!-- GSAP (UMD, exposes window.gsap) -->
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 
-<!-- App entry point -->
 <script type="module" src="js/main.js"></script>
+
+<!-- Click-pulse keyframe (must be reachable from JS-spawned elements) -->
+<style>
+  @keyframes pulseOut {
+    from { transform: translate(-50%,-50%) scale(1); opacity: .9; }
+    to   { transform: translate(-50%,-50%) scale(9); opacity: 0;  }
+  }
+</style>
 
 </body>
 </html>
