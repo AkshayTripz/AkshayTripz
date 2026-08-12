@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="EAGLE — Software Reverse Engineer. Binary analysis, Windows internals, malware research. Understanding software from the inside out." />
+  <meta property="og:title" content="EAGLE — Software Reverse Engineer" />
+  <meta property="og:description" content="Understanding software from the inside out." />
+  <title>EAGLE — Software Reverse Engineer</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+
+<!-- ── ACCESSIBILITY ── -->
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!-- ── CURSOR ── -->
+<div id="cursor-ring"  aria-hidden="true"></div>
+<div id="cursor-dot"   aria-hidden="true"></div>
+<div id="cursor-label" aria-hidden="true">INSPECT</div>
+
+<!-- ── BACKGROUND LAYERS ── -->
+<canvas id="three-canvas"  aria-hidden="true"></canvas>
+<canvas id="scan-canvas"   aria-hidden="true"></canvas>
+<div    id="scanlines"     aria-hidden="true"></div>
+<div    id="re-overlay"    aria-hidden="true"></div>
+
+<!-- ── MOMENT OVERLAY ── -->
+<div id="moment-overlay" aria-live="assertive" aria-hidden="true">
+  <div id="moment-text"></div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     INTRO
+════════════════════════════════════════════════════════ -->
+<div id="intro" role="dialog" aria-label="System initialization" aria-modal="true">
+
+  <div class="intro-terminal" aria-live="polite">
+    <div class="intro-line"><span class="ok">▸</span> INITIALIZING EAGLE CORE...</div>
+    <div class="intro-line"><span class="ok">▸</span> SYSTEM CHECK .............. <span class="ok">OK</span></div>
+    <div class="intro-line"><span class="ok">▸</span> MEMORY ANALYSIS ........... <span class="ok">OK</span></div>
+    <div class="intro-line"><span class="ok">▸</span> BINARY ENGINE ............. <span class="ok">OK</span></div>
+    <div class="intro-line"><span class="ok">▸</span> DISASSEMBLER .............. <span class="ok">ONLINE</span></div>
+    <div class="intro-line"><span class="ok">▸</span> DEBUGGER .................. <span class="ok">ONLINE</span></div>
+    <div class="intro-line"><span class="warn">▸</span> ANTI-ANALYSIS BYPASS ...... <span class="warn">PATCHED</span></div>
+    <div class="intro-line"><span class="err">▸</span> ANOMALOUS REGION DETECTED . <span class="err">FLAGGED</span></div>
+    <div class="intro-line"><span class="ok">▸</span> REVERSE ENGINE ............ <span class="ok">ONLINE</span></div>
+  </div>
+
+  <div class="intro-logo" aria-label="EAGLE">EAGLE</div>
+  <div class="intro-sub">SOFTWARE REVERSE ENGINEER</div>
+
+  <button class="intro-enter" aria-label="Enter system">
+    <span class="btn-pulse" aria-hidden="true"></span>
+    ENTER SYSTEM
+  </button>
+
+</div>
+
+<button class="intro-skip" aria-label="Skip intro">SKIP INTRO</button>
+
+<!-- ════════════════════════════════════════════════════════
+     NAVIGATION
+════════════════════════════════════════════════════════ -->
+<nav id="nav" role="navigation" aria-label="Main navigation">
+  <a href="#" class="nav-logo" aria-label="EAGLE — home">
+    <span>[</span>EAGLE<span>]</span>
+  </a>
+
+  <ul class="nav-links" role="list">
+    <li><a href="#hero"     class="nav-link" data-section="hero">Core</a></li>
+    <li><a href="#sections" class="nav-link" data-section="sections">Sections</a></li>
+    <li><a href="#imports"  class="nav-link" data-section="imports">Imports</a></li>
+    <li><a href="#cfg"      class="nav-link" data-section="cfg">CFG</a></li>
+    <li><a href="#contact"  class="nav-link" data-section="contact">Contact</a></li>
+  </ul>
+
+  <div class="nav-controls">
+    <button id="btn-remode" class="nav-btn" aria-pressed="false">RE MODE</button>
+    <button id="btn-sound"  class="nav-btn" aria-pressed="false">SOUND OFF</button>
+  </div>
+
+  <button id="nav-hamburger" aria-label="Toggle menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ════════════════════════════════════════════════════════
+     MAIN — scroll spacer drives 3D camera journey
+════════════════════════════════════════════════════════ -->
+<main id="main-content">
+  <div id="scroll-spacer" aria-hidden="true"></div>
+</main>
+
+<!-- ════════════════════════════════════════════════════════
+     SECTION OVERLAYS
+════════════════════════════════════════════════════════ -->
+
+<!-- HERO -->
+<div class="section-overlay" id="overlay-hero">
+  <div class="section-label" aria-hidden="true">
+    <span>0x00400000</span> TARGET LOADED <span>PE32+</span>
+  </div>
+  <h1 class="section-title">EAGLE</h1>
+  <p class="section-desc">"Understanding software from the inside out."</p>
+</div>
+
+<!-- HEADERS -->
+<div class="section-overlay" id="overlay-headers">
+  <div class="section-label" aria-hidden="true">LAYER 01</div>
+  <h2 class="section-title">PE HEADERS</h2>
+  <p class="section-desc">
+    DOS stub → NT signature → COFF header → Optional header.
+    The skeleton of every Windows executable.
+  </p>
+</div>
+
+<!-- SECTIONS -->
+<div class="section-overlay" id="overlay-sections">
+  <div class="section-label" aria-hidden="true">LAYER 02</div>
+  <h2 class="section-title">SECTION TABLE</h2>
+  <p class="section-desc">
+    .text · .data · .rdata · .bss · .rsrc —
+    five regions, five purposes. Each a mapped view into the binary's intent.
+  </p>
+</div>
+
+<!-- MEMORY -->
+<div class="section-overlay" id="overlay-memory">
+  <div class="section-label" aria-hidden="true">LAYER 03</div>
+  <h2 class="section-title">MEMORY MAP</h2>
+  <p class="section-desc">
+    Sections expand into virtual memory. RWX permissions harden.
+    The loader maps, the runtime executes.
+  </p>
+</div>
+
+<!-- IMPORTS -->
+<div class="section-overlay" id="overlay-imports">
+  <div class="section-label" aria-hidden="true">LAYER 04</div>
+  <h2 class="section-title">IMPORT TABLE</h2>
+  <p class="section-desc">
+    KERNEL32 · ntdll · USER32 · ADVAPI32.
+    Click any node to inspect resolved functions and dependencies.
+  </p>
+</div>
+
+<!-- CFG -->
+<div class="section-overlay" id="overlay-cfg">
+  <div class="section-label" aria-hidden="true">LAYER 05</div>
+  <h2 class="section-title">CONTROL FLOW</h2>
+  <p class="section-desc">
+    main → Initialize → LoadModule → Decrypt → Execute.
+    Click any function node to view disassembly.
+  </p>
+</div>
+
+<!-- CONTACT -->
+<div class="section-overlay" id="overlay-contact">
+  <div class="section-label" aria-hidden="true">EXFILTRATE</div>
+  <h2 class="section-title">Contact</h2>
+  <p class="section-desc" style="margin-bottom:2rem">
+    Open to research collaborations, CTF invitations, and interesting binaries.
+  </p>
+
+  <!-- Links -->
+  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:2.5rem">
+    <a href="https://github.com/S90x123" target="_blank" rel="noopener" class="contact-link-btn">
+      github.com/S90x123
+    </a>
+    <a href="mailto:eagle@example.com" class="contact-link-btn">
+      eagle@example.com
+    </a>
+    <a href="https://crackmes.one" target="_blank" rel="noopener" class="contact-link-btn">
+      crackmes.one
+    </a>
+  </div>
+
+  <!-- Info cards -->
+  <div class="contact-flex" style="display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;max-width:860px;pointer-events:all">
+
+    <!-- Identity -->
+    <div class="contact-card">
+      <div class="contact-card-label">// IDENTITY</div>
+      <div style="font-family:var(--font-m);font-size:1.1rem;font-weight:700;color:var(--text-1)">EAGLE</div>
+      <div style="font-family:var(--font-m);font-size:.63rem;color:var(--text-2);margin-top:.25rem">Software Reverse Engineer</div>
+      <div style="display:flex;flex-wrap:wrap;gap:.35rem;margin-top:1rem">
+        <span class="contact-tag">Binary Analysis</span>
+        <span class="contact-tag">Windows Internals</span>
+        <span class="contact-tag">Malware Analysis</span>
+        <span class="contact-tag">Protocol Analysis</span>
+        <span class="contact-tag">x86-64 ASM</span>
+        <span class="contact-tag">Kernel Debugging</span>
+      </div>
+    </div>
+
+    <!-- Toolchain -->
+    <div class="contact-card">
+      <div class="contact-card-label">// TOOLCHAIN</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem .75rem">
+        <span style="font-family:var(--font-m);font-size:.65rem;color:var(--text-2)"><span style="color:var(--red)">▸</span> IDA Pro</span>
+        <span style="font-family:var(--font-m);font-size:.65rem;color:var(--text-2)"><span style="color:var(--red)">▸</span> Ghidra</span>
+        <span style="font-family:var(--font-m);font-size:.65rem;color:var(--text-2)"><span style="color:var(--red)">▸</span> x64dbg</span>
+        <span style="font-family:var(--font-m);font-size:.65rem;color:var(--text-2)"><span style="color:var(--blue)">▸</span> WinDbg</span>
+        <span style="font-family:var(--font-m);font-size:.65rem;color:var(--text-2)"><span style="color:var(--blue)">▸</span> Binary Ninja</span>
+        <span style="font-family:var(--font-m);font-size:.65rem;color:var(--text-2)"><span style="color:var(--green)">▸</span> Frida</span>
+        <span style="font-family:var(--font-m);font-size:.65rem;color:var(--text-2)"><span style="color:var(--green)">▸</span> Python</span>
+        <span style="font-family:var(--font-m);font-size:.65rem;color:var(--text-2)"><span style="color:var(--green)">▸</span> C / C++</span>
+      </div>
+    </div>
+
+    <!-- Projects -->
+    <div class="contact-card">
+      <div class="contact-card-label">// PROJECTS</div>
+      <div style="display:flex;flex-direction:column;gap:.5rem">
+        <div style="font-family:var(--font-m);font-size:.65rem;color:var(--text-2)">
+          <span style="color:var(--green)">●</span> Advance Pixel Grid Mapper
+          <span style="color:var(--text-3);font-size:.55rem;display:block;padding-left:1rem;margin-top:.1rem">C++ · Win32 · GDI+ · DirectX</span>
+        </div>
+        <div style="font-family:var(--font-m);font-size:.65rem;color:var(--text-2)">
+          <span style="color:var(--green)">●</span> Pulse
+          <span style="color:var(--text-3);font-size:.55rem;display:block;padding-left:1rem;margin-top:.1rem">C · ETW · WMI · Process telemetry</span>
+        </div>
+        <div style="font-family:var(--font-m);font-size:.65rem;color:var(--text-2)">
+          <span style="color:var(--amber)">●</span> StageFlow
+          <span style="color:var(--text-3);font-size:.55rem;display:block;padding-left:1rem;margin-top:.1rem">Python · Graphviz · Pipeline viz</span>
+        </div>
+        <div style="font-family:var(--font-m);font-size:.65rem;color:var(--text-2)">
+          <span style="color:var(--blue)">●</span> Chaser
+          <span style="color:var(--text-3);font-size:.55rem;display:block;padding-left:1rem;margin-top:.1rem">C++ · PE Analysis · Authenticode</span>
+        </div>
+        <div style="font-family:var(--font-m);font-size:.65rem;color:var(--text-2)">
+          <span style="color:var(--green)">●</span> PixelPerfectPro
+          <span style="color:var(--text-3);font-size:.55rem;display:block;padding-left:1rem;margin-top:.1rem">C++ · Direct2D · COM · Overlay</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     FIXED HUD + CHROME
+════════════════════════════════════════════════════════ -->
+
+<!-- Depth bar -->
+<div id="depth-bar" aria-hidden="true">
+  <div id="depth-fill"></div>
+</div>
+
+<!-- Section progress dots -->
+<div id="section-progress" aria-label="Section progress" aria-hidden="true">
+  <div class="prog-dot active" title="Core"></div>
+  <div class="prog-dot" title="Headers"></div>
+  <div class="prog-dot" title="Sections"></div>
+  <div class="prog-dot" title="Memory"></div>
+  <div class="prog-dot" title="Imports"></div>
+  <div class="prog-dot" title="CFG"></div>
+  <div class="prog-dot" title="Contact"></div>
+</div>
+
+<!-- Metrics HUD (left) -->
+<div id="hud-wrap">
+  <div id="hud-metrics" aria-label="System metrics"></div>
+</div>
+
+<!-- Hover HUD (follows cursor) -->
+<div id="hud-hover" role="tooltip" aria-live="polite">
+  <div class="hover-type">OBJECT</div>
+  <div class="hover-address">0x00000000</div>
+  <div class="hover-rows"></div>
+</div>
+
+<!-- Analyze button -->
+<button id="analyze-btn" aria-label="Analyze binary">
+  <span class="btn-pulse" aria-hidden="true"></span>
+  ANALYZE BINARY
+</button>
+
+<!-- Analysis progress -->
+<div id="analysis-progress" role="dialog" aria-label="Analysis in progress" aria-modal="true">
+  <div class="analysis-title">// BINARY ANALYSIS IN PROGRESS</div>
+  <div class="analysis-steps">
+    <div class="analysis-step"><div class="step-icon">○</div>LOADING PE IMAGE</div>
+    <div class="analysis-step"><div class="step-icon">○</div>PARSING HEADERS</div>
+    <div class="analysis-step"><div class="step-icon">○</div>ANALYZING SECTIONS</div>
+    <div class="analysis-step"><div class="step-icon">○</div>RESOLVING IMPORTS</div>
+    <div class="analysis-step"><div class="step-icon">○</div>BUILDING CFG</div>
+    <div class="analysis-step"><div class="step-icon">○</div>ANALYSIS COMPLETE</div>
+  </div>
+  <div class="analysis-bar"><div class="analysis-bar-fill"></div></div>
+</div>
+
+<!-- Info panel (right, on 3D click) -->
+<div id="info-panel" aria-label="Object details">
+  <div class="info-panel-inner">
+    <div class="info-panel-header">
+      <span class="info-panel-type">OBJECT</span>
+      <button class="info-panel-close" aria-label="Close panel">[×]</button>
+    </div>
+    <div class="info-panel-body">
+      <div class="info-name">—</div>
+      <div class="info-desc"></div>
+      <div class="info-rows"></div>
+      <div class="disasm-view" style="display:none"></div>
+      <div class="info-actions">
+        <button class="info-btn primary"
+          onclick="try{navigator.clipboard.writeText(document.querySelector('.info-desc')?.textContent||'')}catch(e){}">
+          COPY ADDR
+        </button>
+        <button class="info-btn"
+          onclick="document.getElementById('info-panel').classList.remove('visible')">
+          DISMISS
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- System events (bottom-centre) -->
+<div id="events-box" aria-live="polite" aria-atomic="false"></div>
+
+<!-- Scroll indicator -->
+<div id="scroll-indicator" aria-hidden="true">
+  <span class="scroll-ind-text">SCROLL TO DISSECT</span>
+  <div class="scroll-ind-line"></div>
+</div>
+
+<!-- Notifications -->
+<div id="notifications" aria-live="polite" aria-atomic="false"></div>
+
+<!-- ════════════════════════════════════════════════════════
+     TERMINAL
+════════════════════════════════════════════════════════ -->
+<div id="terminal-panel" aria-label="Analysis terminal">
+  <div class="terminal-bar">
+    <div class="term-dot term-dot-r" aria-hidden="true"></div>
+    <div class="term-dot term-dot-y" aria-hidden="true"></div>
+    <div class="term-dot term-dot-g" aria-hidden="true"></div>
+    <span class="term-title">eagle_analyzer — bash</span>
+    <button class="term-minimize" aria-label="Minimize terminal">[−]</button>
+  </div>
+  <div class="terminal-body" aria-label="Terminal output">
+    <div id="terminal-output" aria-live="polite">
+      <span class="term-cursor" aria-hidden="true"></span>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     COMMAND CONSOLE  ("/" key)
+════════════════════════════════════════════════════════ -->
+<div id="cmd-console" role="dialog" aria-label="EAGLE command console" aria-modal="true">
+  <div class="cmd-header">
+    <span class="cmd-header-label">// EAGLE CONSOLE v3 — press Escape or "/" to close</span>
+  </div>
+  <div class="cmd-input-wrap">
+    <span class="cmd-prompt">❯</span>
+    <input id="cmd-input" type="text" placeholder="type a command..."
+           autocomplete="off" autocorrect="off" autocapitalize="off"
+           spellcheck="false" aria-label="Console input" />
+  </div>
+  <div class="cmd-output" aria-live="polite"></div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     SCRIPTS
+════════════════════════════════════════════════════════ -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+  }
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+
+<script type="module" src="js/main.js"></script>
+
+<!-- Click-pulse keyframe (must be reachable from JS-spawned elements) -->
+<style>
+  @keyframes pulseOut {
+    from { transform: translate(-50%,-50%) scale(1); opacity: .9; }
+    to   { transform: translate(-50%,-50%) scale(9); opacity: 0;  }
+  }
+</style>
+
+</body>
+</html>
