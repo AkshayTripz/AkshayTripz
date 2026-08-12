@@ -1,72 +1,59 @@
 /* ============================================================
-   EAGLE V2 — RESPONSIVE + ANIMATIONS
+   EAGLE V3 — RESPONSIVE.CSS
    ============================================================ */
 
-/* ── TABLET (≤1024px) ── */
+/* ── TABLET ≤1024px ── */
 @media (max-width: 1024px) {
-  #hud-stats { display: none; }
-  #terminal-panel { width: min(320px, calc(100vw - 3rem)); }
+  #hud-wrap { display: none; }
+  #terminal-panel { width: min(300px, calc(100vw - 3rem)); }
   #info-panel { width: min(280px, calc(100vw - 3rem)); }
   .nav-links { gap: 1.5rem; }
 }
 
-/* ── MOBILE (≤768px) ── */
+/* ── MOBILE ≤768px ── */
 @media (max-width: 768px) {
   #cursor-ring, #cursor-dot, #cursor-label { display: none; }
   body { cursor: auto; }
   button { cursor: pointer; }
 
   #nav-hamburger { display: flex; }
-
   .nav-links {
-    display: none;
-    position: fixed;
-    inset: 0;
-    top: 0;
-    background: rgba(3,4,10,.97);
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 2.5rem;
-    z-index: 200;
+    display: none; position: fixed; inset: 0;
+    background: rgba(2,3,8,.97); flex-direction: column;
+    align-items: center; justify-content: center; gap: 2.5rem; z-index: 200;
   }
   .nav-links.open { display: flex; }
-  .nav-link { font-size: .9rem; letter-spacing: .18em; }
-
+  .nav-link { font-size: .85rem; letter-spacing: .18em; }
   .nav-controls { display: none; }
 
-  #hud-stats    { display: none; }
-  #section-progress { display: none; }
+  #hud-wrap, #section-progress { display: none; }
   #terminal-panel { display: none; }
 
   #info-panel {
-    right: 0; left: 0;
-    top: auto; bottom: 0;
-    transform: translateY(100%);
-    transition: transform .35s var(--ease-expo), opacity .35s;
+    right: 0; left: 0; top: auto; bottom: 0;
     width: 100%;
+    transform: translateY(100%);
+    transition: transform .35s cubic-bezier(.16,1,.3,1), opacity .35s;
   }
-  #info-panel.visible {
-    transform: translateY(0);
-    opacity: 1;
-  }
+  #info-panel.visible { transform: translateY(0); opacity: 1; }
 
   #analyze-btn { bottom: 4rem; font-size: .65rem; padding: .6rem 1.5rem; }
-
-  #cmd-console { width: 95vw; }
+  #cmd-console { width: 96vw; }
+  #events-box { display: none; }
+  #notifications { right: 1rem; }
+  .section-title { font-size: clamp(1.6rem, 8vw, 3rem); }
 }
 
-/* ── SMALL (≤480px) ── */
+/* ── SMALL ≤480px ── */
 @media (max-width: 480px) {
   .intro-logo { font-size: 2.5rem; }
-  .intro-terminal { font-size: .72rem; }
+  .intro-terminal { font-size: .7rem; }
   #analysis-progress { padding: 1.25rem; }
+  #contact .contact-flex { flex-direction: column; }
 }
 
 /* ── 4K ── */
-@media (min-width: 2560px) {
-  html { font-size: 20px; }
-}
+@media (min-width: 2560px) { html { font-size: 20px; } }
 
 /* ── REDUCED MOTION ── */
 @media (prefers-reduced-motion: reduce) {
@@ -74,7 +61,7 @@
     animation-duration: 0.01ms !important;
     transition-duration: 0.1ms !important;
   }
-  .re-stream { display: none; }
   .scroll-ind-line { animation: none; opacity: .4; }
   .term-cursor { animation: none; opacity: 1; }
+  .btn-pulse { animation: none; }
 }
